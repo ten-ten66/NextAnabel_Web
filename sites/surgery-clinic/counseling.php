@@ -20,9 +20,9 @@ $fields = [
     'email' => ['label' => 'メールアドレス', 'type' => 'email', 'required' => true, 'max' => 254],
     'tel' => ['label' => '電話番号', 'type' => 'tel', 'required' => true, 'max' => 20],
     'menu' => ['label' => 'ご希望の施術', 'type' => 'choices', 'required' => true, 'options' => $menuOptions],
-    'date1' => ['label' => '第1希望日', 'type' => 'date', 'required' => true, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_label' => '日曜・祝日'],
+    'date1' => ['label' => '第1希望日', 'type' => 'date', 'required' => true, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_dates' => (array) site('closed_dates', []), 'closed_label' => (string) site('closed_label')],
     'time' => ['label' => 'ご希望の時間帯', 'type' => 'choice', 'required' => true, 'options' => $timeOptions],
-    'date2' => ['label' => '第2希望日', 'type' => 'date', 'required' => false, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_label' => '日曜・祝日'],
+    'date2' => ['label' => '第2希望日', 'type' => 'date', 'required' => false, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_dates' => (array) site('closed_dates', []), 'closed_label' => (string) site('closed_label')],
     'message' => ['label' => 'ご相談内容', 'type' => 'textarea', 'required' => false, 'max' => 1000],
     'consent' => ['label' => '個人情報の取り扱い', 'type' => 'consent', 'required' => true, 'message' => 'プライバシーポリシーへの同意が必要です。'],
 ];
@@ -216,7 +216,7 @@ partial('header', compact('page'));
             </div>
           <?php endif; ?>
 
-          <form class="p-form__form" method="post" action="<?= e(url('counseling')) ?>" novalidate data-counseling-form<?= is_static() ? ' data-demo-form' : ' data-submit-once' ?>>
+          <form class="p-form__form" method="post" action="<?= e(url('counseling')) ?>" novalidate data-counseling-form data-closed-dates="<?= e(implode(' ', (array) site('closed_dates', []))) ?>"<?= is_static() ? ' data-demo-form' : ' data-submit-once' ?>>
             <h2 class="p-form__title">ご予約内容の入力</h2>
             <p class="p-form__required-note"><span class="c-field__req">必須</span>の項目は必ずご入力ください。</p>
             <?php if (!is_static()): ?><input type="hidden" name="_token" value="<?= e($form['token']) ?>"><?php endif; ?>

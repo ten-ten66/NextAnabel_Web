@@ -5,6 +5,7 @@
  * inc/post-types.php      施術（カスタム投稿タイプ）と悩みカテゴリー、メタ情報の登録
  * inc/meta-box.php        施術の必須表示を入力するメタボックスと、必須表示が揃うまで公開させない仕組み
  * inc/structured-data.php 構造化データ（MedicalClinic / MedicalWebPage / BreadcrumbList）
+ * inc/meta.php            meta description・OGP・canonical（SEO プラグインがある場合は出力しない）
  * inc/contact-form.php    予約フォーム（ショートコード [hakuji_contact]）
  * inc/template-tags.php   テンプレート用の関数
  *
@@ -24,6 +25,7 @@ require HAKUJI_DIR . '/inc/template-tags.php';
 require HAKUJI_DIR . '/inc/post-types.php';
 require HAKUJI_DIR . '/inc/meta-box.php';
 require HAKUJI_DIR . '/inc/structured-data.php';
+require HAKUJI_DIR . '/inc/meta.php';
 require HAKUJI_DIR . '/inc/contact-form.php';
 
 add_action('after_setup_theme', static function (): void {
@@ -59,6 +61,15 @@ add_action('wp_enqueue_scripts', static function (): void {
     }
 });
 
+// Webフォントの CSS は描画を止めないよう非同期に読み込む（静的サイト版と同じ方式。JavaScript が無効なら noscript で読み込む）
+add_filter('style_loader_tag', static function (string $html, string $handle, string $href): string {
+    if ($handle !== 'hakuji-fonts') {
+        return $html;
+    }
+    return '<link rel="stylesheet" id="hakuji-fonts-css" href="' . esc_url($href) . '" media="print" onload="this.media=\'all\'">' . "\n"
+        . '<noscript><link rel="stylesheet" href="' . esc_url($href) . '"></noscript>' . "\n";
+}, 10, 3);
+
 // Google Fonts への事前接続
 add_filter('wp_resource_hints', static function (array $urls, string $relation): array {
     if ($relation === 'preconnect') {
@@ -68,15 +79,38 @@ add_filter('wp_resource_hints', static function (array $urls, string $relation):
     return $urls;
 }, 10, 2);
 
-// タイトルの区切り文字を全角の縦線にする（静的サイト版と同じ表記）
+// タイトルの区切り文字を全角の縦線にし、前後の空白を詰める（静的サイト版と同じ「施術名｜医院名」の表記）
 add_filter('document_title_separator', static fn (): string => '｜');
+add_filter('document_title', static fn (string $title): string => str_replace(' ｜ ', '｜', $title));
 
-// 架空サイトであることを全ページの先頭に表示する
+// テーマの文言はすべて日本語のため、管理画面の言語設定にかかわらず文書の言語を日本語にする
+add_filter('language_attributes', static fn (string $output): string => (string) preg_replace('/\blang="[^"]*"/', 'lang="ja"', $output));
+
+// ブロックを使っていないページでは、ブロック用の CSS を読み込まない（クラシックテーマのため）
+add_action('wp_enqueue_scripts', static function (): void {
+    if (is_singular() && has_blocks()) {
+        return;
+    }
+    foreach (['wp-block-library', 'wp-block-library-theme', 'classic-theme-styles', 'global-styles'] as $handle) {
+        wp_dequeue_style($handle);
+    }
+}, 100);
+
+// 架空サイトであることを全ページの先頭に表示する（静的サイト版と同じマークアップ）
 add_action('wp_body_open', static function (): void {
-    echo '<p class="c-demo-notice">' . esc_html__('このサイトはWeb制作のサンプルとして作成した架空のクリニックです。実在の医療機関・人物とは関係ありません。', 'hakuji') . '</p>';
+    echo '<aside class="c-demo-notice" aria-label="このサイトについて"><p class="c-demo-notice__text">'
+        . esc_html__('このサイトはWeb制作のサンプルとして作成した架空のクリニックです。実在の医療機関・人物とは関係ありません。', 'hakuji')
+        . '</p></aside>';
 });
+
+// JavaScript が無効なときは、JavaScript でしか動かない部品（悩み別の絞り込みなど）を隠す
+add_action('wp_head', static function (): void {
+    echo '<noscript><style>.u-js-only{display:none!important}</style></noscript>' . "\n";
+}, 20);
 
 // 不要な出力を減らす
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
 remove_action('wp_head', 'wp_generator');
+remove_action('wp_head', 'rsd_link');
+remove_action('wp_head', 'wp_shortlink_wp_head');

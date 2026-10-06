@@ -146,6 +146,9 @@ function hakuji_icon(string $name): string
         'tel' => '<path d="M8.6 3.8 6.4 4.4c-1.3.4-2.1 1.7-1.8 3 1.6 6.1 6 10.5 12 12 1.3.3 2.6-.5 3-1.8l.6-2.2-4-2.3-2 1.6a9.9 9.9 0 0 1-5-5l1.6-2z"/>',
         'close' => '<path d="M6 6l12 12M18 6 6 18"/>',
         'calendar' => '<path d="M4.5 7.5h15v12h-15zM4.5 11h15M9 4.5v4M15 4.5v4"/>',
+        'external' => '<path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+        'pause' => '<path d="M9 6v12M15 6v12"/>',
+        'play' => '<path d="M8 5.5v13l10-6.5z"/>',
     ];
     return '<svg class="c-icon c-icon--' . esc_attr($name) . '" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'
         . ($paths[$name] ?? '') . '</svg>';
@@ -215,6 +218,55 @@ function hakuji_hours_summary(): string
     return $base['open'] . '〜' . $base['close'] . ($notes ? '（' . implode('、', $notes) . '）' : '');
 }
 
+/** 受付状況・診療時間の表を JavaScript で更新するためのデータ（静的サイト版の reception_json() と同じ形） */
+function hakuji_reception_json(): string
+{
+    return (string) wp_json_encode([
+        'schedule' => hakuji_clinic('schedule'),
+        'lastEntry' => (int) hakuji_clinic('last_entry_minutes'),
+        'closed' => (array) hakuji_clinic('closed_dates'),
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+}
+
+/** "19:00" から分を引いた時刻 */
+function hakuji_time_minus(string $time, int $minutes): string
+{
+    [$h, $m] = array_map('intval', explode(':', $time));
+    $total = $h * 60 + $m - $minutes;
+    return sprintf('%02d:%02d', intdiv($total, 60), $total % 60);
+}
+
+/**
+ * 曜日ごとの診療時間（月曜始まり・最後に祝日）
+ *
+ * @return list<array{day: string, label: string, open: ?string, close: ?string, last: ?string}>
+ */
+function hakuji_schedule_rows(): array
+{
+    $schedule = (array) hakuji_clinic('schedule');
+    $lastEntry = (int) hakuji_clinic('last_entry_minutes');
+    $rows = [];
+    foreach ([1, 2, 3, 4, 5, 6, 0] as $day) {
+        $slot = $schedule[$day] ?? null;
+        $rows[] = [
+            'day' => (string) $day,
+            'label' => HAKUJI_WEEKDAYS[$day] . '曜日',
+            'open' => $slot['open'] ?? null,
+            'close' => $slot['close'] ?? null,
+            'last' => $slot ? hakuji_time_minus((string) $slot['close'], $lastEntry) : null,
+        ];
+    }
+    $rows[] = ['day' => 'holiday', 'label' => '祝日', 'open' => null, 'close' => null, 'last' => null];
+    return $rows;
+}
+
+/** 地図アプリでの検索URL（建物名を除いた住所で検索する） */
+function hakuji_map_url(): string
+{
+    $street = explode(' ', (string) hakuji_clinic('street'))[0];
+    return 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(hakuji_clinic('region') . hakuji_clinic('locality') . $street);
+}
+
 function hakuji_reviewer_label(): string
 {
     $r = (array) hakuji_clinic('reviewer');
@@ -244,6 +296,7 @@ function hakuji_treatment(WP_Post|int $post): array
         'en' => $meta('en'),
         'lead' => $meta('lead'),
         'image' => $meta('image') ?: 'pearl-spots.webp',
+        'mirror' => $meta('mirror') === '1',
         'summary' => (string) $post->post_excerpt,
         'categories' => is_array($terms) ? wp_list_pluck($terms, 'slug') : [],
         'category_labels' => is_array($terms) ? wp_list_pluck($terms, 'name') : [],
@@ -298,8 +351,12 @@ function hakuji_nav_items(): array
         ], $items);
     }
     $items = [
-        ['label' => '施術一覧', 'en' => 'Treatments', 'url' => (string) get_post_type_archive_link('treatment'), 'current' => is_post_type_archive('treatment') || is_singular('treatment')],
-        ['label' => 'ご予約・お問い合わせ', 'en' => 'Reservation', 'url' => hakuji_contact_url(), 'current' => is_page('contact')],
+        ['label' => '施術一覧', 'en' => 'Treatments', 'url' => (string) get_post_type_archive_link('treatment'), 'current' => is_post_type_archive('treatment') || is_singular('treatment') || is_tax('concern')],
     ];
+    if ((int) get_option('page_for_posts') > 0) {
+        $items[] = ['label' => 'お知らせ', 'en' => 'News', 'url' => (string) get_permalink((int) get_option('page_for_posts')), 'current' => is_home() || is_singular('post')];
+    }
+    $items[] = ['label' => '診療時間・アクセス', 'en' => 'Hours & Access', 'url' => home_url('/#access'), 'current' => false];
+    $items[] = ['label' => 'ご予約・お問い合わせ', 'en' => 'Reservation', 'url' => hakuji_contact_url(), 'current' => is_page('contact')];
     return $items;
 }

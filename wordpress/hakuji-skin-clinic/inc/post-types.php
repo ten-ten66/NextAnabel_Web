@@ -23,6 +23,7 @@ function hakuji_meta_fields(): array
         '_hakuji_en' => ['英語表記', 'text', '例: Intense Pulsed Light（見出しの装飾に使います）'],
         '_hakuji_lead' => ['一覧用の短い説明', 'text', '例: 顔全体のシミ・そばかす、くすみ、赤みに。'],
         '_hakuji_image' => ['画像', 'text', 'テーマの assets/img/ 内のファイル名。例: pearl-spots.webp'],
+        '_hakuji_mirror' => ['画像を左右反転する', 'checkbox', '同じ画像を別の施術でも使うときに、向きを変えて見分けやすくします。'],
         '_hakuji_for' => ['こんな方に', 'textarea', '1行に1項目。'],
         '_hakuji_flow' => ['施術の流れ', 'textarea', '1行に1手順。「見出し：説明」の形で書くと見出しが付きます。'],
         '_hakuji_prices' => ['費用（税込）', 'textarea', '1行に「ラベル|金額」。例: 全顔 1回|22000'],
@@ -63,7 +64,8 @@ add_action('init', static function (): void {
         'rewrite' => ['slug' => 'treatments', 'with_front' => false],
         'menu_icon' => 'dashicons-clipboard',
         'menu_position' => 5,
-        'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes'],
+        // custom-fields は REST API でメタ情報（必須表示）を読み書きするために必要
+        'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields'],
         'show_in_rest' => true,
     ]);
 

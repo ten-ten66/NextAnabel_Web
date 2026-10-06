@@ -1,12 +1,11 @@
 <?php
 /**
- * 施術一覧（悩み別の絞り込み付き）
+ * 施術一覧（悩み別の絞り込み付き）。悩みカテゴリーのページ（taxonomy-concern.php）でも使う
  *
  * @package hakuji
  */
 
 get_header();
-$concerns = get_terms(['taxonomy' => 'concern', 'hide_empty' => true]);
 $treatments = [];
 while (have_posts()) {
     the_post();
@@ -14,20 +13,15 @@ while (have_posts()) {
 }
 ?>
 <main id="main">
-  <?php hakuji_page_head('施術一覧', 'Treatments', '悩みごとに、対応する施術をまとめました。費用・ダウンタイム・主なリスクを一覧で比べられます。'); ?>
+  <?php if (is_tax('concern')) : ?>
+    <?php hakuji_page_head(single_term_title('', false) . 'の施術', 'Treatments', '同じ悩みでも原因によって適した治療は異なるため、最終的な治療法は診察で決めます。'); ?>
+  <?php else : ?>
+    <?php hakuji_page_head('施術一覧', 'Treatments', '悩みごとに、対応する施術をまとめました。費用・ダウンタイム・主なリスクを一覧で比べられます。'); ?>
+  <?php endif; ?>
   <section class="l-section" aria-label="施術の一覧">
     <div class="l-container">
-      <?php if (!is_wp_error($concerns) && $concerns) : ?>
-        <div class="c-filter js-filter u-js-only" data-filter-target="tx-list">
-          <p class="c-filter__label" id="tx-list-filter-label">悩みから絞り込む</p>
-          <div class="c-filter__chips" role="group" aria-labelledby="tx-list-filter-label">
-            <button type="button" class="c-chip" data-filter="all" data-label="すべて" aria-pressed="true">すべて<span class="c-chip__count"><?php echo esc_html((string) count($treatments)); ?></span></button>
-            <?php foreach ($concerns as $term) : ?>
-              <button type="button" class="c-chip" data-filter="<?php echo esc_attr($term->slug); ?>" data-label="<?php echo esc_attr($term->name); ?>" aria-pressed="false"><?php echo esc_html($term->name); ?><span class="c-chip__count"><?php echo esc_html((string) $term->count); ?></span></button>
-            <?php endforeach; ?>
-          </div>
-          <p class="c-filter__status js-filter-status" aria-live="polite"></p>
-        </div>
+      <?php if (!is_tax('concern')) : ?>
+        <?php get_template_part('template-parts/tx-filter', null, ['target' => 'tx-list', 'treatments' => $treatments]); ?>
       <?php endif; ?>
       <ul class="c-tx-grid" id="tx-list">
         <?php foreach ($treatments as $t) : ?>

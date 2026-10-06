@@ -12,17 +12,17 @@ get_header();
 the_post();
 $t = hakuji_treatment(get_post());
 $hasQualifying = (bool) array_filter($t['courses'], static fn ($c) => $c['qualifying']);
-$toc = ['for' => 'こんな方に', 'flow' => '施術の流れ', 'cost' => '費用と主なリスク・副作用'];
-if ($t['unapproved']) {
-    $toc['unapproved'] = '未承認医薬品等に関する表記';
-}
-$toc['course'] = '回数・期間とダウンタイム';
-if ($hasQualifying) {
-    $toc['cooling-off'] = 'クーリング・オフと中途解約';
-}
-$toc['contraindications'] = '受けられない方';
-$toc['aftercare'] = 'アフターケア';
-$toc['contact'] = 'ご予約・お問い合わせ';
+$toc = array_filter([
+    'for' => $t['for'] ? 'こんな方に' : null,
+    'flow' => $t['flow'] ? '施術の流れ' : null,
+    'cost' => '費用と主なリスク・副作用',
+    'unapproved' => $t['unapproved'] ? '未承認医薬品等に関する表記' : null,
+    'course' => '回数・期間とダウンタイム',
+    'cooling-off' => $hasQualifying ? 'クーリング・オフと中途解約' : null,
+    'contraindications' => $t['contraindications'] ? '受けられない方' : null,
+    'aftercare' => $t['aftercare'] ? 'アフターケア' : null,
+    'contact' => 'ご予約・お問い合わせ',
+]);
 $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not_in' => [$t['id']], 'orderby' => 'menu_order', 'order' => 'ASC']);
 ?>
 <main id="main">
@@ -49,7 +49,7 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
           </dl>
           <p class="c-reviewed" data-reviewed-by>監修：<?php echo esc_html(hakuji_reviewer_label()); ?>／最終確認日 <?php echo hakuji_ja_time_tag($t['reviewed']); ?></p>
         </div>
-        <div class="p-tx-hero__visual">
+        <div class="p-tx-hero__visual<?php echo $t['mirror'] ? ' is-mirrored' : ''; ?>">
           <img src="<?php echo esc_url(HAKUJI_URI . '/assets/img/' . $t['image']); ?>" width="960" height="720" alt="" fetchpriority="high">
         </div>
       </div>
@@ -67,6 +67,7 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
     </nav>
 
     <div class="p-tx-content">
+      <?php if ($t['for']) : ?>
       <section class="p-tx-section" id="for" aria-labelledby="for-title">
         <h2 class="p-tx-section__title" id="for-title">こんな方に</h2>
         <ul class="c-check-list c-check-list--large">
@@ -76,6 +77,9 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
         </ul>
       </section>
 
+      <?php endif; ?>
+
+      <?php if ($t['flow']) : ?>
       <section class="p-tx-section" id="flow" aria-labelledby="flow-title">
         <h2 class="p-tx-section__title" id="flow-title">施術の流れ</h2>
         <ol class="p-tx-flow">
@@ -91,6 +95,7 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
           <?php endforeach; ?>
         </ol>
       </section>
+      <?php endif; ?>
 
       <?php if (trim(get_the_content()) !== '') : ?>
         <section class="p-tx-section" aria-label="補足">
@@ -157,6 +162,7 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
         </div>
       <?php endif; ?>
 
+      <?php if ($t['contraindications']) : ?>
       <section class="p-tx-section" id="contraindications" aria-labelledby="contraindications-title">
         <h2 class="p-tx-section__title" id="contraindications-title">受けられない方</h2>
         <ul class="c-dash-list c-dash-list--large">
@@ -166,6 +172,9 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
         </ul>
       </section>
 
+      <?php endif; ?>
+
+      <?php if ($t['aftercare']) : ?>
       <section class="p-tx-section" id="aftercare" aria-labelledby="aftercare-title">
         <h2 class="p-tx-section__title" id="aftercare-title">アフターケア</h2>
         <ul class="c-check-list c-check-list--large">
@@ -174,12 +183,13 @@ $related = get_posts(['post_type' => 'treatment', 'numberposts' => 3, 'post__not
           <?php endforeach; ?>
         </ul>
       </section>
+      <?php endif; ?>
 
       <section class="p-tx-contact" id="contact" data-disclosure="contact" aria-labelledby="contact-title">
         <h2 class="p-tx-contact__title" id="contact-title">ご予約・お問い合わせ</h2>
         <p class="p-tx-contact__text"><?php echo esc_html($t['name']); ?>についてのご相談・ご予約は、Webフォームまたはお電話で承ります。</p>
         <div class="p-tx-contact__actions">
-          <a class="c-button c-button--primary" href="<?php echo esc_url(hakuji_contact_url()); ?>">この施術についてWebで予約する<?php echo hakuji_icon('arrow'); ?></a>
+          <a class="c-button c-button--primary" href="<?php echo esc_url(add_query_arg('menu', $t['slug'], hakuji_contact_url())); ?>">この施術についてWebで予約する<?php echo hakuji_icon('arrow'); ?></a>
           <a class="p-tx-contact__tel" href="<?php echo esc_url(hakuji_tel_href()); ?>"><?php echo hakuji_icon('tel'); ?><span class="p-tx-contact__tel-number"><?php echo esc_html(hakuji_clinic('tel')); ?></span></a>
         </div>
         <dl class="p-tx-contact__info">

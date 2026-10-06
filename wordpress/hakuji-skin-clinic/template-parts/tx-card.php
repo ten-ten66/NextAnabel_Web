@@ -8,7 +8,7 @@ $t = $args['t'];
 $first = $t['prices'][0] ?? null;
 ?>
 <li class="c-tx-card c-tx-card--card js-filter-item" data-categories="<?php echo esc_attr(implode(' ', $t['categories'])); ?>">
-  <div class="c-tx-card__visual">
+  <div class="c-tx-card__visual<?php echo $t['mirror'] ? ' is-mirrored' : ''; ?>">
     <img src="<?php echo esc_url(HAKUJI_URI . '/assets/img/' . $t['image']); ?>" width="960" height="720" alt="" loading="lazy" decoding="async">
   </div>
   <div class="c-tx-card__body">

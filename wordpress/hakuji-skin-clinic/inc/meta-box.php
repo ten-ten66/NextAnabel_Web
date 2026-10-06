@@ -38,7 +38,7 @@ function hakuji_render_meta_box(WP_Post $post): void
     echo '</tbody></table>';
 }
 
-function hakuji_save_meta(int $postId, WP_Post $post): void
+function hakuji_save_meta(int $postId): void
 {
     if (wp_is_post_autosave($postId) || wp_is_post_revision($postId)) {
         return;
@@ -57,17 +57,26 @@ function hakuji_save_meta(int $postId, WP_Post $post): void
         };
         update_post_meta($postId, $key, $value);
     }
-
-    $missing = hakuji_missing_disclosures($postId);
-    if ($missing && $post->post_status === 'publish') {
-        // wp_update_post で save_post が再度呼ばれるため、いったん外してから下書きに戻す
-        remove_action('save_post_treatment', 'hakuji_save_meta', 10);
-        wp_update_post(['ID' => $postId, 'post_status' => 'draft']);
-        add_action('save_post_treatment', 'hakuji_save_meta', 10, 2);
-        set_transient('hakuji_missing_' . get_current_user_id(), $missing, MINUTE_IN_SECONDS);
-    }
 }
-add_action('save_post_treatment', 'hakuji_save_meta', 10, 2);
+add_action('save_post_treatment', 'hakuji_save_meta');
+
+/**
+ * 必須表示が揃っていない施術は公開・予約投稿させない。
+ * メタ情報とタームの保存がすべて終わった後に呼ばれる wp_after_insert_post で確認するため、
+ * 編集画面だけでなく、クイック編集・REST API（show_in_rest）からの公開にも同じ条件がかかる。
+ */
+add_action('wp_after_insert_post', static function (int $postId, WP_Post $post): void {
+    if ($post->post_type !== 'treatment' || !in_array($post->post_status, ['publish', 'future'], true) || wp_is_post_revision($postId)) {
+        return;
+    }
+    $missing = hakuji_missing_disclosures($postId);
+    if (!$missing) {
+        return;
+    }
+    // 下書きに戻すと wp_after_insert_post がもう一度呼ばれるが、状態が draft になるため繰り返さない
+    wp_update_post(['ID' => $postId, 'post_status' => 'draft']);
+    set_transient('hakuji_missing_' . get_current_user_id(), $missing, MINUTE_IN_SECONDS);
+}, 10, 2);
 
 // 下書きに戻したときは、公開済みのメッセージではなく不足項目を表示する
 add_filter('redirect_post_location', static function (string $location): string {

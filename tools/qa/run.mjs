@@ -2,8 +2,10 @@
  * 全ページの品質チェック
  *
  *   node tools/qa/run.mjs [--dir=docs] [--site=skin-clinic] [--no-shots]
+ *   node tools/qa/run.mjs --url=http://127.0.0.1:8300 --paths=/,/treatments/ [--save-html=qa-output/wp-html]
  *
- * manifest.json に載っている全ページを 375 / 768 / 1440px で開き、次を検査する。
+ * manifest.json に載っている全ページ（--url を指定した場合は、そのサーバーの --paths のページ）を
+ * 375 / 768 / 1440px で開き、次を検査する。--url は WordPress テーマ版の確認に使う。
  *   - 横スクロールの発生
  *   - コンソールエラー・読み込み失敗
  *   - 読み込み直後（スクロール前）に透明のまま待機している本文がないか
@@ -23,20 +25,30 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   const [k, v] = a.replace(/^--/, '').split('=');
   return [k, v ?? true];
 }));
-const dir = join(root, args.dir ?? 'docs');
-const manifest = JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf8'));
 const widths = [375, 768, 1440];
-const port = 8400 + Math.floor(Math.random() * 400);
 const outDir = join(root, 'qa-output');
 mkdirSync(join(outDir, 'screens'), { recursive: true });
-
-const server = spawn('php', ['-S', `127.0.0.1:${port}`, '-t', dir], { stdio: 'ignore' });
-await new Promise((r) => setTimeout(r, 800));
+const saveHtml = args['save-html'] ? join(root, String(args['save-html'])) : null;
+if (saveHtml) mkdirSync(saveHtml, { recursive: true });
 
 const pages = [];
-for (const [site, info] of Object.entries(manifest.sites)) {
-  if (args.site && args.site !== site) continue;
-  for (const page of info.pages) pages.push({ site, path: page.path });
+let origin;
+let server = null;
+if (args.url) {
+  // 起動済みのサーバー（WordPress など）のページを検査する
+  origin = String(args.url).replace(/\/$/, '');
+  for (const path of String(args.paths ?? '/').split(',')) pages.push({ site: 'server', path: path.replace(/^\//, '') });
+} else {
+  const dir = join(root, args.dir ?? 'docs');
+  const manifest = JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf8'));
+  const port = 8400 + Math.floor(Math.random() * 400);
+  origin = `http://127.0.0.1:${port}`;
+  server = spawn('php', ['-S', `127.0.0.1:${port}`, '-t', dir], { stdio: 'ignore' });
+  await new Promise((r) => setTimeout(r, 800));
+  for (const [site, info] of Object.entries(manifest.sites)) {
+    if (args.site && args.site !== site) continue;
+    for (const page of info.pages) pages.push({ site, path: page.path });
+  }
 }
 
 // 本文（見出し・段落・リスト・表）のうち、読み込み直後に透明・不可視のものを数える
@@ -62,16 +74,25 @@ const results = [];
 let failures = 0;
 
 for (const { site, path } of pages) {
-  const url = `http://127.0.0.1:${port}/${path}`;
+  const url = `${origin}/${path}`;
   const result = { site, path, overflow: {}, consoleErrors: [], hiddenAtRest: [], hiddenNoJs: [], axe: [] };
 
   for (const width of widths) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
-    page.on('console', (m) => { if (m.type() === 'error') result.consoleErrors.push(`${width}px: ${m.text()}`); });
+    page.on('console', (m) => {
+      if (m.type() !== 'error') return;
+      // 404 ページ自体が 404 を返すこと（--url で存在しない URL を開いた場合）はエラーにしない
+      if (m.text().startsWith('Failed to load resource') && m.location()?.url === url) return;
+      result.consoleErrors.push(`${width}px: ${m.text()}`);
+    });
     page.on('pageerror', (e) => result.consoleErrors.push(`${width}px: ${e}`));
     page.on('requestfailed', (r) => result.consoleErrors.push(`${width}px: 読み込み失敗 ${r.url()}`));
-    await page.goto(url, { waitUntil: 'networkidle' });
+    const response = await page.goto(url, { waitUntil: 'networkidle' });
+    if (saveHtml && width === 1440) {
+      // html-validate にかけるため、サーバーが返した HTML をそのまま保存する
+      writeFileSync(join(saveHtml, `${(path.replace(/\/$/, '') || 'index').replace(/\//g, '__')}.html`), await response.text());
+    }
     await page.waitForTimeout(1500);
     result.overflow[width] = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (width === 1440) {
@@ -91,7 +112,7 @@ for (const { site, path } of pages) {
         window.scrollTo(0, 0);
       });
       await page.waitForLoadState('networkidle');
-      const name = path.replace(/\//g, '__').replace(/\.html$/, '');
+      const name = (path.replace(/\/$/, '') || 'index').replace(/\//g, '__').replace(/\.html$/, '');
       await page.screenshot({ path: join(outDir, 'screens', `${name}-${width}.png`), fullPage: true });
     }
     await context.close();
@@ -117,7 +138,7 @@ for (const { site, path } of pages) {
 }
 
 await browser.close();
-server.kill();
+server?.kill();
 writeFileSync(join(outDir, 'report.json'), JSON.stringify(results, null, 2));
 console.log(`\n${results.length} ページ中 ${results.length - failures} ページ合格`);
 process.exit(failures ? 1 : 0);
