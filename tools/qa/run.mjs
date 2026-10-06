@@ -11,7 +11,7 @@
  *   - 読み込み直後（スクロール前）に透明のまま待機している本文がないか
  *   - JavaScript 無効時に本文が隠れていないか
  *   - axe-core による WCAG 2.1 AA の違反（serious / critical）
- * スクリーンショットは qa-output/screens/ に、結果は qa-output/report.json に保存する。
+ * スクリーンショットは qa-output/screens/ に、結果は qa-output/report.json（--url のときは report-server.json）に保存する。
  */
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -139,6 +139,7 @@ for (const { site, path } of pages) {
 
 await browser.close();
 server?.kill();
-writeFileSync(join(outDir, 'report.json'), JSON.stringify(results, null, 2));
+// --url（WordPress など）の結果は静的版の結果（サンプル集の計測値に使う）と分けて保存する
+writeFileSync(join(outDir, args.url ? 'report-server.json' : 'report.json'), JSON.stringify(results, null, 2));
 console.log(`\n${results.length} ページ中 ${results.length - failures} ページ合格`);
 process.exit(failures ? 1 : 0);
