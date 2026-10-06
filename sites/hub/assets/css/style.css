@@ -514,6 +514,14 @@ a {
 .c-score.is-poor { color: var(--poor); }
 .c-score.is-none { color: var(--muted); }
 
+.c-score__range {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 .p-checks {
   display: grid;
   gap: 0.5rem;

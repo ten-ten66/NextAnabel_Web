@@ -150,7 +150,7 @@ partial('head', compact('page'));
           <?php if ($lighthouse): ?>
             <section class="c-table-wrap" tabindex="0" aria-label="Lighthouse の計測値">
               <table class="c-table c-table--metrics">
-                <caption>Lighthouse（モバイル）の計測値。<?= time_tag((string) $metrics['measuredAt'], 'Y年n月j日') ?>計測</caption>
+                <caption>Lighthouse（モバイル）の計測値。各ページを5回ずつ計測した中央値で、パフォーマンスの下の数字は5回の最小〜最大です（<?= time_tag((string) $metrics['measuredAt'], 'Y年n月j日') ?>計測）</caption>
                 <thead>
                   <tr>
                     <th scope="col">ページ</th>
@@ -168,7 +168,12 @@ partial('head', compact('page'));
                       <tr>
                         <th scope="row"><?= e($sample['name']) ?><span class="c-table__path"><?= e(basename($row['path'])) ?></span></th>
                         <?php foreach (['performance', 'accessibility', 'bestPractices', 'seo'] as $key): ?>
-                          <td><span class="c-score <?= score_class($row[$key] ?? null) ?>"><?= e((string) ($row[$key] ?? '—')) ?></span></td>
+                          <td>
+                            <span class="c-score <?= score_class($row[$key] ?? null) ?>"><?= e((string) ($row[$key] ?? '—')) ?></span>
+                            <?php if ($key === 'performance' && !empty($row['runs'])): ?>
+                              <span class="c-score__range u-mono"><?= e(min($row['runs']) . '〜' . max($row['runs'])) ?></span>
+                            <?php endif; ?>
+                          </td>
                         <?php endforeach; ?>
                         <td class="u-mono"><?= e((string) ($row['lcp'] ?? '—')) ?></td>
                         <td class="u-mono"><?= e((string) ($row['cls'] ?? '—')) ?></td>

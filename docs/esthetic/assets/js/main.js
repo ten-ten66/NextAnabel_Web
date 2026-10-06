@@ -704,7 +704,7 @@
 
     /* (1) ファーストビューの読み込み演出：文字は CSS が表示し、ここでは植物の線画を描く（1.2秒以内）
        線は pathLength="1" で長さを 1 に正規化してあり、破線のずれ（stroke-dashoffset）だけで描く。
-       DrawSVG はパスごとに長さを計測するため、40本ほどの線では読み込み直後の処理が重くなる（低速端末で数百ms） */
+       DrawSVG はパスごとに長さを計測するため、この37本の線では読み込み直後の処理が重くなっていた（CPU 4倍低速の計測で約480ms） */
     const HIDDEN_LINE = { strokeDasharray: '1 2', strokeDashoffset: 1 };
     const DRAWN_LINE = { strokeDashoffset: 0 };
     function playIntro() {
