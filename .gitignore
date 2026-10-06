@@ -1,0 +1,7 @@
+node_modules/
+build/
+qa-output/
+storage/*
+!storage/.htaccess
+!storage/.gitkeep
+.DS_Store
