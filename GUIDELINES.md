@@ -108,14 +108,15 @@ if (document.documentElement.dataset.build === 'demo') {
 - `!important` はユーティリティ以外で使わない。
 - フォーカスは `:focus-visible` で必ず見えるようにする。
 - フォントは Google Fonts から最大2ファミリー・合計4ウェイト以内。`display=swap`。ロゴや見出しの数文字だけに使う書体は、`text=` で使う文字を指定すれば3つ目のファミリーとして追加してよい。
-- テンプレートには Google Fonts の `<link>` を書くだけでよい。ビルド時に `tools/fonts.php` がサイト内で使う文字だけのサブセットを取得して同一オリジンに置き、最初の描画（FCP）が表示されてから読み込む（本文はいったん端末のフォントで表示し、届いた時点で差し替える）。フォントで文字の高さが変わるため、スクロール位置に依存する処理（ScrollTrigger など）はフォントの読み込み完了（`document.fonts` の `loadingdone`）で位置を計算し直す。`text=` 付きの `<link>` はその文字だけで取得する。Artifact 用のビルドでは Google Fonts の読み込みのまま残す。
+- テンプレートには Google Fonts の `<link>` を書くだけでよい。ビルド時に `tools/fonts.php` がサイト内で使う文字だけのサブセットを取得して同一オリジンに置き、表示を止めないよう非同期で読み込む（本文はいったん端末のフォントで表示し、届いた時点で差し替える）。フォントが初期化のあとに届くと文字の高さが変わるため、スクロール位置に依存する処理（ScrollTrigger など）はフォントの読み込み完了（`document.fonts` の `loadingdone`）で位置を計算し直す。`text=` 付きの `<link>` はその文字だけで取得する。Artifact 用のビルドでは Google Fonts の読み込みのまま残す。
 - サンプルサイトはサイトごとに意図したテーマで固定する（美容外科はダーク、その他はライト）。背景色と文字色を必ず明示する。
 
 ## 7. JavaScript
 
-- 依存なしの ES2020+（GSAP・Swiper を使うサイトのみ `assets/vendor/` から読み込む）。`defer` で読み込み、インラインのスクリプト・イベントハンドラは使わない（`tools/fonts.php` が出力するフォント CSS の読み込み処理のみ例外）。
+- 依存なしの ES2020+（GSAP・Swiper を使うサイトのみ `assets/vendor/` から読み込む）。`defer` で読み込み、インラインのイベントハンドラは使わない（`tools/fonts.php` が出力するフォント CSS の非同期読み込みのみ例外）。
 - ファーストビューに関係しない重いライブラリ（ギャラリーの Swiper など）は、対象が画面に近づいてから読み込んでよい。
 - 表示を変えない初期化（計測・監視・演出の準備）は、最初の描画のあと（`requestAnimationFrame` の中の `setTimeout`）に行う。読み込み直後に実行すると、低速な端末で最初の表示が遅れる。
+- Canvas などの動き続ける演出（フェードインを含む）は、最初の描画が画面に表示されてから（Paint Timing の `first-contentful-paint` を受け取ってから）始める。描画の直後に始めると、最初の画面の表示がフェードの終わりまで遅れることがある（美容皮膚科のトップで、Lighthouse の FCP が約1.28秒に固定される現象として確認）。
 - **JavaScript が動かなくても、すべての本文が読めること**（段階的強化）。
 - スクロール監視は `IntersectionObserver`、描画は `requestAnimationFrame`、`scroll` / `touchmove` リスナーは `{ passive: true }`。
 - コンソールエラー 0（静的版を含む）。静的版で fetch を呼ばない。

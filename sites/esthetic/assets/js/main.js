@@ -691,8 +691,12 @@
     }
     if (window.ScrollTrigger) {
       gsap.registerPlugin(window.ScrollTrigger);
-      // Webフォントは最初の描画のあとに差し替わる。文字の高さが変わるため、届いたら位置を計算し直す
-      document.fonts?.addEventListener?.('loadingdone', () => window.ScrollTrigger.refresh());
+      // Webフォントが初期化のあとに届いた場合は文字の高さが変わるため、位置を計算し直す（続けて届いた分はまとめて1回）
+      let fontRefresh = 0;
+      document.fonts?.addEventListener?.('loadingdone', () => {
+        window.clearTimeout(fontRefresh);
+        fontRefresh = window.setTimeout(() => window.ScrollTrigger.refresh(), 200);
+      });
     }
     if (window.DrawSVGPlugin) gsap.registerPlugin(window.DrawSVGPlugin);
     const supportsScrollTimeline = window.CSS?.supports?.('animation-timeline: view()') ?? false;

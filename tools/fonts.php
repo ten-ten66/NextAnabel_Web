@@ -105,18 +105,13 @@ foreach ($faces as $name => $face) {
 }
 file_put_contents($fontDir . '/fonts.css', $css);
 
-// フォントの CSS は、最初の描画（FCP）が画面に表示されてから読み込む。
-// 日本語フォントは1ページで数百KBになり、先に読むと CSS やファーストビューの画像と回線を奪い合う。
-// 以前の media="print" → all の切り替えでは、フォントの取得が最初の描画と重なることがあり、
-// Lighthouse の LCP（推定値）が 1.2秒 → 4.2秒にぶれた（tools/qa/lighthouse.mjs の複数回計測で確認）。
+// フォントの CSS は表示を止めないよう非同期で読み込む（media="print" で取得し、読み込み後に all へ切り替える）。
+// 日本語フォントは1ページで数百KBになり、先に読むと CSS やファーストビューの画像と回線を奪い合うため、
 // 本文はいったん端末のフォントで表示し、Webフォントが届いた時点で差し替える（font-display: swap）。
-// 描画の計測（Paint Timing）に対応しないブラウザでは load 後に、いずれの場合も3秒後には読み込む。
+// なお「最初の描画が表示されてからフォントの CSS を差し込む」方式も計測したが、文字の多いページでは
+// 差し替え時のレイアウトが2回になり、Lighthouse の TBT が 0ms → 450〜640ms に増えたため採用していない。
 // JavaScript が無効な環境では <noscript> で通常どおり読み込む。
-$loader = "(function(h){var d=0,l=function(){if(d)return;d=1;var k=document.createElement('link');k.rel='stylesheet';k.href=h;document.head.appendChild(k)};"
-    . "try{if(PerformanceObserver.supportedEntryTypes.indexOf('paint')<0)throw 0;"
-    . "new PerformanceObserver(function(s){if(s.getEntriesByName('first-contentful-paint').length)setTimeout(l,0)}).observe({type:'paint',buffered:true})}"
-    . "catch(e){addEventListener('load',l)}setTimeout(l,3000)})('assets/fonts/fonts.css')";
-$tags = '<script>' . $loader . '</script>' . "\n"
+$tags = '<link rel="stylesheet" href="assets/fonts/fonts.css" media="print" onload="this.media=\'all\'">' . "\n"
     . '<noscript><link rel="stylesheet" href="assets/fonts/fonts.css"></noscript>' . "\n";
 
 foreach ($htmlFiles as $file) {

@@ -415,8 +415,12 @@
     }
     gsap.registerPlugin(ScrollTrigger, SplitText);
     ScrollTrigger.config({ ignoreMobileResize: true });
-    // Webフォントは最初の描画のあとに差し替わる。文字の高さが変わるため、届いたら位置を計算し直す
-    document.fonts?.addEventListener?.('loadingdone', () => ScrollTrigger.refresh());
+    // Webフォントが初期化のあとに届いた場合は文字の高さが変わるため、位置を計算し直す（続けて届いた分はまとめて1回）
+    let fontRefresh = 0;
+    document.fonts?.addEventListener?.('loadingdone', () => {
+      window.clearTimeout(fontRefresh);
+      fontRefresh = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+    });
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: reduce)', revealTitles);
