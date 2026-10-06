@@ -9,7 +9,7 @@
 $branch = require SITE_DIR . '/data/branch.php';
 $mode = ($mode ?? 'line') === 'shade' ? 'shade' : 'line';
 ?>
-<svg class="p-hero__branch p-hero__branch--<?= e($mode) ?><?= $mode === 'line' ? ' js-branch' : '' ?>" viewBox="<?= e($branch['viewBox']) ?>" aria-hidden="true" focusable="false" data-intro>
+<svg class="p-hero__branch p-hero__branch--<?= e($mode) ?><?= $mode === 'line' ? ' js-branch' : '' ?>" viewBox="<?= e($branch['viewBox']) ?>" aria-hidden="true" focusable="false" data-intro="draw">
   <?php if ($mode === 'line'): ?>
     <?php foreach ($branch['stems'] as $stem): ?>
       <path class="p-hero__stem js-branch-stem" data-at="<?= e($stem['at']) ?>" d="<?= e($stem['d']) ?>"/>

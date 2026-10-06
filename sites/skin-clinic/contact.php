@@ -65,6 +65,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['purpose'] ?? ''
 $onSend = static function (array $v) use ($fields): bool {
     $option = static fn (string $key): string => (string) ($fields[$key]['options'][$v[$key]] ?? '');
     $date = static fn (string $ymd): string => $ymd !== '' ? ja_date($ymd, true) : '指定なし';
+    $flag = static fn (string $ymd): string => is_closed_day($ymd) ? '　※休診日' : '';
+    $hasClosedDay = is_closed_day((string) $v['date1']) || is_closed_day((string) $v['date2']);
     $clinic = (string) site('name');
     $time = $v['time'] !== '' ? $option('time') : '指定なし';
 
@@ -78,9 +80,9 @@ $onSend = static function (array $v) use ($fields): bool {
                 '',
                 '■ ご用件：' . $option('purpose'),
                 '■ 気になる施術：' . ($v['menu'] !== '' ? $option('menu') : '未選択'),
-                '■ 第1希望日：' . $date($v['date1']),
+                '■ 第1希望日：' . $date($v['date1']) . $flag($v['date1']),
                 '■ 時間帯：' . $time,
-                '■ 第2希望日：' . $date($v['date2']),
+                '■ 第2希望日：' . $date($v['date2']) . $flag($v['date2']),
                 '■ お名前：' . $v['name'] . '（' . $v['kana'] . '）',
                 '■ メールアドレス：' . $v['email'],
                 '■ 電話番号：' . $v['tel'],
@@ -100,9 +102,9 @@ $onSend = static function (array $v) use ($fields): bool {
 
         $isReservation = $v['purpose'] !== 'other';
         $schedule = ['■ ご希望日時'];
-        $schedule[] = '　第1希望：' . $date($v['date1']) . ($v['date1'] !== '' ? '　' . $time : '');
+        $schedule[] = '　第1希望：' . $date($v['date1']) . ($v['date1'] !== '' ? '　' . $time : '') . $flag($v['date1']);
         if ($v['date2'] !== '') {
-            $schedule[] = '　第2希望：' . $date($v['date2']) . '　' . $time;
+            $schedule[] = '　第2希望：' . $date($v['date2']) . '　' . $time . $flag($v['date2']);
         }
         $reply = new Mail(
             to: (string) $v['email'],
@@ -122,6 +124,7 @@ $onSend = static function (array $v) use ($fields): bool {
                     $isReservation
                         ? 'ご予約はまだ確定していません。2営業日以内に、当院からお電話またはメールでご連絡し、日時を確定いたします。'
                         : '内容を確認のうえ、2営業日以内に当院からご連絡いたします。',
+                    ...($hasClosedDay ? ['ご希望日に休診日が含まれているため、近い日程をご提案いたします。'] : []),
                     'ご相談内容は、プライバシー保護のため、このメールには記載していません。',
                     '',
                     'このメールにお心当たりのない場合は、お手数ですが破棄してください。',
@@ -284,7 +287,7 @@ partial('header', compact('page'));
             </div>
           <?php endif; ?>
           <?php if (is_static()): ?>
-            <p class="c-demo-note">このページはサンプルのため、送信されません。「入力内容を確認する」を押すと、確認画面と完了画面の流れを再現します（JavaScript を使用します）。</p>
+            <p class="c-demo-note p-contact__demo-intro">このページはサンプルのため、送信されません。「入力内容を確認する」を押すと、確認画面と完了画面の流れを再現します（JavaScript を使用します）。</p>
           <?php endif; ?>
 
           <form class="c-form js-contact-form" action="<?= e(url('contact')) ?>" method="post" novalidate<?= is_static() ? ' data-demo' : '' ?> data-reception="<?= e(reception_json()) ?>">
@@ -395,7 +398,7 @@ partial('header', compact('page'));
 
               <div class="<?= e($fieldClass('consent', 'c-field--consent')) ?>">
                 <p class="c-consent__text" id="f-consent-hint">ご入力いただいた内容は、ご予約の受付とご連絡のために利用します。ご相談内容など健康に関する情報は、ご予約とカウンセリングのためにのみ利用します。詳しくは<a href="<?= e(url('privacy')) ?>">プライバシーポリシー</a>をご確認ください。</p>
-                <label class="c-checkbox" for="f-consent">
+                <label class="c-checkbox">
                   <input type="checkbox" id="f-consent" name="consent" value="1"<?= $val('consent') === '1' ? ' checked' : '' ?> required<?= $invalid('consent') ?><?= $describedBy('consent', true) ?>>
                   <span class="c-checkbox__label">プライバシーポリシーに同意する</span><?= $badge(true) ?>
                 </label>

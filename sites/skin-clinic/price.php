@@ -105,11 +105,13 @@ partial('header', compact('page'));
                       <h4 class="p-price-block__title"><?= e($t['name']) ?></h4>
                       <a class="c-text-link" href="<?= e(url('treatment', ['slug' => $t['slug']])) ?>">施術の詳細・リスク<?= icon('arrow') ?></a>
                     </div>
-                    <?php if (($t['price_table'] ?? '') === 'hair_removal'): ?>
-                      <?php partial('hair-price-tables'); ?>
-                    <?php else: ?>
-                      <?php partial('price-table', ['t' => $t]); ?>
-                    <?php endif; ?>
+                    <div class="p-price-block__tables">
+                      <?php if (($t['price_table'] ?? '') === 'hair_removal'): ?>
+                        <?php partial('hair-price-tables'); ?>
+                      <?php else: ?>
+                        <?php partial('price-table', ['t' => $t]); ?>
+                      <?php endif; ?>
+                    </div>
                     <dl class="p-price-block__meta">
                       <div><dt>回数の目安</dt><dd><?= e($t['sessions_short']) ?></dd></div>
                       <div><dt>ダウンタイム</dt><dd><?= e($t['downtime_short']) ?></dd></div>

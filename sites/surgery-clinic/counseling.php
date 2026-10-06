@@ -318,6 +318,7 @@ partial('header', compact('page'));
             </div>
             <?php if (is_static()): ?>
               <p class="p-form__demo-note" data-lint-ignore>このページはサンプルです。確認画面・完了画面は表示されますが、入力内容は送信されません。</p>
+              <noscript><p class="p-form__demo-note">確認画面・完了画面のデモは、JavaScript を有効にするとご覧いただけます。</p></noscript>
             <?php endif; ?>
           </form>
 

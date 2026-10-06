@@ -37,7 +37,9 @@
   <text class="p-map__label p-map__label--soft p-map__label--small" x="200" y="438" transform="rotate(-49.4 200 438)">東急大井町線</text>
   <g class="p-map__pin">
     <path class="p-map__pin-shape" d="M426 140c-14-16-22-30-22-42a22 22 0 0 1 44 0c0 12-8 26-22 42Z"/>
-    <path class="p-map__pin-leaf" d="M426 108V94m0 6c4.5-.2 7.4-3 7.6-7.6-4.5.2-7.4 3-7.6 7.6Z"/>
+    <path class="p-map__pin-leaf" d="M426 110V96"/>
+    <path class="p-map__pin-leaf" d="M426 101.5c-5.4.2-9-3.3-9.4-8.8 5.4-.2 9 3.3 9.4 8.8Z"/>
+    <path class="p-map__pin-leaf" d="M426 99c.3-5 3.7-8.4 8.9-8.6-.2 5.2-3.6 8.5-8.9 8.6Z"/>
     <rect class="p-map__pin-tag" x="456" y="76" width="120" height="40" rx="20"/>
     <text class="p-map__pin-label" x="516" y="102" text-anchor="middle">苔と麻 2F</text>
   </g>

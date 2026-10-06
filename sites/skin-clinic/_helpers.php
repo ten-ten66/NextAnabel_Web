@@ -147,6 +147,19 @@ function hours_summary(): string
     return $base['open'] . '〜' . $base['close'] . ($notes ? '（' . implode('、', $notes) . '）' : '');
 }
 
+/** 休診日か（曜日の定休日と closed_dates の両方を見る）。'Y-m-d' 以外は false */
+function is_closed_day(string $ymd): bool
+{
+    $date = DateTimeImmutable::createFromFormat('!Y-m-d', $ymd);
+    if ($date === false) {
+        return false;
+    }
+    if (in_array($ymd, (array) site('closed_dates', []), true)) {
+        return true;
+    }
+    return ((array) site('schedule', []))[(int) $date->format('w')] === null;
+}
+
 /** 受付状況の計算に使う値（JavaScript に data 属性で渡す） */
 function reception_json(): string
 {
@@ -180,6 +193,19 @@ function split_heading(string $text): array
 {
     $parts = explode('：', $text, 2);
     return count($parts) === 2 ? $parts : ['', $text];
+}
+
+/**
+ * 施術名の HTML。括弧書きの部分（例: HIFU（高密度焦点式超音波））を小さく次の行に組めるよう分ける。
+ * 文字列そのものは変えない（読み上げ・表現チェックの対象はそのまま）。
+ */
+function name_html(string $name): string
+{
+    $pos = mb_strpos($name, '（');
+    if ($pos === false || $pos === 0) {
+        return e($name);
+    }
+    return e(mb_substr($name, 0, $pos)) . '<span class="c-name-sub">' . e(mb_substr($name, $pos)) . '</span>';
 }
 
 /** 監修者の表記（例: 院長 汐見 透子（皮膚科専門医）） */

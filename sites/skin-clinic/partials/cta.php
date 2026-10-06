@@ -6,7 +6,7 @@
     <div class="c-cta__text">
       <p class="c-cta__en" aria-hidden="true">Reservation</p>
       <h2 class="c-cta__title" id="cta-title">ご予約・ご相談</h2>
-      <p class="c-cta__lead">カウンセリングの日に、施術を受けるかどうかを決める必要はありません。費用とリスクを確かめてから、ゆっくりご検討ください。</p>
+      <p class="c-cta__lead">カウンセリングの日に、施術を受けるかどうかを<br class="u-br-lg">決める必要はありません。<br class="u-br-lg">費用とリスクを確かめてから、ゆっくりご検討ください。</p>
     </div>
     <div class="c-cta__actions">
       <a class="c-cta__button" href="<?= e(url('contact')) ?>">

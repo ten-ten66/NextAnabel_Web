@@ -130,6 +130,8 @@
     window.matchMedia('(min-width: 64em)').addEventListener('change', (event) => {
       if (event.matches) close({ restoreFocus: false });
     });
+    // 戻るボタンでページが復元されたときに、開いたままにならないようにする
+    window.addEventListener('pagehide', () => close({ restoreFocus: false }));
   };
 
   /* ---------------------------------------------------------------------
@@ -152,26 +154,29 @@
     const links = [...document.querySelectorAll('.p-treatment__toc a[href^="#"], .p-document__toc a[href^="#"]')];
     if (!links.length || !('IntersectionObserver' in window)) return;
     const byId = new Map(links.map((link) => [decodeURIComponent(link.hash.slice(1)), link]));
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((link) => link.classList.remove('is-active'));
-        const active = byId.get(entry.target.id);
-        if (active) active.classList.add('is-active');
+    const sections = [...byId.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+    // 画面の上から30%の線を越えた最後の見出しを現在地にする（どれも越えていなければ解除）
+    const update = () => {
+      const line = window.innerHeight * 0.3;
+      let current = null;
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= line) current = section;
       });
-    }, { rootMargin: '-25% 0px -65% 0px' });
-    byId.forEach((_, id) => {
-      const section = document.getElementById(id);
-      if (section) observer.observe(section);
-    });
+      links.forEach((link) => link.classList.toggle('is-active', current !== null && byId.get(current.id) === link));
+    };
+    const observer = new IntersectionObserver(update, { rootMargin: '0px 0px -70% 0px' });
+    sections.forEach((section) => observer.observe(section));
   };
 
   /* ---------------------------------------------------------------------
      フォーム共通
      --------------------------------------------------------------------- */
+  // サーバー版の確認・完了・エラー表示: 読み上げの起点を移し、手順の表示が見える位置までスクロールする
   const focusOnLoad = () => {
     const target = document.querySelector('[data-focus-on-load]:not([hidden])');
-    if (target) target.focus();
+    if (!target) return;
+    target.focus({ preventScroll: true });
+    (document.querySelector('[data-form-steps]') || target).scrollIntoView({ block: 'start' });
   };
 
   // 二重送信の防止。押したボタンの name/value を送信データに残すため、disabled にはしない

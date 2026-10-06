@@ -63,14 +63,14 @@ partial('header', compact('page'));
         <?php partial('section-head', ['en' => 'Policy', 'title' => '診療方針', 'id' => 'policy-title']); ?>
       </div>
       <div class="l-rail__body">
-        <ol class="p-doctor-policy__list">
+        <ul class="p-doctor-policy__list">
           <?php foreach ($doctor['policy'] as $item): ?>
             <li class="p-doctor-policy__item">
               <h3 class="p-doctor-policy__title"><?= e($item['title']) ?></h3>
               <p class="p-doctor-policy__text"><?= e($item['text']) ?></p>
             </li>
           <?php endforeach; ?>
-        </ol>
+        </ul>
       </div>
     </div>
   </section>

@@ -100,7 +100,7 @@ $unapprovedLabels = [
               <span class="c-tag"><?= e($cats[$id]['label'] ?? '') ?></span>
             <?php endforeach; ?>
           </p>
-          <h1 class="p-tx-hero__title"><?= e($t['name']) ?></h1>
+          <h1 class="p-tx-hero__title"><?= name_html($t['name']) ?></h1>
           <p class="p-tx-hero__en" aria-hidden="true"><?= e($t['en']) ?></p>
           <p class="p-tx-hero__summary"><?= e($t['summary']) ?></p>
           <dl class="p-tx-hero__facts">
@@ -111,7 +111,7 @@ $unapprovedLabels = [
           </dl>
           <p class="c-reviewed" data-reviewed-by>監修：<?= e(reviewer_label()) ?>／最終確認日 <?= ja_time_tag($t['reviewed']) ?></p>
         </div>
-        <div class="p-tx-hero__visual<?= !empty($t['mirror']) ? ' is-mirrored' : '' ?>" style="view-transition-name: tx-<?= e($t['slug']) ?>">
+        <div class="p-tx-hero__visual<?= !empty($t['mirror']) ? ' is-mirrored' : '' ?>">
           <img src="<?= e(asset($t['image'])) ?>" width="960" height="720" alt="" fetchpriority="high">
         </div>
       </div>
@@ -190,13 +190,15 @@ $unapprovedLabels = [
             <a class="c-text-link" href="<?= e(url('price#price-' . $t['category'])) ?>">料金表でほかの施術と比べる<?= icon('arrow') ?></a>
           </div>
           <div class="p-tx-disclosure__risks" data-disclosure="risks">
-            <h3 class="p-tx-disclosure__title p-tx-disclosure__title--notice">主なリスク・副作用</h3>
-            <ul class="c-risk-list">
-              <?php foreach ($t['risks'] as $risk): ?>
-                <li><?= e($risk) ?></li>
-              <?php endforeach; ?>
-            </ul>
-            <p class="c-note">症状が出た場合は、診察のうえで必要な処置を行います。気になる変化があれば、施術日以外でもご連絡ください。</p>
+            <div class="p-tx-disclosure__inner">
+              <h3 class="p-tx-disclosure__title p-tx-disclosure__title--notice">主なリスク・副作用</h3>
+              <ul class="c-risk-list">
+                <?php foreach ($t['risks'] as $risk): ?>
+                  <li><?= e($risk) ?></li>
+                <?php endforeach; ?>
+              </ul>
+              <p class="c-note">症状が出た場合は、診察のうえで必要な処置を行います。気になる変化があれば、施術日以外でもご連絡ください。</p>
+            </div>
           </div>
         </div>
       </section>

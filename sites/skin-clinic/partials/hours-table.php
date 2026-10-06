@@ -5,7 +5,7 @@
  */
 $lastEntry = (int) site('last_entry_minutes', 0);
 ?>
-<table class="c-hours js-hours">
+<table class="c-hours js-hours" data-reception="<?= e(reception_json()) ?>">
   <caption class="c-hours__caption"><?= e($caption ?? '診療時間') ?><span class="c-hours__note">最終受付は診療終了の<?= e($lastEntry) ?>分前です</span></caption>
   <thead>
     <tr>

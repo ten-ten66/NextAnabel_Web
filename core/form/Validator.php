@@ -143,9 +143,11 @@ final class Validator
         $minDays = (int) ($def['min_days'] ?? 0);
         $maxDays = (int) ($def['max_days'] ?? 90);
         if ($date < $today->modify("+{$minDays} days")) {
-            return $minDays > 0
-                ? "{$label}は{$minDays}日後以降の日付を選択してください。"
-                : "{$label}は本日以降の日付を選択してください。";
+            return match (true) {
+                $minDays === 1 => "{$label}は明日以降の日付を選択してください。",
+                $minDays > 1 => "{$label}は{$minDays}日後以降の日付を選択してください。",
+                default => "{$label}は本日以降の日付を選択してください。",
+            };
         }
         if ($date > $today->modify("+{$maxDays} days")) {
             return "{$label}は{$maxDays}日以内の日付を選択してください。";

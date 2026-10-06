@@ -6,6 +6,8 @@
  * @var array<string, mixed> $content
  */
 $course = $plan['course'];
+// 挿絵で強調する部位と、ラベルの位置（よく組み合わせて選ばれる部位を例として示す）
+$fvParts = array_intersect_key(['underarm' => 'a', 'vio' => 'b', 'legs' => 'c'], lp_part_options());
 ?>
 <section class="p-fv js-fv" id="fv" aria-labelledby="fv-title">
   <div class="p-fv__bg" aria-hidden="true">
@@ -23,7 +25,7 @@ $course = $plan['course'];
       </h1>
       <p class="p-fv__lead">部位を選ぶと、<?= e((string) $course['count']) ?>回コースの税込総額と通院回数の目安がその場でわかります。カウンセリングは無料。その日に契約を決める必要はありません。</p>
       <div class="p-fv__actions">
-        <a class="c-button c-button--primary c-button--lg" href="#reserve" data-cta="fv">カウンセリングを予約する（無料）<?= lp_icon('arrow', 'c-button__arrow') ?></a>
+        <a class="c-button c-button--primary c-button--lg p-fv__cta" href="#reserve" data-cta="fv"><span>カウンセリングを予約する<span class="u-nowrap">（無料）</span></span><?= lp_icon('arrow', 'c-button__arrow') ?></a>
         <a class="c-button c-button--ghost c-button--lg" href="#simulator" data-cta="fv-simulator"><?= lp_icon('calc') ?>料金を試算する</a>
       </div>
       <ul class="p-fv__points">
@@ -36,6 +38,14 @@ $course = $plan['course'];
       </ul>
     </div>
 
+    <div class="p-fv__aside">
+    <div class="p-fv__visual" aria-hidden="true">
+      <span class="p-fv__disc"></span>
+      <?php partial('figure', ['side' => 'front', 'mode' => 'decorative', 'highlight' => array_keys($fvParts)]); ?>
+<?php foreach ($fvParts as $id => $position): ?>
+      <span class="p-fv__chip p-fv__chip--<?= e($position) ?>"><?= e(lp_split_label(lp_part_options()[$id] ?? $id)[0]) ?></span>
+<?php endforeach; ?>
+    </div>
     <div class="p-fv__facts">
       <p class="p-fv__facts-title"><?= e((string) $course['count']) ?>回コースの目安</p>
       <dl class="p-fv__facts-list">
@@ -54,6 +64,7 @@ $course = $plan['course'];
 <?php endfor; ?>
       </ol>
       <p class="p-fv__facts-note"><?= e($course['interval']) ?>必要な回数には個人差があります。</p>
+    </div>
     </div>
   </div>
 </section>

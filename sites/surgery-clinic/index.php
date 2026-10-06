@@ -291,8 +291,9 @@ partial('header', compact('page'));
             <g class="c-map__clinic">
               <circle cx="408" cy="352" r="9"/>
               <circle class="c-map__clinic-ring" cx="408" cy="352" r="20"/>
-              <text x="438" y="357">オルヴァン美容外科</text>
+              <text class="c-map__clinic-name" x="438" y="357">オルヴァン美容外科</text>
               <text class="c-map__clinic-sub" x="438" y="381">サンプルタワー8階</text>
+              <text class="c-map__clinic-short" x="440" y="361">当院</text>
             </g>
           </svg>
           <figcaption class="c-frame__caption">周辺地図（イラスト）。正確な位置は地図アプリでご確認ください。</figcaption>

@@ -3,7 +3,7 @@
  * <head> と body の開始（スキップリンク・架空サイトの注記・アイコン定義）
  *
  * $page のキー（core/seo.php の説明に加えて）
- *   vendor     読み込むライブラリ ['gsap', 'swiper']
+ *   vendor     読み込むライブラリ ['gsap']（Swiper はギャラリーが近づいたときに main.js が読み込む）
  *   bodyClass  body の class
  *
  * @var array<string, mixed> $page
@@ -22,24 +22,18 @@ $accentFont = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no">
-<script>document.documentElement.classList.replace('no-js', 'js'); document.documentElement.classList.add('is-intro');</script>
+<script>document.documentElement.classList.replace('no-js', 'js'); document.documentElement.classList.add('is-intro', 'is-drawing');</script>
 <?= seo_meta($page) ?>
 <link rel="icon" href="<?= e(asset('img/favicon.svg')) ?>" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&amp;family=Zen+Kaku+Gothic+Antique:wght@400;500&amp;display=swap">
 <link rel="stylesheet" href="<?= e($accentFont) ?>">
-<?php if (in_array('swiper', $vendor, true)): ?>
-<link rel="stylesheet" href="<?= e(asset('vendor/swiper-bundle.min.css')) ?>">
-<?php endif; ?>
 <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
 <?php if (in_array('gsap', $vendor, true)): ?>
 <script src="<?= e(asset('vendor/gsap.min.js')) ?>" defer></script>
 <script src="<?= e(asset('vendor/ScrollTrigger.min.js')) ?>" defer></script>
 <script src="<?= e(asset('vendor/DrawSVGPlugin.min.js')) ?>" defer></script>
-<?php endif; ?>
-<?php if (in_array('swiper', $vendor, true)): ?>
-<script src="<?= e(asset('vendor/swiper-bundle.min.js')) ?>" defer></script>
 <?php endif; ?>
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
 </head>

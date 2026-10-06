@@ -126,6 +126,12 @@ function lp_corporate_url(): string
     return SITE_ORIGIN . '/' . trim((string) site('corporate_base', 'skin-clinic'), '/') . '/';
 }
 
+/** コーポレートサイトのプライバシーポリシー（静的版のファイル名） */
+function lp_privacy_url(): string
+{
+    return lp_corporate_url() . 'privacy.html';
+}
+
 /**
  * 診療時間の表示用の行
  *

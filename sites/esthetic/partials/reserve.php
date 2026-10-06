@@ -26,7 +26,7 @@
           <p class="p-reserve__action">
             <span class="c-magnet js-magnet">
               <button type="button" class="c-button c-button--primary c-button--lg js-dialog-open" aria-haspopup="dialog" aria-controls="reserve-dialog" hidden>
-                <span class="c-button__label">Web予約（外部予約システムを想定）</span>
+                <span class="c-button__label">Web予約<span class="c-button__sub">（外部予約システムを想定）</span></span>
                 <svg class="c-icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>
               </button>
             </span>

@@ -18,7 +18,7 @@
 <noscript><style>.u-js-only{display:none!important}</style></noscript>
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
 </head>
-<body class="<?= e(trim('p-' . ($page['id'] ?? 'page') . ' ' . ($page['bodyClass'] ?? ''))) ?>">
+<body data-page="<?= e($page['id'] ?? '') ?>"<?= !empty($page['bodyClass']) ? ' class="' . e($page['bodyClass']) . '"' : '' ?>>
 <a class="c-skip-link" href="#main">本文へスキップ</a>
 <aside class="c-demo-notice" aria-label="このサイトについて" data-lint-ignore>
   <p class="c-demo-notice__text">このサイトはWeb制作のサンプルとして作成した架空のクリニックです。実在の医療機関・人物とは関係ありません。</p>

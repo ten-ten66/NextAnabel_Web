@@ -15,6 +15,7 @@ $closedNames = implode('・', array_map(static fn ($d) => LP_WEEKDAYS[$d], $clos
 $dateMin = (new DateTimeImmutable('today'))->modify('+' . $fields['date1']['min_days'] . ' days')->format('Y-m-d');
 $dateMax = (new DateTimeImmutable('today'))->modify('+' . $fields['date1']['max_days'] . ' days')->format('Y-m-d');
 $static = is_static();
+$requiredCount = count(array_filter($fields, static fn ($def) => !empty($def['required'])));
 $required = '<span class="c-field__badge">必須</span>';
 $optional = '<span class="c-field__badge c-field__badge--optional">任意</span>';
 ?>
@@ -26,7 +27,7 @@ $optional = '<span class="c-field__badge c-field__badge--optional">任意</span>
     <div class="c-section-head c-section-head--center">
       <p class="c-section-head__label"><span class="c-section-head__num">08</span>ご予約</p>
       <h2 class="c-section-head__title js-reserve-heading" id="reserve-title" tabindex="-1">カウンセリングを予約する（無料）</h2>
-      <p class="c-section-head__lead">必須項目は5つです。ご予約は、クリニックから日時を確定するご連絡をした時点で確定します。</p>
+      <p class="c-section-head__lead">入力は必須<?= e((string) $requiredCount) ?>項目。ご予約は、クリニックから日時を確定するご連絡をした時点で確定します。</p>
     </div>
 
     <div class="p-reserve__card">
@@ -42,7 +43,7 @@ $optional = '<span class="c-field__badge c-field__badge--optional">任意</span>
 
       <p class="p-reserve__prefill js-prefill-note" hidden><?= lp_icon('check') ?><span class="js-prefill-text"></span></p>
 
-      <form class="p-reserve__form js-reserve-form" id="reserve-form"<?= $static ? '' : ' action="api/reserve.php" method="post" data-endpoint="api/reserve.php"' ?> data-closed-days="<?= e(implode(',', $closed)) ?>" data-min-days="<?= e((string) $fields['date1']['min_days']) ?>" data-max-days="<?= e((string) $fields['date1']['max_days']) ?>">
+      <form class="p-reserve__form js-reserve-form" id="reserve-form"<?= $static ? '' : ' action="api/reserve.php" method="post" data-endpoint="api/reserve.php"' ?> data-closed-days="<?= e(implode(',', $closed)) ?>" data-timezone="<?= e(date_default_timezone_get()) ?>" data-min-days="<?= e((string) $fields['date1']['min_days']) ?>" data-max-days="<?= e((string) $fields['date1']['max_days']) ?>">
         <div class="c-error-summary js-error-summary" tabindex="-1" hidden>
           <p class="c-error-summary__title"><?= lp_icon('alert') ?><span class="js-error-summary-title">入力内容をご確認ください</span></p>
           <ul class="c-error-summary__list js-error-summary-list"></ul>
@@ -119,7 +120,7 @@ $optional = '<span class="c-field__badge c-field__badge--optional">任意</span>
               <div><dt><?= e($item['title']) ?></dt><dd><?= e($item['body']) ?></dd></div>
 <?php endforeach; ?>
             </dl>
-            <p class="p-reserve__privacy-more">全文は<a href="<?= e(lp_corporate_url()) ?>" target="_blank" rel="noopener"><?= e(site('name')) ?>の公式サイト<span class="u-visually-hidden">（新しいタブで開きます）</span></a>でご案内しています。</p>
+            <p class="p-reserve__privacy-more">全文は、公式サイトの<a href="<?= e(lp_privacy_url()) ?>" target="_blank" rel="noopener">プライバシーポリシー<span class="u-visually-hidden">（新しいタブで開きます）</span></a>をご覧ください。</p>
           </details>
           <label class="c-check">
             <input class="c-check__input js-field" id="f-consent" type="checkbox" name="consent" value="1" required data-label="個人情報の取り扱い" data-type="consent">
@@ -171,6 +172,6 @@ $optional = '<span class="c-field__badge c-field__badge--optional">任意</span>
       </div>
     </div>
 
-    <p class="p-reserve__tel"><?= lp_icon('phone') ?><span>お電話でのご予約・ご相談：<a href="<?= e(lp_tel_href()) ?>" data-cta="reserve-tel"><?= e(site('tel')) ?></a>（診療時間内）</span></p>
+    <p class="p-reserve__tel"><span class="p-reserve__tel-label">お電話でのご予約・ご相談</span><a class="p-reserve__tel-link" href="<?= e(lp_tel_href()) ?>" data-cta="reserve-tel"><?= lp_icon('phone') ?><?= e(site('tel')) ?></a><span class="p-reserve__tel-note">診療時間内に受け付けています</span></p>
   </div>
 </section>

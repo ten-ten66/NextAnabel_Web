@@ -21,7 +21,7 @@
 
   /* color（上記から導く値） */
   --color-cta-text: var(--color-ink);
-  --color-scrim: color-mix(in srgb, var(--color-ink) 88%, transparent);
+  --color-scrim: color-mix(in srgb, var(--color-ink) 95%, transparent);
   --color-scrim-soft: color-mix(in srgb, var(--color-ink) 55%, transparent);
   --color-line-strong: color-mix(in srgb, var(--color-ivory) 24%, var(--color-ink-line));
   --color-hatch: color-mix(in srgb, var(--color-ink-line) 70%, transparent);
@@ -43,7 +43,7 @@
   --fs-lead: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
   --fs-h3: clamp(1.25rem, 1.12rem + 0.55vw, 1.625rem);
   --fs-h2: clamp(1.75rem, 1.3rem + 1.9vw, 3.125rem);
-  --fs-display: clamp(3.25rem, 1.4rem + 7.6vw, 8.75rem);
+  --fs-display: clamp(3.5rem, 1.6rem + 7.4vw, 8.75rem);
   --fs-numeral: clamp(3.5rem, 2.4rem + 4.6vw, 7.5rem);
   --lh-body: 1.9;
 
@@ -262,7 +262,7 @@ table {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
   height: 100%;
   max-width: calc(var(--container) + var(--gutter) * 2);
   margin-inline: auto;
@@ -270,6 +270,7 @@ table {
 }
 
 .l-header__logo {
+  flex: none;
   margin-right: auto;
   transform-origin: left center;
   transition: transform 0.6s var(--ease-out);
@@ -293,7 +294,7 @@ table {
 .l-header__link {
   position: relative;
   display: inline-block;
-  padding-block: var(--space-2);
+  padding-block: 10px;
   font-size: var(--fs-sm);
   letter-spacing: 0.1em;
   text-decoration: none;
@@ -305,7 +306,7 @@ table {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 2px;
+  bottom: 6px;
   height: 1px;
   background-color: var(--color-brass);
   transform: scaleX(0);
@@ -345,7 +346,8 @@ table {
   color: var(--color-brass);
 }
 
-.l-header__cta {
+/* .c-button の display より優先させるため、親を含めて指定する */
+.l-header .l-header__cta {
   display: none;
 }
 
@@ -359,6 +361,7 @@ table {
 
 .l-header__toggle {
   display: none;
+  flex: none;
   align-items: center;
   gap: var(--space-3);
   min-width: 44px;
@@ -375,13 +378,15 @@ table {
 .l-header__toggle-icon {
   position: relative;
   display: block;
-  width: 28px;
+  flex: none;
+  width: 26px;
   height: 10px;
 }
 
 .l-header__toggle-icon span {
   position: absolute;
   left: 0;
+  display: block;
   width: 100%;
   height: 1px;
   background-color: currentColor;
@@ -416,7 +421,7 @@ table {
 }
 
 @media (min-width: 48em) {
-  .l-header__cta {
+  .l-header .l-header__cta {
     display: inline-flex;
   }
 }
@@ -510,7 +515,7 @@ table {
 
 .l-drawer__sub a {
   display: inline-block;
-  padding-block: var(--space-2);
+  padding-block: 9px;
   font-size: var(--fs-sm);
   color: var(--color-ivory-soft);
   text-decoration: none;
@@ -597,11 +602,12 @@ table {
 .l-footer__list {
   list-style: none;
   padding: 0;
+  line-height: 1.9;
 }
 
 .l-footer__list a {
   display: inline-block;
-  padding-block: 7px;
+  padding-block: 9px;
   text-decoration: none;
 }
 
@@ -699,16 +705,22 @@ table {
 .c-logo__mark {
   font-family: var(--font-accent);
   font-style: italic;
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   line-height: 1;
   letter-spacing: 0.02em;
 }
 
 .c-logo__name {
   font-family: var(--font-display);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.18em;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
   color: var(--color-ivory-soft);
+}
+
+@media (max-width: 22.4375em) {
+  .l-header .c-logo__name {
+    display: none;
+  }
 }
 
 .c-logo--stack {
@@ -723,6 +735,17 @@ table {
 
 .c-logo--stack .c-logo__name {
   font-size: var(--fs-xs);
+}
+
+@media (min-width: 48em) {
+  .c-logo__mark {
+    font-size: 1.625rem;
+  }
+
+  .c-logo__name {
+    font-size: var(--fs-2xs);
+    letter-spacing: 0.18em;
+  }
 }
 
 @media (min-width: 64em) {
@@ -1088,8 +1111,9 @@ table {
 }
 
 .c-breadcrumb__item a {
-  display: inline-block;
-  padding-block: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
 }
 
@@ -1204,7 +1228,7 @@ table {
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: var(--fw-regular);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   letter-spacing: 0;
   color: var(--color-brass);
 }
@@ -1363,6 +1387,7 @@ table {
   padding-right: var(--space-4);
   font-weight: var(--fw-regular);
   text-align: left;
+  word-break: auto-phrase;
 }
 
 .c-price-table td {
@@ -1498,6 +1523,31 @@ table {
   fill: var(--color-ivory-soft);
   font-family: var(--font-body);
   font-size: 12px;
+}
+
+.c-map__clinic .c-map__clinic-short {
+  display: none;
+}
+
+/* 画面幅に合わせて縮小されるため、スマートフォンでは文字を大きくする */
+@media (max-width: 47.9375em) {
+  .c-map__street-label {
+    font-size: 19px;
+  }
+
+  .c-map__station text {
+    font-size: 22px;
+  }
+
+  .c-map__clinic .c-map__clinic-name,
+  .c-map__clinic .c-map__clinic-sub {
+    display: none;
+  }
+
+  .c-map__clinic .c-map__clinic-short {
+    display: inline;
+    font-size: 28px;
+  }
 }
 
 /* Card（施術メニュー） --------------------------------------------------- */
@@ -1680,7 +1730,7 @@ table {
   font-style: italic;
   font-size: 1.375rem;
   line-height: 1;
-  color: var(--color-brass-soft);
+  color: var(--color-ivory-soft);
 }
 
 .c-form-steps__item.is-current,
@@ -1851,6 +1901,7 @@ table {
   position: absolute;
   top: 50%;
   left: var(--space-4);
+  z-index: 1;
   width: 20px;
   height: 20px;
   margin: 0;
@@ -1937,10 +1988,6 @@ table {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .c-choices--inline {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
   .c-choices--inline .c-choice {
     font-size: var(--fs-sm);
   }
@@ -1959,6 +2006,11 @@ table {
 .c-alert {
   margin-bottom: var(--space-6);
   font-size: var(--fs-sm);
+}
+
+/* 読み込み時にスクリプトでフォーカスを移す領域（操作できる要素ではないため枠は出さない） */
+.c-error-summary:focus {
+  outline: none;
 }
 
 .c-error-summary__title {
@@ -2021,10 +2073,13 @@ table {
 /* Toast ------------------------------------------------------------------- */
 .c-toast {
   position: fixed;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: var(--space-5);
   z-index: 120;
+  width: max-content;
   max-width: calc(100% - var(--space-6));
+  margin-inline: auto;
   padding: var(--space-3) var(--space-5);
   background-color: var(--color-ink-raised);
   border: 1px solid var(--color-brass-soft);
@@ -2034,7 +2089,7 @@ table {
   text-align: center;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, 16px);
+  transform: translateY(16px);
   transition: opacity 0.35s var(--ease-out), transform 0.5s var(--ease-out);
 }
 
@@ -2045,7 +2100,7 @@ table {
 
 .c-toast.is-visible {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -2057,7 +2112,7 @@ table {
   isolation: isolate;
   overflow: hidden;
   margin-top: calc(var(--header-h) * -1);
-  padding-top: calc(var(--header-h) + clamp(var(--space-8), 8vw, 136px));
+  padding-top: calc(var(--header-h) + clamp(var(--space-7), 6vw, 112px));
   padding-bottom: clamp(var(--space-6), 4vw, var(--space-8));
 }
 
@@ -2214,7 +2269,7 @@ table {
     top: calc(var(--header-h) + var(--space-8));
     right: calc(var(--gutter) * 0.5);
     display: block;
-    color: var(--color-brass-soft);
+    color: var(--color-brass);
     font-size: var(--fs-2xs);
     letter-spacing: 0.42em;
     text-transform: uppercase;
@@ -2238,6 +2293,10 @@ table {
     grid-row: 2;
     align-self: start;
     margin-top: calc(var(--fs-display) * 1.2);
+  }
+
+  .p-hero__catch {
+    font-size: 1.5rem;
   }
 }
 
@@ -2577,7 +2636,7 @@ table {
   }
 
   .p-flow.is-horizontal .p-flow__step {
-    width: clamp(340px, 31vw, 440px);
+    width: clamp(360px, 36vw, 540px);
     padding-right: clamp(var(--space-6), 3.4vw, 56px);
     border-top: 0;
   }
@@ -2805,10 +2864,6 @@ table {
   line-height: 2;
 }
 
-.p-access__row .c-link {
-  min-height: 32px;
-}
-
 .p-access__stations {
   list-style: none;
   padding: 0;
@@ -3007,7 +3062,7 @@ table {
   display: flex;
   align-items: baseline;
   gap: var(--space-3);
-  padding: var(--space-2) 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--color-ink-line);
   color: var(--color-ivory-soft);
   font-size: 0.8125rem;
@@ -3048,7 +3103,7 @@ table {
 .p-treatment__content,
 .p-document__body {
   min-width: 0;
-  max-width: 50rem;
+  max-width: 56rem;
 }
 
 .p-treatment__section,
@@ -3140,7 +3195,7 @@ table {
 
 .p-disclosure__col {
   min-width: 0;
-  padding: clamp(var(--space-5), 3vw, 40px);
+  padding: clamp(var(--space-5), 2.4vw, 36px);
 }
 
 .p-disclosure__risks {
@@ -3194,7 +3249,7 @@ table {
 }
 
 .p-related__title {
-  font-size: var(--fs-h3);
+  font-size: var(--fs-h2);
 }
 
 .p-related__list {
@@ -3485,6 +3540,10 @@ table {
   .p-case__link {
     grid-column: 7 / span 6;
   }
+
+  .p-case__row {
+    grid-template-columns: 9.5em minmax(0, 1fr);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -3576,6 +3635,9 @@ table {
 
   .p-career__layout > .c-section-head {
     grid-column: 1 / span 4;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-7));
   }
 
   .p-career__body {
@@ -3608,7 +3670,7 @@ table {
 
 .p-counseling__facts div {
   display: grid;
-  grid-template-columns: 8em minmax(0, 1fr);
+  grid-template-columns: 9.5em minmax(0, 1fr);
   gap: var(--space-3);
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-ink-line);
@@ -3787,6 +3849,22 @@ table {
   .p-not-found__body {
     grid-column: 7 / span 6;
   }
+}
+
+/* --------------------------------------------------------------------------
+   小さな明朝の見出しは 700 にして、暗い背景でも線が細くなりすぎないようにする
+   -------------------------------------------------------------------------- */
+.c-steps__title,
+.c-hours__caption,
+.c-error-summary__title,
+.p-disclosure__title,
+.p-related__name,
+.p-treatment__reviewer-name,
+.p-career__subtitle,
+.p-counseling__aside-title,
+.c-map__clinic .c-map__clinic-name,
+.c-map__clinic .c-map__clinic-short {
+  font-weight: var(--fw-bold);
 }
 
 /* --------------------------------------------------------------------------

@@ -7,10 +7,11 @@
  */
 ?>
 <section class="p-faq l-section" id="faq" aria-labelledby="faq-title">
-  <div class="l-container">
-    <div class="c-section-head">
+  <div class="l-container p-faq__layout">
+    <div class="c-section-head p-faq__head">
       <p class="c-section-head__label"><span class="c-section-head__num">07</span>よくある質問</p>
       <h2 class="c-section-head__title" id="faq-title">ご予約の前に、よくいただく質問。</h2>
+      <p class="c-section-head__lead">ほかにも気になることがあれば、カウンセリングで医師とスタッフがお答えします。</p>
     </div>
     <div class="p-faq__list js-faq">
 <?php foreach ($content['faq'] as $i => $item): ?>

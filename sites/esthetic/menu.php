@@ -63,9 +63,9 @@ partial('header', compact('page'));
           <li class="c-breadcrumb__item" aria-current="page">メニューと料金</li>
         </ol>
       </nav>
-      <p class="c-section-head__en" lang="en" aria-hidden="true" data-intro>Menu &amp; Price</p>
-      <h1 class="p-page-hero__title" data-intro>メニューと料金</h1>
-      <p class="p-page-hero__lead" data-intro>表示している料金は、すべて税込の総額です。カウンセリングの料金はいただいていません。迷ったときは、「季節のフェイシャル」か「森のヘッドスパ」から始めてみてください。</p>
+      <p class="c-section-head__en" lang="en" aria-hidden="true" data-intro="text" style="--intro-delay: .05s">Menu &amp; Price</p>
+      <h1 class="p-page-hero__title" data-intro="text" style="--intro-delay: .12s">メニューと料金</h1>
+      <p class="p-page-hero__lead" data-intro="text" style="--intro-delay: .2s">表示している料金は、すべて税込の総額です。カウンセリングの料金はいただいていません。迷ったときは、「季節のフェイシャル」か「森のヘッドスパ」から始めてみてください。</p>
     </div>
   </div>
 

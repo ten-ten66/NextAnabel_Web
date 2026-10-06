@@ -16,7 +16,8 @@ $follicles = [
   <desc id="diagram-desc">レーザーの光は3本の毛すべてに当たりますが、熱が毛根まで伝わりやすいのは、毛根とつながっている成長期の毛だけであることを示した図です。</desc>
   <defs>
     <linearGradient id="diagram-beam" x1="0" y1="0" x2="0" y2="1">
-      <stop class="p-diagram__stop-strong" offset="0"/>
+      <stop class="p-diagram__stop-none" offset="0"/>
+      <stop class="p-diagram__stop-strong" offset=".32"/>
       <stop class="p-diagram__stop-fade" offset="1"/>
     </linearGradient>
     <radialGradient id="diagram-heat">
@@ -30,7 +31,7 @@ $follicles = [
   <path class="p-diagram__surface" d="M0 76H360"/>
 <?php foreach ($follicles as [$x, $top, $bulb, $r, $papilla, $name, $growing]): ?>
   <g class="p-diagram__follicle<?= $growing ? ' is-growing' : '' ?>">
-    <rect class="p-diagram__beam" x="<?= $x - 17 ?>" y="0" width="34" height="<?= $bulb + 4 ?>"/>
+    <rect class="p-diagram__beam" x="<?= $x - 16 ?>" y="0" width="32" height="<?= $bulb + 6 ?>" rx="16"/>
     <path class="p-diagram__sheath" d="M<?= $x - 9 ?> 80V<?= $bulb - 4 ?>Q<?= $x ?> <?= $bulb + $r + 14 ?> <?= $x + 9 ?> <?= $bulb - 4 ?>V80"/>
     <ellipse class="p-diagram__papilla" cx="<?= $x ?>" cy="<?= $papilla ?>" rx="<?= $growing ? 7 : 5 ?>" ry="<?= $growing ? 4.5 : 3.5 ?>"/>
 <?php if ($growing): ?>
@@ -38,11 +39,12 @@ $follicles = [
 <?php endif; ?>
     <path class="p-diagram__hair" d="M<?= $x ?> <?= $top ?>V<?= $bulb - $r + 2 ?>"/>
     <ellipse class="p-diagram__bulb" cx="<?= $x ?>" cy="<?= $bulb ?>" rx="<?= $r ?>" ry="<?= $r - 1.5 ?>"/>
-    <rect class="p-diagram__pulse" x="<?= $x - 17 ?>" y="0" width="34" height="30" style="--travel: <?= $bulb - 24 ?>px"/>
+    <rect class="p-diagram__pulse" x="<?= $x - 16 ?>" y="0" width="32" height="30" rx="15" style="--travel: <?= $bulb - 24 ?>px"/>
     <text class="p-diagram__label<?= $growing ? ' is-growing' : '' ?>" x="<?= $x ?>" y="283"><?= e($name) ?></text>
   </g>
 <?php endforeach; ?>
   <text class="p-diagram__note" x="104" y="244">熱が毛根に伝わる</text>
   <path class="p-diagram__leader" d="M100 240H84"/>
-  <text class="p-diagram__laser" x="8" y="18">レーザー</text>
+  <text class="p-diagram__laser" x="125" y="46">レーザー</text>
+  <path class="p-diagram__leader" d="M98 42H90M152 42H160"/>
 </svg>

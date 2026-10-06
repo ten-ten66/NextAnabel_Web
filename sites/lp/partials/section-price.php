@@ -51,7 +51,8 @@ foreach ($plan['parts'] as $part) {
 <?php foreach ($plan['sets'] as $set): ?>
 <?php $qualifying = lp_is_qualifying_course((int) $set['course'], $months); ?>
               <tr>
-                <th scope="row"><?= e($set['label']) ?><span class="c-price-table__sub"><?= e(implode('・', array_map(static fn ($id) => $shortNames[$id] ?? $id, $set['includes']))) ?></span></th>
+<?php [$setName, $setNote] = lp_split_label((string) $set['label']); ?>
+                <th scope="row"><?= e($setName) ?><?php if ($setNote !== ''): ?><span class="c-price-table__paren">（<?= e($setNote) ?>）</span><?php endif; ?><span class="c-price-table__sub"><?= e(implode('、', array_map(static fn ($id) => $shortNames[$id] ?? $id, $set['includes']))) ?></span></th>
                 <td><?= e(yen((int) $set['once'])) ?></td>
                 <td<?= $qualifying ? ' data-course="qualifying"' : '' ?>><?= e(yen((int) $set['course'])) ?><?php if ($qualifying): ?><span class="c-price-table__mark" aria-hidden="true">※</span><span class="u-visually-hidden">（クーリング・オフの対象）</span><?php endif; ?></td>
               </tr>

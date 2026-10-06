@@ -40,8 +40,10 @@ partial('header', compact('page'));
       <canvas class="p-hero__canvas js-glaze"></canvas>
     </div>
     <div class="l-container p-hero__inner">
-      <p class="p-hero__catch"><span class="p-hero__catch-line">納得してから、</span><span class="p-hero__catch-line">はじめる肌治療。</span></p>
-      <span class="p-hero__seal" aria-hidden="true">白磁</span>
+      <div class="p-hero__lockup">
+        <p class="p-hero__catch"><span class="p-hero__catch-line">納得してから、</span><span class="p-hero__catch-line">はじめる肌治療。</span></p>
+        <span class="p-hero__seal" aria-hidden="true">白磁</span>
+      </div>
       <div class="p-hero__intro">
         <p class="p-hero__en" aria-hidden="true"><?= e(site('name_en')) ?></p>
         <h1 class="p-hero__title" id="hero-title"><?= e(site('name')) ?></h1>
@@ -94,7 +96,7 @@ partial('header', compact('page'));
         <?php partial('section-head', ['en' => 'Concerns', 'title' => '悩みから探す', 'id' => 'concerns-title']); ?>
       </div>
       <div class="l-rail__body">
-        <p class="p-home-concerns__text">気になる症状を選ぶと、対応する施術を表示します。同じ悩みでも原因によって適した治療は異なるため、最終的な治療法は診察で決めます。</p>
+        <p class="p-home-concerns__text">悩みごとに、対応する施術をまとめました。同じ悩みでも原因によって適した治療は異なるため、最終的な治療法は診察で決めます。</p>
         <?php partial('tx-filter', ['target' => 'home-treatments']); ?>
         <ul class="c-tx-grid" id="home-treatments">
           <?php foreach (treatments() as $t): ?>

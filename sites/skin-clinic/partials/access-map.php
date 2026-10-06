@@ -34,7 +34,7 @@ $prefix = $prefix ?? 'map';
     <circle class="c-map__pin-core" cx="413" cy="297" r="3.2"/>
   </g>
   <g class="c-map__labels">
-    <text class="c-map__road-label" transform="translate(120 284) rotate(-18)">青山通り</text>
+    <text class="c-map__road-label" transform="translate(34 324) rotate(-18.1)">青山通り</text>
     <text class="c-map__road-label" transform="translate(118 46) rotate(61.4)">表参道</text>
     <text class="c-map__station-label" x="150" y="236">表参道駅</text>
     <text class="c-map__exit-label" x="230" y="306">A4出口</text>

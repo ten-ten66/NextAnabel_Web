@@ -27,7 +27,7 @@ partial('header', compact('page'));
       'page' => $page,
       'kicker' => 'Cases',
       'title' => '症例写真',
-      'lead' => '症例写真は、施術を検討するうえでの参考のひとつです。仕上がりや経過には個人差があるため、当院では写真と同じ大きさで、治療内容・費用・リスクを並べて掲載しています。',
+      'lead' => '症例写真は、施術を検討するうえでの参考のひとつです。仕上がりや経過には個人差があるため、当院では写真のすぐ隣に、治療内容・費用・主なリスクを並べて掲載しています。',
   ]); ?>
 
   <section class="p-policy l-section" aria-labelledby="policy-title">

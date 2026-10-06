@@ -34,7 +34,7 @@ $page = [
     'id' => 'index',
     'description' => site('description'),
     'jsonld' => [business_ld()],
-    'vendor' => ['gsap', 'swiper'],
+    'vendor' => ['gsap'],
     'has_reserve' => true,
     'bodyClass' => 'is-home',
 ];
@@ -64,19 +64,19 @@ partial('header', compact('page'));
 
     <div class="p-hero__inner l-container">
       <div class="p-hero__head">
-        <p class="p-hero__eyebrow" data-intro>自由が丘のフェイシャル・<br class="u-br-sp">ボディトリートメントサロン</p>
+        <p class="p-hero__eyebrow" data-intro="text" style="--intro-delay: .4s">自由が丘のフェイシャル・<br class="u-br-sp">ボディトリートメントサロン</p>
         <h1 class="p-hero__title" id="hero-title">
-          <span class="p-hero__name"><span class="p-hero__char" data-intro>苔</span><span class="p-hero__char" data-intro>と</span><span class="p-hero__char" data-intro>麻</span></span>
-          <span class="p-hero__name-en" lang="en" data-intro>koke to asa</span>
+          <span class="p-hero__name"><span class="p-hero__char" data-intro="text" style="--intro-delay: .05s">苔</span><span class="p-hero__char" data-intro="text" style="--intro-delay: .13s">と</span><span class="p-hero__char" data-intro="text" style="--intro-delay: .21s">麻</span></span>
+          <span class="p-hero__name-en" lang="en" data-intro="text" style="--intro-delay: .3s">koke to asa</span>
         </h1>
-        <svg class="p-hero__swash" viewBox="0 0 240 18" aria-hidden="true" focusable="false" data-intro><path class="js-hero-swash" d="M3 12c26-9 48 3 76-3s52-9 78-3 44 5 80-4"/></svg>
+        <svg class="p-hero__swash" viewBox="0 0 240 18" aria-hidden="true" focusable="false" data-intro="draw"><path class="js-hero-swash" d="M3 12c26-9 48 3 76-3s52-9 78-3 44 5 80-4"/></svg>
       </div>
 
-      <p class="p-hero__catch"><span class="p-hero__catch-line" data-intro>静けさを、</span><span class="p-hero__catch-line" data-intro>手のひらから。</span></p>
+      <p class="p-hero__catch"><span class="p-hero__catch-line" data-intro="text" style="--intro-delay: .25s">静けさを、</span><span class="p-hero__catch-line" data-intro="text" style="--intro-delay: .37s">手のひらから。</span></p>
 
       <div class="p-hero__body">
-        <p class="p-hero__lead" data-intro>自由が丘の路地にある、個室ふたつの小さなサロンです。季節の植物の香りと手のひらのぬくもりで、呼吸がゆっくり深くなる時間をお届けします。</p>
-        <div class="p-hero__actions" data-intro>
+        <p class="p-hero__lead" data-intro="text" style="--intro-delay: .47s">自由が丘の路地にある、個室ふたつの小さなサロンです。季節の植物の香りと手のひらのぬくもりで、呼吸がゆっくり深くなる時間をお届けします。</p>
+        <div class="p-hero__actions" data-intro="text" style="--intro-delay: .54s">
           <span class="c-magnet js-magnet">
             <a class="c-button c-button--primary c-button--lg" href="#reserve"><span class="c-button__label">ご予約・空き状況</span><svg class="c-icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
           </span>
@@ -84,10 +84,10 @@ partial('header', compact('page'));
         </div>
       </div>
 
-      <dl class="p-hero__info" data-intro>
+      <dl class="p-hero__info" data-intro="text" style="--intro-delay: .61s">
         <div class="p-hero__info-row">
           <dt>営業時間</dt>
-          <dd><?= e(site('hours_label')) ?>（最終受付 <?= e(site('last_entry')) ?>）</dd>
+          <dd><?= e(site('hours_label')) ?><span class="u-nowrap">（最終受付 <?= e(site('last_entry')) ?>）</span></dd>
         </div>
         <div class="p-hero__info-row">
           <dt>定休日</dt>
@@ -137,7 +137,7 @@ partial('header', compact('page'));
     <div class="l-container p-season__head">
       <h2 class="p-season__title" id="season-title"><span class="p-season__en" lang="en" aria-hidden="true">Season</span>香りのこよみ</h2>
       <p class="p-season__lead">二十四節気に合わせて、オイルとお茶の香りを替えています。</p>
-      <button type="button" class="p-season__toggle js-marquee-toggle" hidden>
+      <button type="button" class="p-season__toggle js-marquee-toggle">
         <svg class="c-icon js-marquee-icon" aria-hidden="true" focusable="false"><use href="#i-pause"/></svg>
         <span class="js-marquee-label">動きを止める</span>
       </button>
@@ -234,7 +234,7 @@ partial('header', compact('page'));
     <div class="l-container">
       <?php partial('section-head', ['en' => 'Space', 'title' => '空間', 'id' => 'space-title', 'lead' => '個室はふたつ。窓辺には、季節の枝ものを飾っています。']); ?>
     </div>
-    <div class="p-space__carousel js-gallery" role="region" aria-roledescription="カルーセル" aria-label="店内の様子">
+    <section class="p-space__carousel js-gallery" aria-roledescription="カルーセル" aria-label="店内の様子" data-swiper-js="<?= e(asset('vendor/swiper-bundle.min.js')) ?>" data-swiper-css="<?= e(asset('vendor/swiper-bundle.min.css')) ?>">
       <div class="swiper p-space__swiper js-gallery-swiper">
         <div class="swiper-wrapper p-space__wrapper js-gallery-wrapper" tabindex="0">
           <?php foreach ($gallery as $i => $slide): ?>
@@ -266,7 +266,7 @@ partial('header', compact('page'));
         <p class="u-visually-hidden js-gallery-status" aria-live="polite"></p>
       </div>
       <p class="p-space__hint js-gallery-hint">横にスクロールして、ほかの写真をご覧いただけます。</p>
-    </div>
+    </section>
   </section>
 
   <section class="p-staff l-section" id="staff" aria-labelledby="staff-title">

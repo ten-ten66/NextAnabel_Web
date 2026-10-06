@@ -1,7 +1,8 @@
 /**
  * 苔と麻 / koke to asa — main.js
  *
- * GSAP（gsap / ScrollTrigger / DrawSVGPlugin）と Swiper は、読み込んだページでだけ使う。
+ * GSAP（gsap / ScrollTrigger / DrawSVGPlugin）は読み込んだページでだけ使う。
+ * Swiper はギャラリーが画面に近づいたときに assets/vendor/ から読み込む（最初の表示を軽くするため）。
  * どの機能も「JavaScript がなくても本文が読める」状態から段階的に強化する。
  * 動きは gsap.matchMedia() の中だけで作り、動きを減らす設定では止まった完成形のまま表示する。
  */
@@ -24,6 +25,29 @@
       return {};
     }
   })();
+
+  /** 手が空いたときに実行する（最初の表示を妨げない） */
+  const idle = (fn) => ('requestIdleCallback' in window ? window.requestIdleCallback(fn, { timeout: 1500 }) : window.setTimeout(fn, 200));
+
+  /** 要素が画面に近づいたら一度だけ実行する */
+  function whenNear(el, fn, rootMargin = '100% 0px') {
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) {
+      fn();
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      fn();
+    }, { rootMargin });
+    observer.observe(el);
+  }
+
+  /** 背面のスクロールを止めるとき、スクロールバーの幅だけ余白を足してレイアウトのずれを防ぐ */
+  const measureScrollbar = () => {
+    root.style.setProperty('--scrollbar-w', `${Math.max(0, window.innerWidth - root.clientWidth)}px`);
+  };
 
   /** 東京時間の「曜日・月日・分」 */
   function tokyoNow() {
@@ -136,6 +160,7 @@
     function open() {
       isOpen = true;
       window.clearTimeout(hideTimer);
+      measureScrollbar();
       drawer.hidden = false;
       drawer.getBoundingClientRect(); // 表示を確定させてからトランジションを始める
       drawer.classList.add('is-open');
@@ -180,6 +205,7 @@
       if (!dialog || typeof dialog.showModal !== 'function') return;
       button.hidden = false;
       button.addEventListener('click', () => {
+        measureScrollbar();
         dialog.showModal();
         dialog.addEventListener('close', () => button.focus(), { once: true });
       });
@@ -287,7 +313,6 @@
       section.classList.toggle('is-marquee', enabled);
       toggle.hidden = !enabled;
       $$('.is-clone', track).forEach((item) => { item.hidden = !enabled; });
-      if (enabled) setSpeed();
     };
 
     toggle.addEventListener('click', () => {
@@ -353,11 +378,42 @@
 
   /* --------------------------------------------------------------------------
      空間のギャラリー（Swiper）
-     JavaScript がなければ横スクロールの一覧。前後ボタン・ページ送り・←→キー・読み上げ用の状況表示を付ける
+     JavaScript がなければ横スクロールの一覧。画面に近づいたら Swiper を読み込んで、
+     前後ボタン・ページ送り・←→キー・読み上げ用の状況表示を付ける
      -------------------------------------------------------------------------- */
+  function loadSwiper(region) {
+    if (typeof window.Swiper === 'function') return Promise.resolve();
+    const css = region.dataset.swiperCss;
+    const js = region.dataset.swiperJs;
+    if (!js) return Promise.reject(new Error('Swiper の場所が指定されていません'));
+    if (css) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = css;
+      document.head.append(link);
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = js;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Swiper を読み込めませんでした'));
+      document.head.append(script);
+    });
+  }
+
   function initGallery() {
     const region = $('.js-gallery');
-    if (!region || typeof window.Swiper !== 'function') return;
+    if (!region) return;
+    whenNear(region, () => {
+      loadSwiper(region).then(() => setupGallery(region)).catch(() => {
+        // 読み込めなくても、横スクロールの一覧のまま使える
+      });
+    }, '120% 0px');
+  }
+
+  function setupGallery(region) {
+    if (typeof window.Swiper !== 'function') return;
     const container = $('.js-gallery-swiper', region);
     const wrapper = $('.js-gallery-wrapper', region);
     const controls = $('.js-gallery-controls', region);
@@ -369,6 +425,7 @@
     let swiper = null;
 
     wrapper.removeAttribute('tabindex');
+    wrapper.scrollLeft = 0;
     controls.hidden = false;
     $('.js-gallery-hint', region)?.setAttribute('hidden', '');
 
@@ -456,6 +513,7 @@
   /* --------------------------------------------------------------------------
      施術の流れ：ステップの番号を通る茎と葉を、レイアウトから SVG で組み立てる
      スクロールに合わせて DrawSVGPlugin で描く。動きを減らす設定・JavaScript なしでは描き終えた状態
+     （画面に近づいてから組み立てるので、最初の表示の負担にならない）
      -------------------------------------------------------------------------- */
   function createVine() {
     const body = $('.js-vine');
@@ -538,19 +596,19 @@
       const total = stem.getTotalLength();
       // 各ステップの番号が茎のどの長さにあるか（茎を細かく区切って一番近い点を探す）
       const samples = [];
-      for (let l = 0; l <= total; l += 4) samples.push({ l, p: stem.getPointAtLength(l) });
+      for (let l = 0; l <= total; l += 6) samples.push({ l, p: stem.getPointAtLength(l) });
       const lengthAt = (pt) => samples.reduce((best, s) => {
         const dist = Math.hypot(s.p.x - pt.x, s.p.y - pt.y);
         return dist < best.dist ? { dist, l: s.l } : best;
       }, { dist: Infinity, l: 0 }).l;
 
       const leaves = [];
-      const gap = width > 80 ? 56 : 46;
-      const size = width > 80 ? 26 : 19;
+      const gap = width > 80 ? 38 : 32;
+      const size = width > 80 ? 31 : 21;
       let side = 1;
-      for (let l = 34, i = 0; l < total - 24; l += gap * (0.85 + random(i) * 0.3), i += 1) {
+      for (let l = 30, i = 0; l < total - 20; l += gap * (0.8 + random(i) * 0.4), i += 1) {
         const pt = stem.getPointAtLength(l);
-        if (points.some((n) => Math.hypot(n.x - pt.x, n.y - pt.y) < n.r + 16)) continue;
+        if (points.some((n) => Math.hypot(n.x - pt.x, n.y - pt.y) < n.r + 10)) continue;
         const ahead = stem.getPointAtLength(Math.min(total, l + 1));
         const tangent = Math.atan2(ahead.y - pt.y, ahead.x - pt.x);
         const angle = tangent + side * (0.78 + random(i + 3) * 0.3);
@@ -606,8 +664,10 @@
       });
     }
 
-    if ('ResizeObserver' in window) new ResizeObserver(rebuild).observe(body);
-    else rebuild();
+    whenNear(body, () => {
+      if ('ResizeObserver' in window) new ResizeObserver(rebuild).observe(body);
+      else rebuild();
+    });
 
     return {
       setAnimated(value) {
@@ -621,8 +681,9 @@
      動き（GSAP）。gsap.matchMedia() で「動きを減らす設定」の分岐を作る
      -------------------------------------------------------------------------- */
   function initMotion(vine) {
+    const finishDrawing = () => root.classList.remove('is-drawing', 'is-drawing-running');
     if (!gsap) {
-      root.classList.remove('is-intro');
+      finishDrawing();
       return;
     }
     if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
@@ -630,52 +691,40 @@
     const supportsScrollTimeline = window.CSS?.supports?.('animation-timeline: view()') ?? false;
     let introDone = false;
 
-    function finishIntro() {
-      introDone = true;
-      root.classList.remove('is-intro', 'is-intro-running');
-    }
-
-    /* (1) ファーストビューの読み込み演出（1.2秒以内に、止まった完成形で終わる） */
+    /* (1) ファーストビューの読み込み演出：文字は CSS が表示し、ここでは植物の線画を描く（1.2秒以内） */
     function playIntro() {
-      if (introDone || !root.classList.contains('is-intro')) return;
-      // 読み込みが遅く、フェイルセーフで既に表示されているなら演出しない
-      if (performance.now() > 1800) {
-        finishIntro();
+      if (introDone) return;
+      introDone = true;
+      const hero = $('.js-hero');
+      const targets = $$('[data-intro="draw"]');
+      // 線画がない、または読み込みが遅くフェイルセーフで表示済みなら、演出しない
+      if (!hero || !targets.length || !window.DrawSVGPlugin || performance.now() > 1800) {
+        finishDrawing();
         return;
       }
-      root.classList.add('is-intro-running');
-      const targets = $$('[data-intro]');
+      root.classList.add('is-drawing-running');
+      const stems = $$('.js-branch-stem', hero);
+      const leaves = $$('.js-branch-leaf', hero);
+      const leafPaths = leaves.flatMap((leaf) => Array.from(leaf.children));
+      const swash = $('.js-hero-swash', hero);
       const tl = gsap.timeline({
-        defaults: { ease: 'power3.out', duration: 0.8 },
+        defaults: { ease: 'power2.inOut' },
         onComplete() {
-          gsap.set(targets, { clearProps: 'opacity,visibility,transform' });
-          finishIntro();
+          gsap.set([...targets, ...stems, ...leafPaths, swash], { clearProps: 'opacity,visibility,strokeDasharray,strokeDashoffset' });
+          finishDrawing();
         },
       });
-      const hero = $('.js-hero');
-      if (hero && window.DrawSVGPlugin) {
-        const stems = $$('.js-branch-stem', hero);
-        const leaves = $$('.js-branch-leaf', hero);
-        const leafPaths = leaves.flatMap((leaf) => Array.from(leaf.children));
-        tl.fromTo($('.js-hero-far', hero), { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0)
-          .set($$('.p-hero__branch, .p-hero__swash', hero), { autoAlpha: 1 }, 0)
-          .fromTo($('.p-hero__branch--shade', hero), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1, ease: 'sine.out' }, 0.1)
-          .fromTo(stems[0], { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.95, ease: 'power2.inOut' }, 0)
-          .fromTo(stems.slice(1), { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.5, ease: 'power2.out' }, 0.38)
-          .fromTo($$('.p-hero__char', hero), { autoAlpha: 0, yPercent: 38 }, { autoAlpha: 1, yPercent: 0, stagger: 0.08, duration: 0.9, ease: 'expo.out' }, 0.08)
-          .fromTo($$('.p-hero__catch-line', hero), { autoAlpha: 0, y: -18 }, { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.9, ease: 'expo.out' }, 0.24)
-          .fromTo($('.p-hero__name-en', hero), { autoAlpha: 0, x: -10 }, { autoAlpha: 1, x: 0, duration: 0.7 }, 0.34)
-          .fromTo($('.js-hero-swash', hero), { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.6, ease: 'power2.inOut' }, 0.44)
-          .fromTo($$('.p-hero__eyebrow, .p-hero__lead, .p-hero__actions, .p-hero__info', hero), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.6 }, 0.42);
-        // 葉は、茎が届く順に少しずつ遅らせて描く
-        leaves.forEach((leaf) => {
-          const at = Number(leaf.dataset.at) || 0;
-          tl.fromTo(leaf.children, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.38, ease: 'power1.out' }, 0.1 + at * 0.72);
-        });
-        tl.set([...stems, ...leafPaths, $('.js-hero-swash', hero)], { clearProps: 'strokeDasharray,strokeDashoffset' });
-      } else {
-        tl.fromTo(targets, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.7 });
-      }
+      tl.fromTo($('.js-hero-far', hero), { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0)
+        .set(targets, { autoAlpha: 1 }, 0)
+        .fromTo($('.p-hero__branch--shade', hero), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1, ease: 'sine.out' }, 0.1)
+        .fromTo(stems[0], { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.95 }, 0)
+        .fromTo(stems.slice(1), { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.5, ease: 'power2.out' }, 0.38)
+        .fromTo(swash, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.6 }, 0.44);
+      // 葉は、茎が届く順に少しずつ遅らせて描く
+      leaves.forEach((leaf) => {
+        const at = Number(leaf.dataset.at) || 0;
+        tl.fromTo(leaf.children, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.38, ease: 'power1.out' }, 0.1 + at * 0.72);
+      });
       if (tl.duration() > 1.2) tl.timeScale(tl.duration() / 1.2);
     }
 
@@ -780,7 +829,8 @@
       const { motion, fine } = context.conditions;
       if (!motion) {
         // 動きを減らす設定：演出を作らず、描き終えた完成形のまま
-        finishIntro();
+        introDone = true;
+        finishDrawing();
         vine?.setAnimated(false);
         return undefined;
       }
@@ -801,9 +851,9 @@
   initDialogs();
   initSeason();
   initOpenStatus();
-  initMarquee();
   initAccordion();
   initPriceNav();
-  initGallery();
   initMotion(createVine());
+  initGallery();
+  idle(initMarquee);
 })();

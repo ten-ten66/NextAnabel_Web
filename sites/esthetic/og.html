@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>OGP — 苔と麻</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&amp;family=Zen+Kaku+Gothic+Antique:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&amp;text=kotesaSmplwrk%C2%B7&amp;display=swap">
+<style>
+  /* tools/og-image.mjs で 1200×630 の PNG に書き出す（色は tokens/esthetic.tokens.json） */
+  :root {
+    --color-linen: #ECEEE6;
+    --color-paper: #F6F7F2;
+    --color-lichen: #A8B394;
+    --color-moss: #2F3B2B;
+    --color-moss-soft: #56664F;
+    --color-mauve: #7E6278;
+    --color-mauve-soft: #DCCFD8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body {
+    margin: 0;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background-color: var(--color-linen);
+    color: var(--color-moss);
+    font-family: "Zen Kaku Gothic Antique", sans-serif;
+  }
+
+  .og {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    padding: 76px 84px 64px;
+    isolation: isolate;
+    display: grid;
+    align-content: space-between;
+  }
+
+  /* 枝の影（ぼかし）と線画の2層。PNG の容量を抑えるため、写真の質感は使わない */
+  .og__branch {
+    position: absolute;
+    top: -70px;
+    right: -30px;
+    width: 470px;
+    z-index: -1;
+  }
+
+  .og__branch--shade {
+    top: -36px;
+    right: -64px;
+    z-index: -2;
+    opacity: .16;
+    filter: blur(6px);
+  }
+
+  .og__branch svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .p-hero__stem { fill: none; stroke: var(--color-moss-soft); stroke-width: 1.4; stroke-linecap: round; }
+  .p-hero__leaf-outline { fill: rgba(168, 179, 148, .3); stroke: var(--color-moss-soft); stroke-width: 1.2; stroke-linejoin: round; }
+  .p-hero__leaf-rib { fill: none; stroke: var(--color-moss-soft); stroke-width: 1; stroke-linecap: round; }
+  .p-hero__shade { fill: var(--color-moss); }
+  .p-hero__shade-stem { fill: none; stroke: var(--color-moss); stroke-width: 4; }
+
+  .og__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    color: var(--color-moss-soft);
+  }
+
+  .og__eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; }
+
+  .og__name {
+    margin: 26px 0 0;
+    font-family: "Klee One", serif;
+    font-weight: 600;
+    font-size: 172px;
+    line-height: 1.04;
+    letter-spacing: .06em;
+  }
+
+  .og__en {
+    margin: 10px 0 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-size: 50px;
+    line-height: 1.1;
+    color: var(--color-mauve);
+  }
+
+  .og__swash { width: 260px; margin-top: 10px; }
+  .og__swash path { fill: none; stroke: var(--color-lichen); stroke-width: 2.4; stroke-linecap: round; }
+
+  .og__catch {
+    position: absolute;
+    top: 96px;
+    right: 336px;
+    margin: 0;
+    writing-mode: vertical-rl;
+    font-family: "Klee One", serif;
+    font-size: 40px;
+    line-height: 1.5;
+    letter-spacing: .3em;
+  }
+
+  .og__catch span { display: block; }
+  .og__catch span + span { margin-block-start: .35em; padding-inline-start: 1.8em; }
+
+  .og__foot {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 22px;
+    letter-spacing: .08em;
+  }
+
+  .og__tag {
+    padding: 6px 18px;
+    border-radius: 999px;
+    background: var(--color-mauve-soft);
+    color: var(--color-moss);
+    font-size: 18px;
+    letter-spacing: .06em;
+  }
+</style>
+</head>
+<body>
+  <div class="og">
+    <div class="og__branch og__branch--shade"><svg class="p-hero__branch p-hero__branch--shade" viewBox="0 0 560 760" aria-hidden="true" focusable="false">
+<g class="p-hero__shade">
+<path class="p-hero__shade-stem" d="M548 -24C470 150 390 270 318 420C262 536 214 640 176 792"/>
+<path class="p-hero__shade-stem" d="M356 336C404 372 446 430 462 520"/>
+<path d="M507.3 52.4C514.9 84.1 490.3 107.7 447.1 100.4C450.1 62.2 478.8 41.3 507.3 52.4Z"/>
+<path d="M481.3 125.7C450.7 145.8 452.7 183.5 493.9 210.3C520.8 176.9 513.3 138.2 481.3 125.7Z"/>
+<path d="M436.9 187.7C445.5 221.3 420.5 245.3 375.4 236.2C377.7 196.1 407 175.1 436.9 187.7Z"/>
+<path d="M412.2 254.6C382 277.1 386.9 313.3 431.3 335.1C456.7 300.2 446.1 263.5 412.2 254.6Z"/>
+<path d="M367.2 313.1C372.3 351.4 340.3 376.6 289.8 363.4C298.1 318.6 334.7 296.9 367.2 313.1Z"/>
+<path d="M396.2 369.4C397.7 393.1 419.3 403.6 447 388.4C436.9 362.8 413.1 355.1 396.2 369.4Z"/>
+<path d="M345.5 380.8C321.1 405.4 330.4 439.7 373.6 456.3C392 420.3 377.5 386.1 345.5 380.8Z"/>
+<path d="M419.1 413.5C437.3 430 431.9 454.2 401.8 466.8C387.6 442.1 396.7 418 419.1 413.5Z"/>
+<path d="M303.1 439.5C309.6 475.8 281 499.7 233.6 487.3C239.2 444.8 272.2 424.3 303.1 439.5Z"/>
+<path d="M450.4 461.7C447.8 478.5 461.6 489.9 483.9 484.7C480.7 464.9 464.8 455 450.4 461.7Z"/>
+<path d="M290 494.7C265.8 516.7 272.9 548.9 313 565.7C332 532.9 320 500.7 290 494.7Z"/>
+<path d="M459.8 525.6C470.5 536.4 466.3 550.9 447.2 557.2C439.2 541.5 445.6 527.3 459.8 525.6Z"/>
+<path d="M255.4 542C258.1 570.8 232.2 590.9 193 582.7C200.9 548.5 230.4 530.9 255.4 542Z"/>
+<path d="M245.8 598.1C225 621.7 235.3 652 275.5 664C290.2 630.4 275.1 600.7 245.8 598.1Z"/>
+<path d="M213.5 650.5C223.8 680.3 203.2 703.6 161.9 698.2C160.8 661.8 185.6 641 213.5 650.5Z"/>
+<path d="M206 710.8C189.9 732.9 201.3 759.5 237.1 768.5C247 737.8 231.6 711.9 206 710.8Z"/>
+<path d="M176.5 772.8C185.6 794.6 170.2 816.3 137.7 818.9C135.6 790.4 154.3 769.9 176.5 772.8Z"/>
+</g>
+</svg></div>
+    <div class="og__branch"><svg class="p-hero__branch p-hero__branch--line" viewBox="0 0 560 760" aria-hidden="true" focusable="false">
+<path class="p-hero__stem" d="M548 -24C470 150 390 270 318 420C262 536 214 640 176 792"/>
+<path class="p-hero__stem" d="M356 336C404 372 446 430 462 520"/>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M507.3 52.4C514.9 84.1 490.3 107.7 447.1 100.4C450.1 62.2 478.8 41.3 507.3 52.4Z"/>
+<path class="p-hero__leaf-rib" d="M515.1 46.1L507.3 52.4Q475.3 74 453.1 95.6"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M481.3 125.7C450.7 145.8 452.7 183.5 493.9 210.3C520.8 176.9 513.3 138.2 481.3 125.7Z"/>
+<path class="p-hero__leaf-rib" d="M479.9 115.8L481.3 125.7Q491.1 167.5 492.6 201.8"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M436.9 187.7C445.5 221.3 420.5 245.3 375.4 236.2C377.7 196.1 407 175.1 436.9 187.7Z"/>
+<path class="p-hero__leaf-rib" d="M444.7 181.5L436.9 187.7Q404.1 209.3 381.6 231.4"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M412.2 254.6C382 277.1 386.9 313.3 431.3 335.1C456.7 300.2 446.1 263.5 412.2 254.6Z"/>
+<path class="p-hero__leaf-rib" d="M409.9 244.8L412.2 254.6Q425.3 294 429.4 327.1"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M367.2 313.1C372.3 351.4 340.3 376.6 289.8 363.4C298.1 318.6 334.7 296.9 367.2 313.1Z"/>
+<path class="p-hero__leaf-rib" d="M375.6 307.6L367.2 313.1Q326.5 335.2 297.6 358.4"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M396.2 369.4C397.7 393.1 419.3 403.6 447 388.4C436.9 362.8 413.1 355.1 396.2 369.4Z"/>
+<path class="p-hero__leaf-rib" d="M390.6 367.3L396.2 369.4Q422.4 376.8 441.9 386.5"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M345.5 380.8C321.1 405.4 330.4 439.7 373.6 456.3C392 420.3 377.5 386.1 345.5 380.8Z"/>
+<path class="p-hero__leaf-rib" d="M342 371.5L345.5 380.8Q362.7 417.4 370.8 448.8"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M419.1 413.5C437.3 430 431.9 454.2 401.8 466.8C387.6 442.1 396.7 418 419.1 413.5Z"/>
+<path class="p-hero__leaf-rib" d="M421 407.8L419.1 413.5Q408.2 439.4 403.5 461.5"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M303.1 439.5C309.6 475.8 281 499.7 233.6 487.3C239.2 444.8 272.2 424.3 303.1 439.5Z"/>
+<path class="p-hero__leaf-rib" d="M311.3 433.9L303.1 439.5Q266.3 460.5 240.5 482.5"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M450.4 461.7C447.8 478.5 461.6 489.9 483.9 484.7C480.7 464.9 464.8 455 450.4 461.7Z"/>
+<path class="p-hero__leaf-rib" d="M445.4 458.3L450.4 461.7Q468.1 471.9 480.6 482.4"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M290 494.7C265.8 516.7 272.9 548.9 313 565.7C332 532.9 320 500.7 290 494.7Z"/>
+<path class="p-hero__leaf-rib" d="M287 485.2L290 494.7Q304.5 529.3 310.7 558.6"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M459.8 525.6C470.5 536.4 466.3 550.9 447.2 557.2C439.2 541.5 445.6 527.3 459.8 525.6Z"/>
+<path class="p-hero__leaf-rib" d="M462 520L459.8 525.6Q452.1 540.8 448.4 554"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M255.4 542C258.1 570.8 232.2 590.9 193 582.7C200.9 548.5 230.4 530.9 255.4 542Z"/>
+<path class="p-hero__leaf-rib" d="M263.7 536.5L255.4 542Q222.7 560.1 199.2 578.6"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M245.8 598.1C225 621.7 235.3 652 275.5 664C290.2 630.4 275.1 600.7 245.8 598.1Z"/>
+<path class="p-hero__leaf-rib" d="M241.7 588.9L245.8 598.1Q263.4 629.8 272.5 657.4"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M213.5 650.5C223.8 680.3 203.2 703.6 161.9 698.2C160.8 661.8 185.6 641 213.5 650.5Z"/>
+<path class="p-hero__leaf-rib" d="M220.8 643.7L213.5 650.5Q185.6 672.1 167 693.4"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M206 710.8C189.9 732.9 201.3 759.5 237.1 768.5C247 737.8 231.6 711.9 206 710.8Z"/>
+<path class="p-hero__leaf-rib" d="M201.2 702L206 710.8Q223.8 738.4 234 762.8"/>
+</g>
+<g class="p-hero__leaf-leaf">
+<path class="p-hero__leaf-outline" d="M176.5 772.8C185.6 794.6 170.2 816.3 137.7 818.9C135.6 790.4 154.3 769.9 176.5 772.8Z"/>
+<path class="p-hero__leaf-rib" d="M182.9 765.1L176.5 772.8Q155.4 794.4 141.6 814.3"/>
+</g>
+</svg></div>
+    <div>
+      <p class="og__eyebrow">自由が丘のフェイシャル・ボディトリートメントサロン</p>
+      <p class="og__name">苔と麻</p>
+      <p class="og__en">koke to asa</p>
+      <svg class="og__swash" viewBox="0 0 240 18" aria-hidden="true"><path d="M3 12c26-9 48 3 76-3s52-9 78-3 44 5 80-4"/></svg>
+    </div>
+    <p class="og__catch"><span>静けさを、</span><span>手のひらから。</span></p>
+    <div class="og__foot">
+      <span>季節の香りと、手のひらのぬくもり。</span>
+      <span class="og__tag">Web制作サンプル・架空のサロン</span>
+    </div>
+  </div>
+</body>
+</html>

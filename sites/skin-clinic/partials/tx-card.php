@@ -9,11 +9,11 @@ $cats = categories();
 $first = $t['prices'][0];
 ?>
 <li class="c-tx-card c-tx-card--<?= e($variant) ?> js-filter-item" data-categories="<?= e(implode(' ', $t['categories'])) ?>">
-  <div class="c-tx-card__visual<?= !empty($t['mirror']) ? ' is-mirrored' : '' ?>" style="view-transition-name: tx-<?= e($t['slug']) ?>">
+  <div class="c-tx-card__visual<?= !empty($t['mirror']) ? ' is-mirrored' : '' ?>">
     <img src="<?= e(asset($t['image'])) ?>" width="960" height="720" alt="" loading="lazy" decoding="async">
   </div>
   <div class="c-tx-card__body">
-    <h3 class="c-tx-card__title"><a class="c-tx-card__link" href="<?= e(url('treatment', ['slug' => $t['slug']])) ?>"><?= e($t['name']) ?></a></h3>
+    <h3 class="c-tx-card__title"><a class="c-tx-card__link" href="<?= e(url('treatment', ['slug' => $t['slug']])) ?>"><?= name_html($t['name']) ?></a></h3>
     <p class="c-tx-card__tags">
       <?php foreach ($t['categories'] as $id): ?>
         <span class="c-tag"><?= e($cats[$id]['label'] ?? '') ?></span>

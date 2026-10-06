@@ -216,6 +216,7 @@ partial('header', compact('page'));
 
   <section class="p-related l-section" aria-labelledby="related-title">
     <div class="l-container">
+      <p class="c-kicker"><span class="c-kicker__label" lang="en">Other treatments</span></p>
       <h2 class="p-related__title" id="related-title">ほかの施術</h2>
       <ul class="p-related__list">
         <?php foreach ($treatments as $i => $other): if ($other['slug'] === $t['slug']) { continue; } ?>

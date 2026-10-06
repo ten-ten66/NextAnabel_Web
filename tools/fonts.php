@@ -78,8 +78,12 @@ foreach (array_keys($googleUrls) as $url) {
             $order[] = str_replace('+', ' ', urldecode($family));
         }
     }
-    foreach ($chunks as $index => $chunk) {
-        $result = fetch_chunk($url, $chunk, $index, $tmpDir);
+    // テンプレート側で text= を指定済みの読み込み（ロゴ用の欧文書体など）は、その文字だけで取得する
+    [$baseUrl, $ownText] = split_text_param($url);
+    $urlChunks = $ownText === null ? $chunks : chunk_chars(array_values(array_unique(mb_str_split($ownText))));
+    $suffix = $ownText === null ? '' : '-t';
+    foreach ($urlChunks as $index => $chunk) {
+        $result = fetch_chunk($baseUrl, $chunk, $index, $tmpDir, $suffix);
         if ($result === null) {
             fwrite(STDERR, "  フォントを部分取得できなかったため Google Fonts のまま残します: {$url}\n");
             remove_dir($tmpDir);
@@ -192,7 +196,7 @@ function chunk_chars(array $chars): array
  * @param list<string> $chunk
  * @return array<string, array{family: string, style: string, weights: list<int>, range: string, chunk: int}>|null
  */
-function fetch_chunk(string $url, array $chunk, int $index, string $tmpDir): ?array
+function fetch_chunk(string $url, array $chunk, int $index, string $tmpDir, string $suffix = ''): ?array
 {
     $css = fetch($url . '&text=' . rawurlencode(implode('', $chunk)));
     if ($css === null || !preg_match_all('/@font-face\s*\{([^}]+)\}/', $css, $blocks)) {
@@ -219,7 +223,7 @@ function fetch_chunk(string $url, array $chunk, int $index, string $tmpDir): ?ar
         $seen[$combo] = true;
         if (!isset($byUrl[$src[1]])) {
             $name = strtolower(trim((string) preg_replace('/[^a-z0-9]+/i', '-', $family[1]), '-'))
-                . '-' . ($weight[1] ?? '400') . ($italic ? 'i' : '') . '-' . $index;
+                . '-' . ($weight[1] ?? '400') . ($italic ? 'i' : '') . $suffix . '-' . $index;
             $data = fetch($src[1]);
             if ($data === null) {
                 return null;
@@ -237,6 +241,21 @@ function fetch_chunk(string $url, array $chunk, int $index, string $tmpDir): ?ar
         $faces[$byUrl[$src[1]]]['weights'][] = (int) ($weight[1] ?? 400);
     }
     return $faces;
+}
+
+/**
+ * URL から text= を取り除き、[text= を除いた URL, 指定された文字列（なければ null）] を返す
+ * （family= は複数あるため parse_str は使わない）
+ *
+ * @return array{0: string, 1: ?string}
+ */
+function split_text_param(string $url): array
+{
+    if (!preg_match('/[?&]text=([^&]*)/', $url, $m)) {
+        return [$url, null];
+    }
+    $base = (string) preg_replace('/([?&])text=[^&]*&?/', '$1', $url);
+    return [rtrim($base, '?&'), rawurldecode(str_replace('+', ' ', $m[1]))];
 }
 
 /** @param list<string> $chars */

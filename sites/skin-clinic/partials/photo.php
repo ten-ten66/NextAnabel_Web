@@ -8,9 +8,10 @@
  * @var string|null $ratio CSS の aspect-ratio（省略時は画像の比率）
  * @var string|null $class 追加のクラス
  */
+$ratio = !empty($ratio) ? $ratio : $width . ' / ' . $height;
 ?>
 <figure class="c-photo<?= !empty($class) ? ' ' . e($class) : '' ?>">
-  <div class="c-photo__frame"<?= !empty($ratio) ? ' style="aspect-ratio: ' . e($ratio) . '"' : '' ?>>
+  <div class="c-photo__frame" style="aspect-ratio: <?= e($ratio) ?>">
     <img src="<?= e(asset($src)) ?>" width="<?= e($width) ?>" height="<?= e($height) ?>" alt="" loading="lazy" decoding="async">
     <span class="c-photo__mark" aria-hidden="true">Photo</span>
   </div>
