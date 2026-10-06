@@ -8,10 +8,12 @@
  * @var ?string $lead    リード文
  * @var ?string $index   大きな数字（Bodoni Moda で表示。数字のみ）
  * @var list<array{0: string, 1: string}> $facts  概要（見出し, 値）
+ * @var ?string $reviewed 監修の最終確認日（Y-m-d）。指定すると監修者の表示を出す
  */
 $lead ??= null;
 $index ??= null;
 $facts ??= [];
+$reviewed ??= null;
 $crumbs = $page['breadcrumb'] ?? [];
 ?>
 <div class="c-page-head">
@@ -42,6 +44,9 @@ $crumbs = $page['breadcrumb'] ?? [];
       <h1 class="c-page-head__title" data-split-intro><?= e($title) ?></h1>
       <?php if ($lead !== null): ?>
         <p class="c-page-head__lead"><?= e($lead) ?></p>
+      <?php endif; ?>
+      <?php if ($reviewed !== null): ?>
+        <p class="c-page-head__reviewed" data-reviewed-by>監修：<?= e(sc_reviewer_label()) ?>／最終確認日 <?= sc_date($reviewed) ?></p>
       <?php endif; ?>
     </div>
     <?php if ($facts): ?>
