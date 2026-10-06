@@ -111,7 +111,7 @@ foreach ($faces as $name => $face) {
 }
 file_put_contents($fontDir . '/fonts.css', $css);
 
-// 出現回数の多い文字を収めた最初の塊を、書体ごとに1ファイル（URL に先に書かれた順に最大2書体）preload する
+// 出現回数の多い文字を収めた最初の塊を、書体ごとに1ファイル（URL に先に書かれた順に最大2書体）preload の候補にする
 $preload = [];
 foreach ($order as $family) {
     foreach ($faces as $name => $face) {
@@ -120,9 +120,20 @@ foreach ($order as $family) {
         }
     }
 }
+// 先読みが多すぎるとファーストビューの画像と回線を奪い合うため、合計 100KB までにする（最初の1つは必ず含める）
+$selected = [];
+$budget = 100 * 1024;
+foreach (array_slice(array_values($preload), 0, 2) as $name) {
+    $size = (int) filesize($fontDir . '/' . $name . '.woff2');
+    if ($selected && $size > $budget) {
+        break;
+    }
+    $selected[] = $name;
+    $budget -= $size;
+}
 $tags = implode("\n", array_map(
     static fn ($name) => '<link rel="preload" href="assets/fonts/' . $name . '.woff2" as="font" type="font/woff2" crossorigin>',
-    array_slice(array_values($preload), 0, 2)
+    $selected
 )) . "\n" . '<link rel="stylesheet" href="assets/fonts/fonts.css">' . "\n";
 
 foreach ($htmlFiles as $file) {

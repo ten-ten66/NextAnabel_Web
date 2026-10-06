@@ -147,6 +147,22 @@ function hours_summary(): string
     return $base['open'] . '〜' . $base['close'] . ($notes ? '（' . implode('、', $notes) . '）' : '');
 }
 
+/**
+ * 定休日の曜日（0=日曜 … 6=土曜）。site.php の schedule で null の曜日
+ *
+ * @return list<int>
+ */
+function closed_weekdays(): array
+{
+    $closed = [];
+    foreach ((array) site('schedule', []) as $weekday => $slot) {
+        if (!is_array($slot)) {
+            $closed[] = (int) $weekday;
+        }
+    }
+    return $closed;
+}
+
 /** 休診日か（曜日の定休日と closed_dates の両方を見る）。'Y-m-d' 以外は false */
 function is_closed_day(string $ymd): bool
 {

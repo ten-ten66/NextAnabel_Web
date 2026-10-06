@@ -27,7 +27,16 @@ $fields = [
         ],
     ],
     'menu' => ['label' => '気になる施術', 'type' => 'choice', 'required' => false, 'options' => $menuOptions],
-    'date1' => ['label' => '第1希望日', 'type' => 'date', 'required' => true, 'min_days' => 1, 'max_days' => 60],
+    // 定休日（木曜）は Validator が受け付けない。祝日は判定しないため、案内文で補う
+    'date1' => [
+        'label' => '第1希望日',
+        'type' => 'date',
+        'required' => true,
+        'min_days' => 1,
+        'max_days' => 60,
+        'closed_weekdays' => closed_weekdays(),
+        'closed_label' => (string) site('closed_label'),
+    ],
     'time' => [
         'label' => '時間帯',
         'type' => 'choice',
@@ -39,7 +48,15 @@ $fields = [
             'any' => '指定なし',
         ],
     ],
-    'date2' => ['label' => '第2希望日', 'type' => 'date', 'required' => false, 'min_days' => 1, 'max_days' => 60],
+    'date2' => [
+        'label' => '第2希望日',
+        'type' => 'date',
+        'required' => false,
+        'min_days' => 1,
+        'max_days' => 60,
+        'closed_weekdays' => closed_weekdays(),
+        'closed_label' => (string) site('closed_label'),
+    ],
     'message' => ['label' => 'ご相談内容', 'type' => 'textarea', 'required' => false, 'max' => 1000],
     'consent' => [
         'label' => '個人情報の取り扱い',
@@ -291,7 +308,7 @@ partial('header', compact('page'));
             <p class="c-demo-note p-contact__demo-intro">このページはサンプルのため、送信されません。「入力内容を確認する」を押すと、確認画面と完了画面の流れを再現します（JavaScript を使用します）。</p>
           <?php endif; ?>
 
-          <form class="c-form js-contact-form" action="<?= e(url('contact')) ?>" method="post" novalidate<?= is_static() ? ' data-demo' : '' ?> data-reception="<?= e(reception_json()) ?>">
+          <form class="c-form js-contact-form" action="<?= e(url('contact')) ?>" method="post" novalidate<?= is_static() ? ' data-demo' : '' ?> data-reception="<?= e(reception_json()) ?>" data-closed-label="<?= e(site('closed_label')) ?>">
             <?php if (!is_static()): ?>
               <input type="hidden" name="_token" value="<?= e($token) ?>">
             <?php endif; ?>
@@ -364,7 +381,7 @@ partial('header', compact('page'));
                 <div class="<?= e($fieldClass('date1')) ?>">
                   <label class="c-field__label" for="f-date1">第1希望日<span class="js-required-badge" data-optional-for="other"><?= $badge(true) ?></span></label>
                   <input class="c-field__input c-field__input--date js-date" type="date" id="f-date1" name="date1" value="<?= e($val('date1')) ?>"<?= $dateRange ?> required<?= $invalid('date1') ?><?= $describedBy('date1', true) ?>>
-                  <p class="c-field__hint" id="f-date1-hint">明日から60日先までの日付を選べます。その他のお問い合わせの場合は空欄でもかまいません。</p>
+                  <p class="c-field__hint" id="f-date1-hint">明日から60日先までの、休診日（<?= e(site('closed_label')) ?>）以外の日付を選べます。その他のお問い合わせの場合は空欄でもかまいません。</p>
                   <?= $error('date1') ?>
                 </div>
                 <div class="<?= e($fieldClass('date2')) ?>">
@@ -384,7 +401,7 @@ partial('header', compact('page'));
                     </label>
                   <?php endforeach; ?>
                 </div>
-                <p class="c-field__hint" id="f-time-hint">第1・第2希望日に共通の時間帯です。日曜日は16:30が最終受付です。休診日（<?= e(site('closed_label')) ?>）を選ばれた場合は、近い日程をご提案します。</p>
+                <p class="c-field__hint" id="f-time-hint">第1・第2希望日に共通の時間帯です。日曜日は16:30が最終受付です。祝日を選ばれた場合は、近い日程をご提案します。</p>
                 <?= $error('time') ?>
               </fieldset>
             </fieldset>

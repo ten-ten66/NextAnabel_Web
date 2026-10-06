@@ -7,7 +7,7 @@
 (() => {
   const H = window.Hakuji;
   if (!H) return;
-  const { $, $$, create, tokyoNow, ymd, addDays, jaDate, readCalendar, slotFor } = H;
+  const { $, $$, create, WEEK, tokyoNow, ymd, addDays, jaDate, readCalendar, slotFor } = H;
 
   // 予約フォーム: サーバー版の送信は PHP（FormFlow）。ここでは日付の範囲・休診日の注意・文字数・二重送信の防止。
   // 静的版は送信せず、入力 → 確認 → 完了の流れを画面上で再現する（入力値は textContent で表示）
@@ -39,13 +39,18 @@
     $$('.js-date', form).forEach((input) => {
       if (!input.min) input.min = minDate;
       if (!input.max) input.max = maxDate;
+      // 定休日（木曜）は送信時にエラーになるため先に知らせる。祝日はサーバーでは判定しないため、ご提案の案内にとどめる
       const warn = () => {
         const field = input.closest('.c-field');
         field.querySelector('.js-closed-warning')?.remove();
-        if (!calendar || !/^\d{4}-\d{2}-\d{2}$/.test(input.value)) return;
+        if (!calendar || field.querySelector('.c-field__error') || !/^\d{4}-\d{2}-\d{2}$/.test(input.value)) return;
         const [y, m, d] = input.value.split('-').map(Number);
-        if (slotFor(calendar, new Date(Date.UTC(y, m - 1, d)))) return;
-        input.after(create('p', 'c-field__warning js-closed-warning', '選択された日は休診日です。この日をご希望の場合は、近い日程をご提案します。'));
+        const date = new Date(Date.UTC(y, m - 1, d));
+        if (slotFor(calendar, date)) return;
+        const weekdayClosed = !calendar.schedule[date.getUTCDay()];
+        input.after(create('p', 'c-field__warning js-closed-warning', weekdayClosed
+          ? `${WEEK[date.getUTCDay()]}曜日は休診日です。別の日を選択してください。`
+          : '選択された日は祝日のため休診です。この日をご希望の場合は、近い日程をご提案します。'));
       };
       input.addEventListener('change', warn);
       warn();
@@ -91,11 +96,11 @@
       update();
     });
 
-    if (form.hasAttribute('data-demo')) initDemoForm(form, { minDate, maxDate });
+    if (form.hasAttribute('data-demo')) initDemoForm(form, { minDate, maxDate, calendar });
   };
 
   /* 静的版の送信デモ（サーバーの検証 core/form/Validator.php と同じ規則・同じ文言） */
-  const initDemoForm = (form, { minDate, maxDate }) => {
+  const initDemoForm = (form, { minDate, maxDate, calendar }) => {
     const stage = $('.js-form-stage');
     const steps = $$('.js-steps > li');
     const submit = $('.js-submit', form);
@@ -164,9 +169,14 @@
         if (!value) {
           if (isRequired) add(field, required(field, '選択'));
         } else if (value < minDate) {
-          add(field, `${labels[field]}は1日後以降の日付を選択してください。`);
+          add(field, `${labels[field]}は明日以降の日付を選択してください。`);
         } else if (value > maxDate) {
           add(field, `${labels[field]}は60日以内の日付を選択してください。`);
+        } else if (calendar) {
+          const [y, m, d] = value.split('-').map(Number);
+          if (!calendar.schedule[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]) {
+            add(field, `${labels[field]}は休診日（${form.dataset.closedLabel || '休診日'}）以外の日付を選択してください。`);
+          }
         }
       });
       if (!inquiry && !checked('time')) add('time', required('time', '選択'));
@@ -197,6 +207,7 @@
         const control = controlOf(name);
         if (!control) return;
         const field = control.matches('fieldset') ? control : control.closest('.c-field');
+        field.querySelector('.js-closed-warning')?.remove();
         const error = create('p', 'c-field__error js-demo-error', message);
         error.id = `f-${name}-error`;
         field.classList.add('is-invalid');

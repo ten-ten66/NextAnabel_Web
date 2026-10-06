@@ -14,7 +14,7 @@
     "qa": "node tools/qa/run.mjs",
     "test:forms": "node tests/forms.e2e.mjs",
     "serve:php": "php -S 127.0.0.1:8080 -t sites",
-    "serve:static": "php -S 127.0.0.1:8090 -t docs"
+    "serve:static": "node tools/qa/serve.mjs docs 8090"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

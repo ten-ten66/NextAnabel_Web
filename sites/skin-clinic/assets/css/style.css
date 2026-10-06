@@ -336,6 +336,7 @@ small {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  min-height: 48px;
   margin-right: auto;
   color: var(--color-ink);
   text-decoration: none;
@@ -683,6 +684,7 @@ small {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
+  min-height: 48px;
   color: var(--color-ink);
   text-decoration: none;
 }
