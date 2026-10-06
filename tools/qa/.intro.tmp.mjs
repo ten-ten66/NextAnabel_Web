@@ -1,0 +1,17 @@
+import { chromium } from 'playwright';
+import { serve } from './serve.mjs';
+const [out] = process.argv.slice(2);
+const server = await serve('docs', 8888);
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errors = [];
+page.on('pageerror', (e) => errors.push(String(e)));
+page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+await page.goto('http://127.0.0.1:8888/esthetic/index.html');
+await page.waitForTimeout(450);
+await page.screenshot({ path: `${out}/intro-mid.png`, clip: { x: 600, y: 60, width: 840, height: 700 } });
+await page.waitForTimeout(2500);
+await page.screenshot({ path: `${out}/intro-end.png`, clip: { x: 600, y: 60, width: 840, height: 700 } });
+const dash = await page.evaluate(() => [...document.querySelectorAll('.js-branch-stem, .p-hero__leaf-outline, .js-hero-swash')].slice(0, 4).map((p) => getComputedStyle(p).strokeDasharray + '|' + getComputedStyle(p).strokeDashoffset));
+console.log('after intro dash:', dash.join(', '), 'errors:', errors.length ? errors : 'none');
+await browser.close(); server.close();

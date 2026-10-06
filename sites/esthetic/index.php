@@ -69,7 +69,7 @@ partial('header', compact('page'));
           <span class="p-hero__name"><span class="p-hero__char" data-intro="text" style="--intro-delay: .05s">苔</span><span class="p-hero__char" data-intro="text" style="--intro-delay: .13s">と</span><span class="p-hero__char" data-intro="text" style="--intro-delay: .21s">麻</span></span>
           <span class="p-hero__name-en" lang="en" data-intro="text" style="--intro-delay: .3s">koke to asa</span>
         </h1>
-        <svg class="p-hero__swash" viewBox="0 0 240 18" aria-hidden="true" focusable="false" data-intro="draw"><path class="js-hero-swash" d="M3 12c26-9 48 3 76-3s52-9 78-3 44 5 80-4"/></svg>
+        <svg class="p-hero__swash" viewBox="0 0 240 18" aria-hidden="true" focusable="false" data-intro="draw"><path class="js-hero-swash" pathLength="1" d="M3 12c26-9 48 3 76-3s52-9 78-3 44 5 80-4"/></svg>
       </div>
 
       <p class="p-hero__catch"><span class="p-hero__catch-line" data-intro="text" style="--intro-delay: .25s">静けさを、</span><span class="p-hero__catch-line" data-intro="text" style="--intro-delay: .37s">手のひらから。</span></p>

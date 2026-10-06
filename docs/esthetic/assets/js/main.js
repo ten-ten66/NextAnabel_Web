@@ -702,14 +702,18 @@
     const supportsScrollTimeline = window.CSS?.supports?.('animation-timeline: view()') ?? false;
     let introDone = false;
 
-    /* (1) ファーストビューの読み込み演出：文字は CSS が表示し、ここでは植物の線画を描く（1.2秒以内） */
+    /* (1) ファーストビューの読み込み演出：文字は CSS が表示し、ここでは植物の線画を描く（1.2秒以内）
+       線は pathLength="1" で長さを 1 に正規化してあり、破線のずれ（stroke-dashoffset）だけで描く。
+       DrawSVG はパスごとに長さを計測するため、40本ほどの線では読み込み直後の処理が重くなる（低速端末で数百ms） */
+    const HIDDEN_LINE = { strokeDasharray: '1 2', strokeDashoffset: 1 };
+    const DRAWN_LINE = { strokeDashoffset: 0 };
     function playIntro() {
       if (introDone) return;
       introDone = true;
       const hero = $('.js-hero');
       const targets = $$('[data-intro="draw"]');
       // 線画がない、または読み込みが遅くフェイルセーフで表示済みなら、演出しない
-      if (!hero || !targets.length || !window.DrawSVGPlugin || performance.now() > 1800) {
+      if (!hero || !targets.length || performance.now() > 1800) {
         finishDrawing();
         return;
       }
@@ -729,13 +733,13 @@
       tl.fromTo($('.p-hero__layer--far .js-hero-depth', hero), { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0)
         .set(targets, { autoAlpha: 1 }, 0)
         .fromTo($('.p-hero__branch--shade', hero), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1, ease: 'sine.out' }, 0.1)
-        .fromTo(stems[0], { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.95 }, 0)
-        .fromTo(stems.slice(1), { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.5, ease: 'power2.out' }, 0.38)
-        .fromTo(swash, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.6 }, 0.44);
+        .fromTo(stems[0], HIDDEN_LINE, { ...DRAWN_LINE, duration: 0.95 }, 0)
+        .fromTo(stems.slice(1), HIDDEN_LINE, { ...DRAWN_LINE, duration: 0.5, ease: 'power2.out' }, 0.38)
+        .fromTo(swash, HIDDEN_LINE, { ...DRAWN_LINE, duration: 0.6 }, 0.44);
       // 葉は、茎が届く順に少しずつ遅らせて描く
       leaves.forEach((leaf) => {
         const at = Number(leaf.dataset.at) || 0;
-        tl.fromTo(leaf.children, { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.38, ease: 'power1.out' }, 0.1 + at * 0.72);
+        tl.fromTo(leaf.children, HIDDEN_LINE, { ...DRAWN_LINE, duration: 0.38, ease: 'power1.out' }, 0.1 + at * 0.72);
       });
       if (tl.duration() > 1.2) tl.timeScale(tl.duration() / 1.2);
     }
