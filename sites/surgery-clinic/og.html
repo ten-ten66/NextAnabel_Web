@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>OGP — オルヴァン美容外科</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500&amp;family=Zen+Old+Mincho:wght@500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&amp;text=ORVANE0123456789%3A%E2%80%93.-&amp;display=swap">
+<style>
+  /* tools/og-image.mjs で 1200×630 の PNG に書き出す（tokens/surgery-clinic.tokens.json の色を使用） */
+  :root {
+    --color-ink: #111418;
+    --color-ink-line: #2c333b;
+    --color-ivory: #ede7dc;
+    --color-ivory-soft: #b9b2a6;
+    --color-brass: #c3a574;
+    --color-brass-soft: #8f7a57;
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body {
+    margin: 0;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background-color: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: "IBM Plex Sans JP", sans-serif;
+  }
+
+  .og {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    padding: 64px 72px;
+    isolation: isolate;
+  }
+
+  .og__media {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: -2;
+    width: 760px;
+    background: url("assets/img/hero-silk.webp") 60% 40% / cover no-repeat;
+  }
+
+  .og::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, var(--color-ink) 0%, var(--color-ink) 38%, color-mix(in srgb, var(--color-ink) 55%, transparent) 70%, color-mix(in srgb, var(--color-ink) 20%, transparent) 100%);
+  }
+
+  .og__kicker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    color: var(--color-brass);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+  }
+
+  .og__kicker::before {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background-color: currentColor;
+  }
+
+  .og__mark {
+    margin: 56px 0 0;
+    font-family: "Bodoni Moda", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 132px;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+  }
+
+  .og__name {
+    margin: 22px 0 0;
+    font-family: "Zen Old Mincho", serif;
+    font-weight: 500;
+    font-size: 44px;
+    letter-spacing: 0.16em;
+    font-feature-settings: "palt";
+  }
+
+  .og__rule {
+    width: 520px;
+    height: 1px;
+    margin: 40px 0 28px;
+    background-color: var(--color-ink-line);
+  }
+
+  .og__catch {
+    margin: 0;
+    font-family: "Zen Old Mincho", serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.7;
+    letter-spacing: 0.1em;
+    font-feature-settings: "palt";
+  }
+
+  .og__meta {
+    margin: 14px 0 0;
+    color: var(--color-ivory-soft);
+    font-size: 16px;
+    letter-spacing: 0.08em;
+  }
+
+  .og__vertical {
+    position: absolute;
+    top: 64px;
+    right: 48px;
+    margin: 0;
+    color: var(--color-brass-soft);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    writing-mode: vertical-rl;
+  }
+
+  .og__sample {
+    position: absolute;
+    right: 72px;
+    bottom: 56px;
+    margin: 0;
+    padding: 6px 14px;
+    border: 1px solid var(--color-brass-soft);
+    color: var(--color-ivory-soft);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+</style>
+</head>
+<body>
+  <div class="og">
+    <div class="og__media"></div>
+    <p class="og__kicker">AESTHETIC SURGERY — GINZA, TOKYO</p>
+    <p class="og__mark">ORVANE</p>
+    <p class="og__name">オルヴァン美容外科</p>
+    <div class="og__rule"></div>
+    <p class="og__catch">できることと、できないことを、最初にお伝えします。</p>
+    <p class="og__meta">形成外科専門医の院長が、カウンセリングから術後の検診まで担当します。</p>
+    <p class="og__vertical">ORVANE AESTHETIC SURGERY</p>
+    <p class="og__sample">架空のクリニックのWebサイトサンプル</p>
+  </div>
+</body>
+</html>

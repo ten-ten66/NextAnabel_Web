@@ -1,0 +1,27 @@
+{
+  "name": "clinic-salon-web-samples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "美容クリニック・エステ向け Web サンプルサイト集（架空）",
+  "type": "module",
+  "scripts": {
+    "vendor": "node tools/vendor.mjs",
+    "build": "php tools/build.php --env=demo",
+    "build:prod": "php tools/build.php --env=production --out=build/production",
+    "lint:compliance": "php tools/lint-compliance.php docs",
+    "lint:html": "html-validate \"docs/**/*.html\"",
+    "lint:php": "find core sites tools tests wordpress -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null",
+    "qa": "node tools/qa/run.mjs",
+    "test:forms": "node tests/forms.e2e.mjs",
+    "serve:php": "php -S 127.0.0.1:8080 -t sites",
+    "serve:static": "node tools/qa/serve.mjs docs 8090"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "gsap": "3.15.0",
+    "html-validate": "11.16.2",
+    "lighthouse": "13.5.0",
+    "playwright": "1.56.1",
+    "swiper": "14.3.0"
+  }
+}

@@ -1,0 +1,137 @@
+/*
+ * WordPress 版だけで使うスタイル
+ * 共通のデザインは style.css（静的サイト版 sites/skin-clinic/assets/css/style.css の写し）を使い、
+ * ここには固定ページ本文・投稿一覧のページ送り・フォームの完了表示・管理バー表示時の位置調整だけを書く。
+ */
+
+.l-container--narrow {
+  max-width: 46em;
+}
+
+/* 固定ページの本文（エディターで入力した見出し・段落・リスト） */
+.p-page-content {
+  scroll-margin-top: calc(var(--header-h) + var(--space-5));
+}
+
+.p-page-content > * + * {
+  margin-top: var(--space-4);
+}
+
+.p-page-content > h2 {
+  margin-top: var(--space-8);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.08em;
+}
+
+.p-page-content > h3 {
+  margin-top: var(--space-6);
+  font-size: var(--fs-md);
+}
+
+.p-page-content > ul,
+.p-page-content > ol {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.4em;
+}
+
+.p-page-content > ul {
+  list-style: disc;
+}
+
+.p-page-content > ol {
+  list-style: decimal;
+}
+
+.p-page-content a:not([class]) {
+  color: var(--color-cobalt);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.p-page-content > .c-form {
+  margin-top: var(--space-6);
+}
+
+/* 予約フォームの送信完了 */
+.c-form-notice--done {
+  border-left-color: var(--color-cobalt);
+  background: var(--color-cobalt-wash);
+}
+
+.c-form-notice--done .c-form-notice__title {
+  color: var(--color-cobalt);
+}
+
+.c-form-notice--done > * + * {
+  margin-top: var(--space-2);
+}
+
+/* お知らせ一覧の見出しリンク */
+.c-news__title a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 0.25em;
+}
+
+.c-news__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* 投稿一覧のページ送り（the_posts_pagination の出力） */
+.pagination {
+  margin-top: var(--space-7);
+}
+
+.pagination .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pagination .page-numbers {
+  display: inline-grid;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  place-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+}
+
+.pagination .page-numbers.current {
+  border-color: var(--color-cobalt);
+  background: var(--color-cobalt);
+  color: var(--color-on-cobalt);
+}
+
+/* WordPress が出力する読み上げ専用のテキスト */
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* ログイン中に表示される管理バーと、固定ヘッダーが重ならないようにする */
+.admin-bar .l-header {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+@media (max-width: 600px) {
+  /* 狭い画面では管理バーがスクロールで流れるため、ヘッダーは上端に付ける */
+  .admin-bar .l-header {
+    top: 0;
+  }
+}

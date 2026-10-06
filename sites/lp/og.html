@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>OGP 白磁スキンクリニック 医療脱毛LP</title>
+<!-- OGP画像（1200×630）の原稿。node tools/og-image.mjs lp で assets/img/ogp.png に書き出す。公開物には含めない -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600&amp;family=Zen+Kaku+Gothic+New:wght@400;700;900&amp;display=swap">
+<style>
+  :root {
+    --color-porcelain: #f7f8fb;
+    --color-paper: #ffffff;
+    --color-sky: #e3ecff;
+    --color-line: #ccd5e3;
+    --color-ink: #1f2a37;
+    --color-ink-soft: #526070;
+    --color-cobalt: #2346a0;
+    --color-cobalt-deep: #1a367f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--color-porcelain);
+    color: var(--color-ink);
+    font-family: "Zen Kaku Gothic New", sans-serif;
+  }
+  .og { position: relative; width: 1200px; height: 630px; padding: 64px 0 0 80px; }
+  .og__band { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: var(--color-cobalt); }
+  .og__brand { display: flex; align-items: center; gap: 14px; }
+  .og__brand svg { width: 52px; height: 52px; }
+  .og__name { font-size: 26px; font-weight: 700; letter-spacing: .08em; }
+  .og__tag { display: block; font-size: 18px; font-weight: 700; letter-spacing: .14em; color: var(--color-cobalt); }
+  .og__title {
+    margin: 40px 0 0;
+    font-family: "Shippori Mincho B1", serif;
+    font-weight: 600;
+    font-size: 76px;
+    line-height: 1.32;
+    letter-spacing: .03em;
+    font-feature-settings: "palt";
+  }
+  .og__title span { display: block; }
+  .og__title em {
+    font-style: normal;
+    color: var(--color-cobalt);
+    background: linear-gradient(transparent 72%, rgb(35 70 160 / 14%) 72%);
+  }
+  .og__lead { margin: 26px 0 0; font-size: 24px; font-weight: 700; line-height: 1.6; color: var(--color-ink-soft); }
+  .og__disc {
+    position: absolute;
+    top: 70px;
+    right: 70px;
+    width: 470px;
+    height: 470px;
+    border-radius: 50%;
+    background: var(--color-sky);
+    box-shadow: inset 0 0 0 16px rgb(255 255 255 / 55%);
+  }
+  .og__figure { position: absolute; top: 96px; right: 228px; width: 194px; height: 420px; }
+  .og__figure .s { fill: #f4f7fd; stroke: #9fb0d2; stroke-width: 1.6; }
+  .og__figure .h { fill: var(--color-cobalt); stroke: var(--color-cobalt-deep); stroke-width: 1.6; }
+  .og__figure .hair { fill: #dbe2ee; stroke: #9fb0d2; stroke-width: 1.6; }
+  .og__chip {
+    position: absolute;
+    padding: 5px 16px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: var(--color-cobalt);
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .og__facts {
+    position: absolute;
+    right: 64px;
+    bottom: 56px;
+    display: flex;
+    gap: 28px;
+    padding: 18px 28px;
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    background: var(--color-paper);
+  }
+  .og__fact { font-size: 17px; font-weight: 700; color: var(--color-ink-soft); }
+  .og__fact b { display: block; color: var(--color-cobalt); font-size: 44px; font-weight: 900; line-height: 1.1; }
+  .og__fact b small { font-size: 20px; color: var(--color-ink); margin-left: 2px; }
+  .og__sample {
+    position: absolute;
+    left: 80px;
+    bottom: 40px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .06em;
+  }
+</style>
+</head>
+<body>
+<div class="og">
+  <div class="og__brand">
+    <svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" fill="#2346A0"/><path d="M18 7.5c5.8 0 10.5 4.7 10.5 10.5S23.8 28.5 18 28.5" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/><path d="M9 27L25.5 8" stroke="#E3ECFF" stroke-width="1.6" stroke-linecap="round"/><circle cx="18" cy="18" r="3.2" fill="#FFFFFF"/></svg>
+    <div><span class="og__name">白磁スキンクリニック</span><span class="og__tag">医療レーザー脱毛</span></div>
+  </div>
+  <h1 class="og__title"><span>医療脱毛は、</span><span><em>総額</em>と<em>回数</em>を</span><span>知ってから。</span></h1>
+  <p class="og__lead">部位を選ぶと、税込の総額と通院回数の目安がわかる。</p>
+
+  <div class="og__disc"></div>
+  <svg class="og__figure" viewBox="0 0 240 520" aria-hidden="true">
+    <path class="s" d="M79 108C69 109 62 117 61 129C59 152 56 176 53 200C50 228 47 256 45 282C45 287 49 290 52 290C55 290 58 288 58.5 284C61.5 258 65 230 69 204C72 182 77 160 80.5 138Z"/>
+    <path class="s" d="M161 108C171 109 178 117 179 129C181 152 184 176 187 200C190 228 193 256 195 282C195 287 191 290 188 290C185 290 182 288 181.5 284C178.5 258 175 230 171 204C168 182 163 160 159.5 138Z"/>
+    <path class="s" d="M45.5 283C41 290 39.5 300 41 308C42.5 316 51 318 54.5 311C57 305 58.5 295 58.5 284Z"/>
+    <path class="s" d="M194.5 283C199 290 200.5 300 199 308C197.5 316 189 318 185.5 311C183 305 181.5 295 181.5 284Z"/>
+    <path class="h" d="M80 234C80 280 86 320 89 352C92 390 95 430 97 466C97.5 471 100.5 474 104 474C107.5 474 110 471 110.5 466C111.5 430 113 392 114.5 354C116 320 118.5 290 120 258Z"/>
+    <path class="h" d="M160 234C160 280 154 320 151 352C148 390 145 430 143 466C142.5 471 139.5 474 136 474C132.5 474 130 471 129.5 466C128.5 430 127 392 125.5 354C124 320 121.5 290 120 258Z"/>
+    <path class="s" d="M97.5 464C93 469 87 475 88 480.5C89 486 104 487.5 109.5 483.5C112.5 481 112 472 110.5 464Z"/>
+    <path class="s" d="M142.5 464C147 469 153 475 152 480.5C151 486 136 487.5 130.5 483.5C127.5 481 128 472 129.5 464Z"/>
+    <path class="s" d="M108 70C109.5 80 108.5 89 103 101H137C131.5 89 130.5 80 132 70Z"/>
+    <path class="s" d="M106 98C92 99 80 103 75 113C71 121 73 131 78.5 139C82 160 85 180 84 198C83 214 78 226 79 240C80 252 90 259 104 260H136C150 259 160 252 161 240C162 226 157 214 156 198C155 180 158 160 161.5 139C167 131 169 121 165 113C160 103 148 99 134 98Z"/>
+    <ellipse class="s" cx="120" cy="47" rx="25" ry="30"/>
+    <path class="hair" d="M95.6 53C93 33 104 17 120 17C136 17 147 33 144.4 53C142 44.5 138 39 132 36C124 40.5 113 40.5 106.5 36C101 39.5 97.5 45 95.6 53Z"/>
+    <ellipse class="h" cx="80" cy="129" rx="5.5" ry="10"/>
+    <ellipse class="h" cx="160" cy="129" rx="5.5" ry="10"/>
+    <path class="h" d="M103 240H137C136 252.5 129 261.5 120 266C111 261.5 104 252.5 103 240Z"/>
+  </svg>
+  <span class="og__chip" style="top: 178px; right: 120px;">両ワキ</span>
+  <span class="og__chip" style="top: 266px; right: 432px;">VIO</span>
+  <span class="og__chip" style="top: 330px; right: 128px;">両脚</span>
+
+  <div class="og__facts">
+    <div class="og__fact"><b>5<small>回</small></b>コースの照射回数</div>
+    <div class="og__fact"><b><small>約</small>10<small>か月</small></b>通院期間の目安</div>
+  </div>
+  <span class="og__sample">SAMPLE｜Web制作のサンプル（架空のクリニック）</span>
+  <div class="og__band"></div>
+</div>
+</body>
+</html>

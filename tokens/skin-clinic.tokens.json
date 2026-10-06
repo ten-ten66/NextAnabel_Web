@@ -1,0 +1,140 @@
+{
+  "$description": "白磁スキンクリニック（美容皮膚科）: 磁器の白と呉須の青",
+  "color": {
+    "$type": "color",
+    "porcelain": {
+      "$value": "#F7F8F6",
+      "$description": "ページ背景（白磁）"
+    },
+    "paper": {
+      "$value": "#FFFFFF",
+      "$description": "カード・面"
+    },
+    "celadon": {
+      "$value": "#E4ECE8",
+      "$description": "青磁色の淡い面"
+    },
+    "mist": {
+      "$value": "#DCE3E6",
+      "$description": "霧がかった青灰の面"
+    },
+    "line": {
+      "$value": "#C9D2D6",
+      "$description": "罫線"
+    },
+    "ink": {
+      "$value": "#26323A",
+      "$description": "本文"
+    },
+    "ink-soft": {
+      "$value": "#56646C",
+      "$description": "補足テキスト"
+    },
+    "cobalt": {
+      "$value": "#2B4C8C",
+      "$description": "アクセント・主要ボタン（呉須の青）"
+    },
+    "cobalt-deep": {
+      "$value": "#1E3A70",
+      "$description": "主要ボタンのホバー"
+    },
+    "notice": {
+      "$value": "#7A4E2D",
+      "$description": "注意喚起（リスク表示の見出し）"
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "display": {
+        "$value": [
+          "Shippori Mincho B1",
+          "Hiragino Mincho ProN",
+          "Yu Mincho",
+          "serif"
+        ]
+      },
+      "body": {
+        "$value": [
+          "Zen Kaku Gothic New",
+          "Hiragino Sans",
+          "Yu Gothic",
+          "Meiryo",
+          "sans-serif"
+        ]
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": 400
+      },
+      "medium": {
+        "$value": 500
+      },
+      "bold": {
+        "$value": 700
+      }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "0": {
+      "$value": "0px"
+    },
+    "1": {
+      "$value": "4px"
+    },
+    "2": {
+      "$value": "8px"
+    },
+    "3": {
+      "$value": "12px"
+    },
+    "4": {
+      "$value": "16px"
+    },
+    "5": {
+      "$value": "24px"
+    },
+    "6": {
+      "$value": "32px"
+    },
+    "7": {
+      "$value": "48px"
+    },
+    "8": {
+      "$value": "64px"
+    },
+    "9": {
+      "$value": "96px"
+    },
+    "10": {
+      "$value": "128px"
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1280px"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": {
+      "$value": "4px"
+    },
+    "md": {
+      "$value": "12px"
+    },
+    "pill": {
+      "$value": "999px"
+    }
+  }
+}

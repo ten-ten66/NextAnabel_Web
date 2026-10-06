@@ -1,0 +1,137 @@
+{
+  "$description": "オルヴァン美容外科: 墨の黒と象牙色、真鍮の差し色",
+  "color": {
+    "$type": "color",
+    "ink": {
+      "$value": "#111418",
+      "$description": "ページ背景"
+    },
+    "ink-raised": {
+      "$value": "#1A1F25",
+      "$description": "面"
+    },
+    "ink-line": {
+      "$value": "#2C333B",
+      "$description": "罫線"
+    },
+    "ivory": {
+      "$value": "#EDE7DC",
+      "$description": "本文"
+    },
+    "ivory-soft": {
+      "$value": "#B9B2A6",
+      "$description": "補足テキスト"
+    },
+    "brass": {
+      "$value": "#C3A574",
+      "$description": "差し色（細線・数字）"
+    },
+    "brass-soft": {
+      "$value": "#8F7A57",
+      "$description": "差し色の弱"
+    },
+    "cta": {
+      "$value": "#EDE7DC",
+      "$description": "主要ボタン（象牙色の地に墨色の文字）"
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "display": {
+        "$value": [
+          "Zen Old Mincho",
+          "Hiragino Mincho ProN",
+          "Yu Mincho",
+          "serif"
+        ]
+      },
+      "body": {
+        "$value": [
+          "IBM Plex Sans JP",
+          "Hiragino Sans",
+          "Yu Gothic",
+          "Meiryo",
+          "sans-serif"
+        ]
+      },
+      "accent": {
+        "$value": [
+          "Bodoni Moda",
+          "Didot",
+          "serif"
+        ],
+        "$description": "欧文の装飾用。Google Fonts の text= で必要な文字だけ読み込む"
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": 400
+      },
+      "medium": {
+        "$value": 500
+      },
+      "bold": {
+        "$value": 700
+      }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "0": {
+      "$value": "0px"
+    },
+    "1": {
+      "$value": "4px"
+    },
+    "2": {
+      "$value": "8px"
+    },
+    "3": {
+      "$value": "12px"
+    },
+    "4": {
+      "$value": "16px"
+    },
+    "5": {
+      "$value": "24px"
+    },
+    "6": {
+      "$value": "32px"
+    },
+    "7": {
+      "$value": "48px"
+    },
+    "8": {
+      "$value": "64px"
+    },
+    "9": {
+      "$value": "96px"
+    },
+    "10": {
+      "$value": "128px"
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1280px"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "none": {
+      "$value": "0px"
+    },
+    "sm": {
+      "$value": "2px"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[
+  "gsap/dist/gsap.min.js",
+  "gsap/dist/ScrollTrigger.min.js",
+  "gsap/dist/DrawSVGPlugin.min.js",
+  "swiper/swiper-bundle.min.js",
+  "swiper/swiper-bundle.min.css"
+]

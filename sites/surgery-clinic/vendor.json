@@ -1,0 +1,5 @@
+[
+  "gsap/dist/gsap.min.js",
+  "gsap/dist/ScrollTrigger.min.js",
+  "gsap/dist/SplitText.min.js"
+]

@@ -1,0 +1,2 @@
+:root { --color-bg: #ffffff; --color-text: #1f2328; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: "Zen Kaku Gothic New", sans-serif; }

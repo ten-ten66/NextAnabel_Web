@@ -1,0 +1,140 @@
+{
+  "$description": "苔と麻（エステティックサロン）: 苔の緑、麻の生成り、藤色",
+  "color": {
+    "$type": "color",
+    "linen": {
+      "$value": "#ECEEE6",
+      "$description": "ページ背景（麻）"
+    },
+    "paper": {
+      "$value": "#F6F7F2",
+      "$description": "面"
+    },
+    "stone": {
+      "$value": "#CFCBC0",
+      "$description": "罫線・石"
+    },
+    "lichen": {
+      "$value": "#A8B394",
+      "$description": "淡い緑"
+    },
+    "moss": {
+      "$value": "#2F3B2B",
+      "$description": "本文・濃色"
+    },
+    "moss-soft": {
+      "$value": "#56664F",
+      "$description": "補足テキスト"
+    },
+    "mauve": {
+      "$value": "#7E6278",
+      "$description": "差し色（藤色）"
+    },
+    "mauve-soft": {
+      "$value": "#DCCFD8",
+      "$description": "藤色の淡い面"
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "display": {
+        "$value": [
+          "Klee One",
+          "Hiragino Mincho ProN",
+          "Yu Mincho",
+          "serif"
+        ]
+      },
+      "body": {
+        "$value": [
+          "Zen Kaku Gothic Antique",
+          "Hiragino Sans",
+          "Yu Gothic",
+          "Meiryo",
+          "sans-serif"
+        ]
+      },
+      "accent": {
+        "$value": [
+          "Fraunces",
+          "Georgia",
+          "serif"
+        ],
+        "$description": "欧文の装飾用。Google Fonts の text= で必要な文字だけ読み込む"
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": 400
+      },
+      "medium": {
+        "$value": 500
+      },
+      "semibold": {
+        "$value": 600
+      }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "0": {
+      "$value": "0px"
+    },
+    "1": {
+      "$value": "4px"
+    },
+    "2": {
+      "$value": "8px"
+    },
+    "3": {
+      "$value": "12px"
+    },
+    "4": {
+      "$value": "16px"
+    },
+    "5": {
+      "$value": "24px"
+    },
+    "6": {
+      "$value": "32px"
+    },
+    "7": {
+      "$value": "48px"
+    },
+    "8": {
+      "$value": "64px"
+    },
+    "9": {
+      "$value": "96px"
+    },
+    "10": {
+      "$value": "128px"
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1280px"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": {
+      "$value": "6px"
+    },
+    "md": {
+      "$value": "20px"
+    },
+    "organic": {
+      "$value": "48% 52% 44% 56% / 55% 45% 55% 45%"
+    }
+  }
+}
