@@ -50,7 +50,7 @@ return [
     'og_image' => 'img/ogp.png',
     'demo_notice' => 'このサイトはWeb制作のサンプルとして作成した架空のサロンです。実在の店舗・人物とは関係ありません。',
     // 欧文の装飾書体（Fraunces）は、ここに含まれる文字だけを Google Fonts の text= で読み込む
-    'accent_glyphs' => 'koke to asa About Season Menu Price Flow Space Therapists First visit FAQ Access Reserve Notes Course Options Facial Body Head spa Hands Quiet Not found 0123456789 / – — · & : . ( ) ,',
+    'accent_glyphs' => 'koke to asa Top About Season Menu Price Flow Space Therapists First visit FAQ Access Reserve Notes Course Options Facial Body Head spa Hands Quiet Not found N Q 0123456789 - / – — · & : . ( ) ,',
     'nav' => [
         ['id' => 'about', 'label' => 'はじめに', 'en' => 'About', 'href' => 'index#about'],
         ['id' => 'menu', 'label' => 'メニューと料金', 'en' => 'Menu & Price', 'href' => 'menu'],

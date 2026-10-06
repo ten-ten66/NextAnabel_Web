@@ -60,6 +60,17 @@ function sc_date(string $ymd): string
     return time_tag($ymd, 'Y年n月j日');
 }
 
+/** 2026-10-08 → 2026年10月8日（木）（メール・確認画面用） */
+function sc_date_label(string $ymd): string
+{
+    $date = DateTimeImmutable::createFromFormat('!Y-m-d', $ymd);
+    if ($date === false) {
+        return $ymd;
+    }
+    $week = ['日', '月', '火', '水', '木', '金', '土'][(int) $date->format('w')];
+    return $date->format('Y年n月j日') . "（{$week}）";
+}
+
 /** 監修者の表記「院長 桐生 遼（形成外科専門医）」 */
 function sc_reviewer_label(): string
 {

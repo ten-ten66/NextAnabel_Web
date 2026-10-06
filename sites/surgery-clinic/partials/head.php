@@ -1,8 +1,8 @@
 <?php
 /** @var array<string, mixed> $page */
-$bodyClass = trim('p-' . ($page['id'] ?? 'page') . ' ' . ($page['bodyClass'] ?? ''));
+$bodyClass = trim('p-page--' . ($page['id'] ?? 'page') . ' ' . ($page['bodyClass'] ?? ''));
 // Bodoni Moda はロゴタイプと数字だけに使うため、text= で必要な字形だけを読み込む
-$accentGlyphs = rawurlencode('ORVANE0123456789:–.');
+$accentGlyphs = rawurlencode('ORVANE0123456789:–.-');
 ?>
 <!DOCTYPE html>
 <html lang="ja" data-env="<?= is_static() ? 'static' : 'server' ?>" data-build="<?= e(BUILD_ENV) ?>">

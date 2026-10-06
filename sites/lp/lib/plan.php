@@ -146,3 +146,11 @@ function lp_tel_href(): string
 {
     return 'tel:' . preg_replace('/[^0-9+]/', '', (string) site('tel'));
 }
+
+/**
+ * アイコン（partials/icons.php のシンボルを参照する inline SVG）。装飾として読み上げから外す。
+ */
+function lp_icon(string $name, string $class = ''): string
+{
+    return '<svg class="c-icon' . ($class !== '' ? ' ' . e($class) : '') . '" aria-hidden="true" width="24" height="24"><use href="#i-' . e($name) . '"></use></svg>';
+}

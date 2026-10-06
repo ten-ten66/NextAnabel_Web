@@ -53,10 +53,11 @@ partial('header', compact('page'));
           <a class="c-link" href="#treatments">施術メニューを見る</a>
         </div>
       </div>
+      <span class="p-hero__rule" aria-hidden="true" data-hero-rule></span>
       <dl class="p-hero__info">
         <div class="p-hero__info-item">
           <dt>診療時間</dt>
-          <dd><span class="c-figure"><?= e(site('hours_label')) ?></span><span class="p-hero__info-sub">休診 <?= e(site('closed_label')) ?></span></dd>
+          <dd>月〜土 <span class="c-digits">10:00–19:00</span><span class="p-hero__info-sub">休診 <?= e(site('closed_label')) ?></span></dd>
         </div>
         <div class="p-hero__info-item">
           <dt>アクセス</dt>
@@ -232,7 +233,7 @@ partial('header', compact('page'));
             </thead>
             <tbody>
               <tr>
-                <th scope="row" class="c-figure">10:00–19:00</th>
+                <th scope="row" class="c-digits">10:00–19:00</th>
                 <?php foreach ($days as $day): ?><td><span class="c-hours__mark" aria-hidden="true"></span><span class="u-visually-hidden">診療</span></td><?php endforeach; ?>
                 <td><span class="c-hours__closed" aria-hidden="true">—</span><span class="u-visually-hidden">休診</span></td>
               </tr>

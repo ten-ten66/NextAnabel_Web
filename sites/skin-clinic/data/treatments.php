@@ -12,6 +12,7 @@
  *   downtime_short  一覧・概要用のダウンタイム
  *   risks_short     料金表・一覧で価格の隣に添える主なリスク
  *   anesthesia      麻酔について
+ *   anesthesia_extra 麻酔クリームの費用が別にかかるか（料金欄に麻酔代を添える）
  *   price_note      料金の補足
  *   price_table     'hair_removal' のとき、部位別の料金表を data/hair_removal.php から組み立てる
  *   procedure_type  schema.org の MedicalProcedureType
@@ -61,6 +62,7 @@ return [
         'downtime' => '照射後に赤みやほてりが出ることがあり、多くは数時間から1日ほどでおさまります。シミの部分が一時的に濃く見え、1〜2週間ほどでかさぶた状にはがれ落ちることがあります。',
         'downtime_short' => '赤み 数時間〜1日程度',
         'anesthesia' => '通常は使用しません',
+        'anesthesia_extra' => false,
         'risks' => [
             '赤み・ほてり',
             'シミが一時的に濃く見える（かさぶた状になり、1〜2週間ほどではがれ落ちます）',
@@ -127,6 +129,7 @@ return [
         'downtime' => '施術中から当日にかけて、赤みやヒリヒリ感が出ることがあります。数日間は乾燥しやすく、細かな皮むけが起こることがあります。',
         'downtime_short' => '赤み・乾燥 数日程度',
         'anesthesia' => '使用しません',
+        'anesthesia_extra' => false,
         'risks' => [
             '赤み・ヒリヒリ感',
             '乾燥・つっぱり感',
@@ -191,6 +194,7 @@ return [
         'downtime' => '照射後に赤みやむくみが出ることがあり、多くは数時間から数日でおさまります。照射部位を押したときの痛みや一時的なしびれが、数日から数週間続くことがあります。',
         'downtime_short' => '赤み・むくみ 数時間〜数日',
         'anesthesia' => 'ご希望に応じて麻酔クリームを使用します（別途費用）',
+        'anesthesia_extra' => true,
         'risks' => [
             '赤み・腫れ・むくみ',
             '押したときの痛み（筋肉痛のような痛み）',
@@ -261,6 +265,7 @@ return [
         'downtime' => '注入部位に腫れや内出血が出ることがあり、多くは数日から2週間ほどでおさまります。数日間は、注入部位に硬さや違和感を感じることがあります。',
         'downtime_short' => '腫れ・内出血 数日〜2週間',
         'anesthesia' => '麻酔クリーム、または麻酔成分を含む製剤を使用します（料金に含みます）',
+        'anesthesia_extra' => false,
         'risks' => [
             '内出血・腫れ・痛み',
             '注入部位のしこり・凹凸',
@@ -328,6 +333,7 @@ return [
         'downtime' => '照射後に赤みや、毛穴のまわりの腫れが出ることがあり、多くは数時間から数日でおさまります。',
         'downtime_short' => '赤み 数時間〜数日',
         'anesthesia' => 'ご希望に応じて麻酔クリームを使用します（別途費用）',
+        'anesthesia_extra' => true,
         'risks' => [
             '赤み・ほてり・毛穴のまわりの腫れ',
             '毛嚢炎（毛穴の炎症）',
