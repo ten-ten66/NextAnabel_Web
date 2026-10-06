@@ -1,0 +1,15 @@
+{
+    "env": "demo",
+    "origin": "https://example.com",
+    "sites": {
+        "sample": {
+            "base": "sample",
+            "profile": "medical",
+            "data": [],
+            "pages": [
+                {"path": "sample/ng.html", "kind": "treatment"},
+                {"path": "sample/ok.html", "kind": "treatment"}
+            ]
+        }
+    }
+}

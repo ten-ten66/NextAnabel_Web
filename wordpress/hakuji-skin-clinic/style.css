@@ -1,0 +1,14 @@
+/*
+Theme Name: 白磁スキンクリニック（サンプル）
+Theme URI: https://github.com/ten-ten66/NextAnabel_Web
+Description: 美容皮膚科サンプルサイト「白磁スキンクリニック」のクラシックテーマ版（架空）。施術をカスタム投稿タイプで管理し、費用・リスク・ダウンタイムなどの必須表示が揃うまで公開できない仕組みを備えます。
+Version: 1.0.0
+Requires at least: 6.3
+Tested up to: 6.5
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: hakuji
+*/
+
+/* 見た目は assets/css/style.css（静的サイト版と共通）で定義しています。 */
