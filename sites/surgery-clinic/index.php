@@ -117,7 +117,7 @@ partial('header', compact('page'));
               <dl class="c-card__facts" data-disclosure-group>
                 <div class="c-card__fact" data-disclosure="price">
                   <dt>費用</dt>
-                  <dd><span class="c-card__price-label"><?= e($t['card_price']['label']) ?></span> <?= e(sc_price_from($t)) ?></dd>
+                  <dd><span class="c-card__price-label"><?= e($t['card_price']['label']) ?></span><span class="c-card__price"><?= e(sc_price_from($t)) ?></span></dd>
                 </div>
                 <div class="c-card__fact" data-disclosure="downtime">
                   <dt>ダウンタイム</dt>
