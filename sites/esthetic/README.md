@@ -106,6 +106,7 @@ node tools/qa/run.mjs --dir=build/esthetic --site=esthetic
 ## 補足
 
 - 画像は `tools/gen_visuals.py` が生成した WebP です（`hero-leaves` / `leaves-room` / `leaves-mauve` / `stones` / `room`）。
-- OGP 画像は、PNG の容量を抑えるため写真の質感を使わず、枝の線画と影だけで構成しています（1200×630・約135KB）。
-- Fraunces は Google Fonts の `text=` で、ロゴと欧文の見出しに使う文字だけを読み込みます（`data/site.php` の `accent_glyphs`）。
+- OGP 画像は、PNG の容量を抑えるため写真の質感を使わず、枝の線画と影だけで構成しています（1200×630・約140KB）。
+- 和文フォントは Klee One（600）と Zen Kaku Gothic Antique（400・500）の3ウェイト。縦書きのキャッチも Klee One 600 にそろえ、1ウェイト分（約200KB）を減らしました。Fraunces は Google Fonts の `text=` で、ロゴと欧文の見出しに使う文字だけを読み込みます（`data/site.php` の `accent_glyphs`）。
+- 表示速度のため、ファーストビューの文字は CSS で表示し（JavaScript を待たない）、Swiper はギャラリーが近づいてから、施術の流れの線画は画面に近づいてから組み立てます。
 - ファーストビューの枝の座標（`data/branch.php`）は、葉の形と重力による垂れ方を計算する生成スクリプトで書き出し、手で整えたものです。

@@ -387,10 +387,13 @@
     const js = region.dataset.swiperJs;
     if (!js) return Promise.reject(new Error('Swiper の場所が指定されていません'));
     if (css) {
+      // サイトの CSS より前に入れて、Swiper の既定のスタイルをサイト側で上書きできる順序にする
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = css;
-      document.head.append(link);
+      const own = $('link[rel="stylesheet"][href*="css/style.css"]');
+      if (own) own.before(link);
+      else document.head.append(link);
     }
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');

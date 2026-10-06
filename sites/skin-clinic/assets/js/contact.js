@@ -39,7 +39,7 @@
     $$('.js-date', form).forEach((input) => {
       if (!input.min) input.min = minDate;
       if (!input.max) input.max = maxDate;
-      // 定休日（木曜）は送信時にエラーになるため先に知らせる。祝日はサーバーでは判定しないため、ご提案の案内にとどめる
+      // 定休日（木曜）・祝日・年末年始は送信時にエラーになるため、選んだ時点で知らせる
       const warn = () => {
         const field = input.closest('.c-field');
         field.querySelector('.js-closed-warning')?.remove();
@@ -50,7 +50,7 @@
         const weekdayClosed = !calendar.schedule[date.getUTCDay()];
         input.after(create('p', 'c-field__warning js-closed-warning', weekdayClosed
           ? `${WEEK[date.getUTCDay()]}曜日は休診日です。別の日を選択してください。`
-          : '選択された日は祝日のため休診です。この日をご希望の場合は、近い日程をご提案します。'));
+          : '選択された日は祝日・年末年始のため休診です。別の日を選択してください。'));
       };
       input.addEventListener('change', warn);
       warn();
@@ -174,7 +174,7 @@
           add(field, `${labels[field]}は60日以内の日付を選択してください。`);
         } else if (calendar) {
           const [y, m, d] = value.split('-').map(Number);
-          if (!calendar.schedule[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]) {
+          if (!slotFor(calendar, new Date(Date.UTC(y, m - 1, d)))) {
             add(field, `${labels[field]}は休診日（${form.dataset.closedLabel || '休診日'}）以外の日付を選択してください。`);
           }
         }

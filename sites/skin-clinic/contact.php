@@ -27,7 +27,7 @@ $fields = [
         ],
     ],
     'menu' => ['label' => '気になる施術', 'type' => 'choice', 'required' => false, 'options' => $menuOptions],
-    // 定休日（木曜）は Validator が受け付けない。祝日は判定しないため、案内文で補う
+    // 定休日（木曜）と、site.php の closed_dates（祝日・年末年始）は Validator が受け付けない
     'date1' => [
         'label' => '第1希望日',
         'type' => 'date',
@@ -35,6 +35,7 @@ $fields = [
         'min_days' => 1,
         'max_days' => 60,
         'closed_weekdays' => closed_weekdays(),
+        'closed_dates' => (array) site('closed_dates', []),
         'closed_label' => (string) site('closed_label'),
     ],
     'time' => [
@@ -55,6 +56,7 @@ $fields = [
         'min_days' => 1,
         'max_days' => 60,
         'closed_weekdays' => closed_weekdays(),
+        'closed_dates' => (array) site('closed_dates', []),
         'closed_label' => (string) site('closed_label'),
     ],
     'message' => ['label' => 'ご相談内容', 'type' => 'textarea', 'required' => false, 'max' => 1000],
@@ -401,7 +403,7 @@ partial('header', compact('page'));
                     </label>
                   <?php endforeach; ?>
                 </div>
-                <p class="c-field__hint" id="f-time-hint">第1・第2希望日に共通の時間帯です。日曜日は16:30が最終受付です。祝日を選ばれた場合は、近い日程をご提案します。</p>
+                <p class="c-field__hint" id="f-time-hint">第1・第2希望日に共通の時間帯です。日曜日は16:30が最終受付です。木曜・祝日・年末年始は休診です。</p>
                 <?= $error('time') ?>
               </fieldset>
             </fieldset>

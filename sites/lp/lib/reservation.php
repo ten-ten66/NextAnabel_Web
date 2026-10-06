@@ -98,6 +98,8 @@ function lp_validate_reservation(array $input): array
         $weekday = (int) date('w', (int) strtotime($values['date1']));
         if (in_array($weekday, lp_closed_weekdays(), true)) {
             $errors['date1'] = LP_WEEKDAYS[$weekday] . '曜日は休診日です。別の日を選択してください。';
+        } elseif (in_array($values['date1'], (array) site('closed_dates', []), true)) {
+            $errors['date1'] = 'この日は祝日・年末年始のため休診です。別の日を選択してください。';
         }
     }
     return [$values, $errors];

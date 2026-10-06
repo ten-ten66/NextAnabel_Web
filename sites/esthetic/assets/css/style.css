@@ -1408,9 +1408,10 @@ html.is-drawer-open {
 .p-about__statement {
   font-family: var(--font-display);
   font-weight: var(--weight-semibold);
-  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem);
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.375rem);
   line-height: 1.75;
   letter-spacing: 0.08em;
+  word-break: auto-phrase;
 }
 
 .p-about__text {
@@ -1420,6 +1421,8 @@ html.is-drawer-open {
 }
 
 .p-about__media {
+  width: 100%;
+  max-width: 560px;
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-organic);
   background: var(--color-lichen-wash);
