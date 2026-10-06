@@ -1,0 +1,163 @@
+{
+    "env": "demo",
+    "origin": "https://ten-ten66.github.io/NextAnabel_Web",
+    "sites": {
+        "esthetic": {
+            "base": "esthetic",
+            "profile": "esthetic",
+            "data": {
+                "menu": "data/menu.php"
+            },
+            "pages": [
+                {
+                    "path": "esthetic/index.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "esthetic/menu.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "esthetic/404.html",
+                    "kind": "page"
+                }
+            ]
+        },
+        "hub": {
+            "base": "",
+            "profile": "none",
+            "data": [],
+            "pages": [
+                {
+                    "path": "index.html",
+                    "kind": "page"
+                }
+            ]
+        },
+        "lp": {
+            "base": "lp",
+            "profile": "medical",
+            "data": [],
+            "pages": [
+                {
+                    "path": "lp/index.html",
+                    "kind": "treatment"
+                }
+            ]
+        },
+        "skin-clinic": {
+            "base": "skin-clinic",
+            "profile": "medical",
+            "data": {
+                "treatments": "data/treatments.php"
+            },
+            "pages": [
+                {
+                    "path": "skin-clinic/index.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/treatments.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/price.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/doctor.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/clinic.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/faq.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/contact.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/privacy.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/404.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "skin-clinic/treatment-ipl.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "skin-clinic/treatment-peeling.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "skin-clinic/treatment-hifu.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "skin-clinic/treatment-hyaluronic.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "skin-clinic/treatment-hair-removal.html",
+                    "kind": "treatment"
+                }
+            ]
+        },
+        "surgery-clinic": {
+            "base": "surgery-clinic",
+            "profile": "medical",
+            "data": {
+                "treatments": "data/treatments.php"
+            },
+            "pages": [
+                {
+                    "path": "surgery-clinic/index.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/cases.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/doctor.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/counseling.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/privacy.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/404.html",
+                    "kind": "page"
+                },
+                {
+                    "path": "surgery-clinic/treatment-double-eyelid-suture.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "surgery-clinic/treatment-double-eyelid-incision.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "surgery-clinic/treatment-thread-lift.html",
+                    "kind": "treatment"
+                },
+                {
+                    "path": "surgery-clinic/treatment-liposuction.html",
+                    "kind": "treatment"
+                }
+            ]
+        }
+    }
+}

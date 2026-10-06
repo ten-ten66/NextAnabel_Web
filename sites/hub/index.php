@@ -195,7 +195,7 @@ partial('head', compact('page'));
             <div><dt>アクセシビリティ</dt><dd>キーボードだけで操作でき、メニュー・タブ・ダイアログのフォーカスを管理しています。文字と背景のコントラストは WCAG 2.1 AA を満たします。</dd></div>
             <div><dt>SEO</dt><dd>見出し階層とランドマークを整えたHTML、canonical・OGPの自動生成、構造化データ（MedicalClinic、監修者と最終確認日を持つ MedicalWebPage、BeautySalon、BreadcrumbList）。</dd></div>
             <div><dt>WordPress</dt><dd><?= e(($metrics['wordpress']['verified'] ?? false)
-                ? '美容皮膚科サンプルのクラシックテーマ版を同梱。カスタム投稿タイプとメタボックスで施術情報を管理し、WordPress ' . $metrics['wordpress']['version'] . '（SQLite構成）で表示を確認しています。'
+                ? '美容皮膚科サンプルのクラシックテーマ版を同梱。カスタム投稿タイプとメタボックスで施術情報を管理し、費用・リスクなどの必須表示が揃うまで公開できません（編集画面・REST API のどちらからでも）。WordPress ' . $metrics['wordpress']['version'] . '（SQLite構成）で、表示・予約フォーム・公開の制御を確認しています。'
                 : '美容皮膚科サンプルのクラシックテーマ版を同梱しています。') ?></dd></div>
             <div><dt>デザイントークン</dt><dd>色・書体・余白を W3C Design Tokens 形式の JSON で同梱しています。本サンプルはデザインツールを介さずコードで制作しました。</dd></div>
           </dl>

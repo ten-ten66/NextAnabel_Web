@@ -1,7 +1,7 @@
 /**
  * 計測結果をサンプル集用のデータにまとめる
  *   node tools/qa/metrics.mjs [--wp=6.5.5]
- * qa-output/lighthouse.json・qa-output/report.json・html-validate・表現チェックの結果を集計し、
+ * qa-output/lighthouse.json・qa-output/report.json・qa-output/forms.json・html-validate・表現チェックの結果を集計し、
  * sites/hub/data/metrics.json に書き出す。値はすべて実測から算出し、手で書き換えない。
  */
 import { spawnSync } from 'node:child_process';
@@ -20,6 +20,7 @@ const manifest = read('docs/manifest.json');
 const samplePages = Object.values(manifest.sites).filter((s) => s.base).flatMap((s) => s.pages);
 const lighthouse = existsSync(join(root, 'qa-output/lighthouse.json')) ? read('qa-output/lighthouse.json') : { results: [] };
 const report = existsSync(join(root, 'qa-output/report.json')) ? read('qa-output/report.json') : [];
+const forms = existsSync(join(root, 'qa-output/forms.json')) ? read('qa-output/forms.json') : null;
 
 const htmlValidate = spawnSync('npx', ['html-validate', '-f', 'json', 'docs/**/*.html'], { cwd: root, encoding: 'utf8' });
 const htmlResults = JSON.parse(htmlValidate.stdout || '[]');
@@ -38,6 +39,12 @@ const checks = [
   { label: 'JavaScript 無効時に読めない本文', value: `${count((r) => r.hiddenNoJs.length)}件` },
   { label: '広告表現チェックの違反', value: `${lintViolations}件` },
 ];
+if (forms) {
+  checks.push({
+    label: `フォームの E2E テスト（CSRF・二重送信・改行混入・XSS・休診日など${forms.wordpress ? '。WordPress 版を含む' : ''}）`,
+    value: `${forms.passed}/${forms.passed + forms.failed}件合格`,
+  });
+}
 
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
 const metrics = {

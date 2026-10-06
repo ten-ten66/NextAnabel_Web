@@ -1,0 +1,603 @@
+/* =========================================================================
+   サンプル集
+   仕様書のように揃えた1カラム＋2面構成。アクセントは石油青の1色だけ。
+   ========================================================================= */
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --fg: #15181b;
+  --muted: #5a626a;
+  --line: #d6dadf;
+  --accent: #1e5b73;
+  --accent-soft: #e2edf1;
+  --on-accent: #ffffff;
+  --good: #1f6b45;
+  --fair: #8a5a00;
+  --poor: #a1272b;
+  --font-jp: "Murecho", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --radius: 10px;
+  --wrap: 72rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111315;
+    --surface: #191c1f;
+    --fg: #eceef0;
+    --muted: #a2aab2;
+    --line: #2b3035;
+    --accent: #86c3d7;
+    --accent-soft: #1a2b31;
+    --on-accent: #0d191e;
+    --good: #7fd1a2;
+    --fair: #f0c36b;
+    --poor: #ff9a9a;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #111315;
+  --surface: #191c1f;
+  --fg: #eceef0;
+  --muted: #a2aab2;
+  --line: #2b3035;
+  --accent: #86c3d7;
+  --accent-soft: #1a2b31;
+  --on-accent: #0d191e;
+  --good: #7fd1a2;
+  --fair: #f0c36b;
+  --poor: #ff9a9a;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-jp);
+  font-size: 1rem;
+  line-height: 1.85;
+  font-feature-settings: "palt" 0;
+  overflow-wrap: anywhere;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.l-wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: max(16px, 4vw);
+}
+
+.u-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.c-skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  padding: 0.5em 1em;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.c-skip-link:focus {
+  top: 16px;
+}
+
+.c-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.c-heading {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.c-subheading {
+  margin: 3rem 0 1rem;
+  font-size: 1.0625rem;
+}
+
+.c-note {
+  margin: 1.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.c-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0.7em 1.4em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.c-button::after {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.c-button:hover {
+  filter: brightness(1.1);
+}
+
+/* ---- 導入 ---- */
+.p-intro {
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 3.5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.p-intro__inner {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.p-intro__title {
+  margin: 0;
+  font-size: clamp(2rem, 1.2rem + 3.6vw, 3.5rem);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.p-intro__lead {
+  max-width: 40em;
+  margin: 0;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+}
+
+.p-intro__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.5rem;
+  margin: 0.75rem 0 0;
+}
+
+.p-intro__facts div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.p-intro__facts dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.p-intro__facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ---- サンプル一覧 ---- */
+.p-works {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.p-works__list {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 48em) {
+  .p-works__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.c-work {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.c-work__link {
+  display: grid;
+  gap: 0.35rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.c-work__media {
+  position: relative;
+  margin: 0 0 0.75rem;
+  padding-right: 14%;
+  padding-bottom: 6%;
+}
+
+.c-work__desktop {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.c-work__mobile {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24%;
+  aspect-ratio: 6 / 13;
+  object-fit: cover;
+  object-position: top;
+  border: 4px solid var(--fg);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.18);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.c-work__link:hover .c-work__desktop {
+  transform: translateY(-4px);
+}
+
+.c-work__link:hover .c-work__mobile {
+  transform: translateY(-8px);
+}
+
+.c-work__type {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.c-work__name {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  line-height: 1.4;
+}
+
+.c-work__link:hover .c-work__name {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.c-work__summary {
+  margin: 0;
+}
+
+.c-work__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c-work__tags li {
+  padding: 0.15em 0.75em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+}
+
+/* ---- タブ ---- */
+.p-detail {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5rem);
+  border-top: 1px solid var(--line);
+}
+
+.c-tabs__list {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.c-tabs__tab {
+  flex: none;
+  min-height: 44px;
+  padding: 0.4em 1.25em;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.c-tabs__tab[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.c-tabs__panel + .c-tabs__panel {
+  margin-top: 4rem;
+}
+
+.js-tabs.is-ready .c-tabs__panel + .c-tabs__panel {
+  margin-top: 0;
+}
+
+.c-tabs__title {
+  margin: 0 0 1.75rem;
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.p-values {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 48em) {
+  .p-values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.p-values__item {
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.p-values__item h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.0625rem;
+}
+
+.p-values__item p {
+  margin: 0;
+}
+
+.p-fit__title {
+  margin: 3rem 0 1rem;
+  font-size: 1.0625rem;
+}
+
+.p-fit {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.p-fit__row {
+  display: grid;
+  gap: 0.25rem 2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 48em) {
+  .p-fit__row {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+
+.p-fit dt {
+  font-weight: 700;
+}
+
+.p-fit dd {
+  margin: 0;
+}
+
+/* ---- 表 ---- */
+.c-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.c-table {
+  width: 100%;
+  min-width: 46rem;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.c-table caption {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.c-table th,
+.c-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.c-table tbody tr:last-child th,
+.c-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.c-table thead th {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.c-table tbody th {
+  white-space: nowrap;
+}
+
+.c-table__path {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.c-table--metrics td {
+  vertical-align: middle;
+}
+
+.c-score {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.75em;
+  padding: 0.1em 0.5em;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.c-score.is-good { color: var(--good); }
+.c-score.is-fair { color: var(--fair); }
+.c-score.is-poor { color: var(--poor); }
+.c-score.is-none { color: var(--muted); }
+
+.p-checks {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 48em) {
+  .p-checks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.p-checks li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.p-checks__value {
+  flex: none;
+  min-width: 3.5em;
+  font-weight: 500;
+  color: var(--good);
+}
+
+.p-points {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.p-points div {
+  display: grid;
+  gap: 0.25rem 2rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 48em) {
+  .p-points div {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+}
+
+.p-points dt {
+  font-weight: 700;
+}
+
+.p-points dd {
+  margin: 0;
+}
+
+.p-repo {
+  margin: 2.5rem 0 0;
+}
+
+.l-footer {
+  padding-block: 2rem 3rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.l-footer p {
+  margin: 0;
+}
+
+@media (max-width: 47.99em) {
+  .u-sp-hidden {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

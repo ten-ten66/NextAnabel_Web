@@ -141,7 +141,7 @@ function hakuji_form_field(string $key, array $field, string $value, string $err
         $html .= '<legend class="c-field__label">' . esc_html($field['label']) . hakuji_form_badge($field['required']) . '</legend>';
         $html .= '<div class="c-choice-list c-choice-list--compact">';
         foreach ($field['options'] as $optValue => $optLabel) {
-            $html .= '<label class="c-choice"><input type="radio" name="' . esc_attr($key) . '" value="' . esc_attr((string) $optValue) . '"' . checked($value, (string) $optValue, false) . $required . '>'
+            $html .= '<label class="c-choice"><input type="radio" name="' . esc_attr($key) . '" value="' . esc_attr((string) $optValue) . '"' . ($value === (string) $optValue ? ' checked' : '') . $required . '>'
                 . '<span class="c-choice__label">' . esc_html($optLabel) . '</span></label>';
         }
         return $html . '</div>' . $hint . $errorHtml . '</fieldset>';
@@ -153,7 +153,7 @@ function hakuji_form_field(string $key, array $field, string $value, string $err
         $html .= '<p class="c-consent__text" id="' . esc_attr($id . '-hint') . '">ご入力いただいた内容は、ご予約の受付とご連絡のために利用します。ご相談内容など健康に関する情報は、ご予約とカウンセリングのためにのみ利用します。'
             . ($privacy !== '' ? '詳しくは<a href="' . esc_url($privacy) . '">プライバシーポリシー</a>をご確認ください。' : '') . '</p>';
         $consentAria = ($error !== '' ? ' aria-invalid="true"' : '') . ' aria-describedby="' . esc_attr($id . '-hint' . ($error !== '' ? ' ' . $id . '-error' : '')) . '"';
-        $html .= '<label class="c-checkbox"><input type="checkbox" id="' . esc_attr($id) . '" name="' . esc_attr($key) . '" value="1"' . checked($value, '1', false) . $required . $consentAria . '>'
+        $html .= '<label class="c-checkbox"><input type="checkbox" id="' . esc_attr($id) . '" name="' . esc_attr($key) . '" value="1"' . ($value === '1' ? ' checked' : '') . $required . $consentAria . '>'
             . '<span class="c-checkbox__label">' . esc_html($field['label']) . '</span>' . hakuji_form_badge($field['required']) . '</label>';
         return $html . $errorHtml . '</div>';
     }
@@ -166,7 +166,7 @@ function hakuji_form_field(string $key, array $field, string $value, string $err
     } elseif ($field['type'] === 'select') {
         $html .= '<div class="c-select"><select class="c-field__input" id="' . esc_attr($id) . '" name="' . esc_attr($key) . '"' . $required . $aria . '>';
         foreach ($field['options'] as $optValue => $optLabel) {
-            $html .= '<option value="' . esc_attr((string) $optValue) . '"' . selected($value, (string) $optValue, false) . '>' . esc_html($optLabel) . '</option>';
+            $html .= '<option value="' . esc_attr((string) $optValue) . '"' . ($value === (string) $optValue ? ' selected' : '') . '>' . esc_html($optLabel) . '</option>';
         }
         $html .= '</select></div>';
     } else {

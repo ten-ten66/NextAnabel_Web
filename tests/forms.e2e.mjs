@@ -10,10 +10,11 @@
  *   - --wp を指定した場合は、起動済みの WordPress（テーマ hakuji-skin-clinic）の予約フォームも検査する
  * 観点: 正常系・入力エラー・CSRF・XSS・ヘッダーへの改行混入・ハニーポット・入力時間・二重送信・送信間隔・休診日
  * メールは送らず storage/mail.log に書かれる（MAIL_TRANSPORT 未設定時の LogMailer）。
+ * 結果は qa-output/forms.json に保存する（tools/qa/metrics.mjs がサンプル集に載せる）。
  */
 import { request } from 'playwright';
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,9 +35,11 @@ await new Promise((r) => setTimeout(r, 800));
 
 let passed = 0;
 let failed = 0;
+const results = [];
 const check = (label, ok, detail = '') => {
   if (ok) passed++;
   else failed++;
+  results.push({ label, ok: Boolean(ok) });
   console.log(`${ok ? 'OK' : 'NG'}  ${label}${ok || !detail ? '' : `\n      ${detail}`}`);
 };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -256,5 +259,7 @@ if (args.wp) {
 }
 
 server.kill();
+mkdirSync(join(root, 'qa-output'), { recursive: true });
+writeFileSync(join(root, 'qa-output', 'forms.json'), JSON.stringify({ testedAt: new Date().toISOString(), wordpress: Boolean(args.wp), passed, failed, results }, null, 2));
 console.log(`\n${passed + failed} 件中 ${passed} 件合格`);
 process.exit(failed ? 1 : 0);

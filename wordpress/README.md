@@ -52,7 +52,7 @@ php wordpress/tools/seed.php /path/to/wordpress
 node tests/forms.e2e.mjs --wp=http://127.0.0.1:8300
 # 4. 表示の検査（375 / 768 / 1440px、JavaScript 無効、axe）と HTML の検証
 node tools/qa/run.mjs --url=http://127.0.0.1:8300 --paths=/,/treatments/,/treatments/hifu/,/contact/ --save-html=qa-output/wp-html
-npx html-validate "qa-output/wp-html/*.html"
+npx html-validate --config wordpress/htmlvalidate.json "qa-output/wp-html/*.html"
 ```
 
 `seed.php` は施術データを静的サイト版の `sites/skin-clinic/data/treatments.php` から取り込みます。料金やリスクの記載を、静的サイト版と WordPress 版で同じデータから作れることの確認を兼ねています。
@@ -63,7 +63,7 @@ npx html-validate "qa-output/wp-html/*.html"
 - 表示: トップ・施術一覧・お悩み別一覧・施術詳細・予約・プライバシーポリシー・404 で、横スクロールなし・コンソールエラーなし・axe の serious / critical 0件・JavaScript 無効時も本文をすべて表示
 - 公開ガード: `wp_insert_post`・予約投稿・REST API（作成・更新）・管理画面の編集画面の各経路で、必須表示が欠けた施術が下書きに戻ること
 - 予約フォーム: nonce・ハニーポット・入力エラー（カナ・メール形式・改行混入・休診日・同意）・PRG
-- HTML: html-validate で WordPress 本体が出力する属性の引用符（シングルクォート）以外のエラーなし
+- HTML: html-validate のエラー0件（`wordpress/htmlvalidate.json`。WordPress 本体が出力する属性のシングルクォートだけは検査から外している）
 
 ## 未確認の範囲
 
