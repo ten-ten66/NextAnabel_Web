@@ -20,12 +20,22 @@ const HAKUJI_UNAPPROVED_ITEMS = [
 function hakuji_meta_fields(): array
 {
     $fields = [
+        '_hakuji_en' => ['英語表記', 'text', '例: Intense Pulsed Light（見出しの装飾に使います）'],
+        '_hakuji_lead' => ['一覧用の短い説明', 'text', '例: 顔全体のシミ・そばかす、くすみ、赤みに。'],
+        '_hakuji_image' => ['画像', 'text', 'テーマの assets/img/ 内のファイル名。例: pearl-spots.webp'],
+        '_hakuji_for' => ['こんな方に', 'textarea', '1行に1項目。'],
+        '_hakuji_flow' => ['施術の流れ', 'textarea', '1行に1手順。「見出し：説明」の形で書くと見出しが付きます。'],
         '_hakuji_prices' => ['費用（税込）', 'textarea', '1行に「ラベル|金額」。例: 全顔 1回|22000'],
         '_hakuji_courses' => ['コース', 'textarea', '1行に「ラベル|期間（月）|金額」。期間1か月超かつ5万円超のコースにはクーリング・オフの案内が自動で表示されます。'],
+        '_hakuji_price_note' => ['料金の補足', 'textarea', ''],
         '_hakuji_sessions' => ['回数・期間の目安', 'textarea', '個人差がある旨も記載してください。'],
+        '_hakuji_sessions_short' => ['回数の目安（短い表記）', 'text', '例: 3〜4週間ごと・5回程度'],
         '_hakuji_duration' => ['施術時間', 'text', '例: 約20分'],
+        '_hakuji_anesthesia' => ['麻酔', 'text', '例: 通常は使用しません'],
         '_hakuji_downtime' => ['ダウンタイム', 'textarea', ''],
+        '_hakuji_downtime_short' => ['ダウンタイム（短い表記）', 'text', '例: 赤み 数時間〜1日程度'],
         '_hakuji_risks' => ['主なリスク・副作用', 'textarea', '1行に1項目。'],
+        '_hakuji_risks_short' => ['主なリスク（一覧用の短い表記）', 'text', ''],
         '_hakuji_contraindications' => ['施術を受けられない方', 'textarea', '1行に1項目。'],
         '_hakuji_aftercare' => ['アフターケア', 'textarea', '1行に1項目。'],
         '_hakuji_reviewed' => ['最終確認日', 'date', '監修医が内容を確認した日'],

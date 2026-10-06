@@ -26,5 +26,22 @@ return [
         ['days' => ['Sunday'], 'opens' => '10:00', 'closes' => '17:00', 'label' => '日'],
     ],
     'closed' => '木曜・祝日',
-    'reviewer' => ['name' => '汐見 透子', 'title' => '院長・皮膚科専門医'],
+    // 0=日曜 … 6=土曜。null は休診
+    'schedule' => [
+        0 => ['open' => '10:00', 'close' => '17:00'],
+        1 => ['open' => '10:00', 'close' => '19:00'],
+        2 => ['open' => '10:00', 'close' => '19:00'],
+        3 => ['open' => '10:00', 'close' => '19:00'],
+        4 => null,
+        5 => ['open' => '10:00', 'close' => '19:00'],
+        6 => ['open' => '10:00', 'close' => '19:00'],
+    ],
+    'last_entry_minutes' => 30,
+    'reviewer' => ['name' => '汐見 透子', 'title' => '院長・皮膚科専門医', 'role' => '院長', 'specialty' => '皮膚科専門医'],
+    'concerns' => [
+        'spots' => 'シミ・くすみ',
+        'firmness' => 'たるみ・ハリ',
+        'pores' => '毛穴・ニキビ跡',
+        'hair' => '医療脱毛',
+    ],
 ];

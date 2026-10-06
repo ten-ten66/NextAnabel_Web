@@ -46,9 +46,16 @@ add_action('wp_enqueue_scripts', static function (): void {
     );
     $css = HAKUJI_DIR . '/assets/css/style.css';
     wp_enqueue_style('hakuji', HAKUJI_URI . '/assets/css/style.css', ['hakuji-fonts'], (string) (is_file($css) ? filemtime($css) : '1'));
+    $theme = HAKUJI_DIR . '/assets/css/theme.css';
+    wp_enqueue_style('hakuji-theme', HAKUJI_URI . '/assets/css/theme.css', ['hakuji'], (string) (is_file($theme) ? filemtime($theme) : '1'));
     $js = HAKUJI_DIR . '/assets/js/main.js';
     if (is_file($js)) {
         wp_enqueue_script('hakuji', HAKUJI_URI . '/assets/js/main.js', [], (string) filemtime($js), ['strategy' => 'defer', 'in_footer' => false]);
+    }
+    // トップページだけで使う演出（背景の Canvas・受付状況）
+    $home = HAKUJI_DIR . '/assets/js/home.js';
+    if (is_front_page() && is_file($home)) {
+        wp_enqueue_script('hakuji-home', HAKUJI_URI . '/assets/js/home.js', ['hakuji'], (string) filemtime($home), ['strategy' => 'defer', 'in_footer' => false]);
     }
 });
 

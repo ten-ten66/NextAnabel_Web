@@ -107,12 +107,15 @@ if (document.documentElement.dataset.build === 'demo') {
 - 文字サイズは `clamp()` で流体的に変える。本文は 16px 以上、行間 1.8 前後、1行は全角35〜40字程度。
 - `!important` はユーティリティ以外で使わない。
 - フォーカスは `:focus-visible` で必ず見えるようにする。
-- フォントは Google Fonts から最大2ファミリー・合計4ウェイト以内。`display=swap`。テンプレートには Google Fonts の `<link>` を書くだけでよい。ビルド時に `tools/fonts.php` がサイト内で使う文字だけのサブセットを取得し、同一オリジンから preload して読み込むよう書き換える（日本語フォントの分割ファイルを大量に読み込む遅延を避けるため。Artifact 用のビルドでは Google Fonts の `text=` 指定に切り替える）。
+- フォントは Google Fonts から最大2ファミリー・合計4ウェイト以内。`display=swap`。ロゴや見出しの数文字だけに使う書体は、`text=` で使う文字を指定すれば3つ目のファミリーとして追加してよい。
+- テンプレートには Google Fonts の `<link>` を書くだけでよい。ビルド時に `tools/fonts.php` がサイト内で使う文字だけのサブセットを取得して同一オリジンに置き、表示を止めないよう非同期で読み込む（本文はいったん端末のフォントで表示し、届いた時点で差し替える）。`text=` 付きの `<link>` はその文字だけで取得する。Artifact 用のビルドでは Google Fonts の読み込みのまま残す。
 - サンプルサイトはサイトごとに意図したテーマで固定する（美容外科はダーク、その他はライト）。背景色と文字色を必ず明示する。
 
 ## 7. JavaScript
 
-- 依存なしの ES2020+（GSAP・Swiper を使うサイトのみ `assets/vendor/` から読み込む）。`defer` で読み込み、インラインのイベントハンドラは使わない。
+- 依存なしの ES2020+（GSAP・Swiper を使うサイトのみ `assets/vendor/` から読み込む）。`defer` で読み込み、インラインのイベントハンドラは使わない（`tools/fonts.php` が出力するフォント CSS の非同期読み込みのみ例外）。
+- ファーストビューに関係しない重いライブラリ（ギャラリーの Swiper など）は、対象が画面に近づいてから読み込んでよい。
+- 表示を変えない初期化（計測・監視・演出の準備）は、最初の描画のあと（`requestAnimationFrame` の中の `setTimeout`）に行う。読み込み直後に実行すると、低速な端末で最初の表示が遅れる。
 - **JavaScript が動かなくても、すべての本文が読めること**（段階的強化）。
 - スクロール監視は `IntersectionObserver`、描画は `requestAnimationFrame`、`scroll` / `touchmove` リスナーは `{ passive: true }`。
 - コンソールエラー 0（静的版を含む）。静的版で fetch を呼ばない。
@@ -130,6 +133,7 @@ if (document.documentElement.dataset.build === 'demo') {
 | ページ遷移アニメーション（View Transitions、対応ブラウザのみ） | 自動で動き続け、止められない要素 |
 
 - 動かすのは `transform` と `opacity` のみ。`will-change` は動作中だけ付ける。
+- ファーストビューの最大の要素（LCP になる画像や見出し）は透明から始めない。読み込み時の演出は位置や大きさの変化にとどめる。
 - `prefers-reduced-motion: reduce` では演出を止める（View Transitions も無効化）。
 - 画面外の Canvas は描画を止める（`IntersectionObserver` と `visibilitychange`）。
 - GSAP を使う場合は `gsap.matchMedia()` で「PC かつ動きを減らす設定でない」ときだけ複雑な演出を有効にし、それ以外は通常の縦並びにする。
