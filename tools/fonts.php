@@ -2,7 +2,7 @@
 /**
  * 日本語Webフォントのサブセット化とセルフホスト（tools/build.php から呼ばれる）
  *
- *   php tools/fonts.php <サイトの出力ディレクトリ> [self|google]
+ *   php tools/fonts.php <サイトの出力ディレクトリ> [self|google] [after-paint|async]
  *
  * 日本語フォントをそのまま Google Fonts から読むと、ページごとに数十〜百数十個の分割ファイルを
  * 別ドメインから取得するため、モバイル回線では表示が大きく遅れる。そこでビルド時に、
@@ -26,8 +26,10 @@ const MAX_TEXT_PARAM = 4000;
 
 $dir = rtrim($argv[1] ?? '', '/');
 $mode = ($argv[2] ?? 'self') === 'google' ? 'google' : 'self';
+// フォントの CSS を読み込む時機（サイトごとに build.config.php の fonts_loading で選ぶ。下の $tags の説明を参照）
+$loading = ($argv[3] ?? 'after-paint') === 'async' ? 'async' : 'after-paint';
 if ($dir === '' || !is_dir($dir)) {
-    fwrite(STDERR, "使い方: php tools/fonts.php <サイトの出力ディレクトリ> [self|google]\n");
+    fwrite(STDERR, "使い方: php tools/fonts.php <サイトの出力ディレクトリ> [self|google] [after-paint|async]\n");
     exit(1);
 }
 
@@ -105,14 +107,25 @@ foreach ($faces as $name => $face) {
 }
 file_put_contents($fontDir . '/fonts.css', $css);
 
-// フォントの CSS は表示を止めないよう非同期で読み込む（media="print" で取得し、読み込み後に all へ切り替える）。
-// 日本語フォントは1ページで数百KBになり、先に読むと CSS やファーストビューの画像と回線を奪い合うため、
-// 本文はいったん端末のフォントで表示し、Webフォントが届いた時点で差し替える（font-display: swap）。
-// なお「最初の描画が表示されてからフォントの CSS を差し込む」方式も計測したが、文字の多いページでは
-// 差し替え時のレイアウトが2回になり、Lighthouse の TBT が 0ms → 450〜640ms に増えたため採用していない。
-// JavaScript が無効な環境では <noscript> で通常どおり読み込む。
-$tags = '<link rel="stylesheet" href="assets/fonts/fonts.css" media="print" onload="this.media=\'all\'">' . "\n"
-    . '<noscript><link rel="stylesheet" href="assets/fonts/fonts.css"></noscript>' . "\n";
+// フォントの CSS の読み込み方。日本語フォントは1ページで数百KBになるため、どちらも描画は止めない
+// （本文はいったん端末のフォントで表示し、Webフォントが届いた時点で差し替える。font-display: swap）。
+//   after-paint（既定）: 最初の描画（FCP）が画面に表示されてから CSS を差し込む。フォントの取得が
+//     ファーストビューの画像と重ならない。async では Lighthouse の LCP（推定値）が 1.2秒⇔4.2秒にぶれた
+//     （フォントの取得開始が最初の描画より前か後かで、推定に含まれるかが変わるため）。
+//     描画の計測（Paint Timing）に対応しないブラウザでは load 後に、いずれの場合も3秒後には読み込む。
+//   async: media="print" で取得し、読み込み後に all へ切り替える。差し替えが最初の描画の前に済むことが多く、
+//     文字の多いページでは after-paint より TBT が小さい（医療脱毛LP: 0ms。after-paint では 450〜640ms）。
+// JavaScript が無効な環境では、どちらも <noscript> で通常どおり読み込む。
+$noscript = '<noscript><link rel="stylesheet" href="assets/fonts/fonts.css"></noscript>' . "\n";
+if ($loading === 'async') {
+    $tags = '<link rel="stylesheet" href="assets/fonts/fonts.css" media="print" onload="this.media=\'all\'">' . "\n" . $noscript;
+} else {
+    $loader = "(function(h){var d=0,l=function(){if(d)return;d=1;var k=document.createElement('link');k.rel='stylesheet';k.href=h;document.head.appendChild(k)};"
+        . "try{if(PerformanceObserver.supportedEntryTypes.indexOf('paint')<0)throw 0;"
+        . "new PerformanceObserver(function(s){if(s.getEntriesByName('first-contentful-paint').length)setTimeout(l,0)}).observe({type:'paint',buffered:true})}"
+        . "catch(e){addEventListener('load',l)}setTimeout(l,3000)})('assets/fonts/fonts.css')";
+    $tags = '<script>' . $loader . '</script>' . "\n" . $noscript;
+}
 
 foreach ($htmlFiles as $file) {
     $pending = $tags;

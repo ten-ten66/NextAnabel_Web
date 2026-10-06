@@ -97,7 +97,8 @@ foreach ($sites as $name => $config) {
 
     if ($fonts !== 'none') {
         // 日本語Webフォントをサイト内で使う文字だけに絞る（失敗しても Google Fonts のまま続行）
-        passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(ROOT . '/tools/fonts.php') . ' ' . escapeshellarg($dest) . ' ' . $fonts);
+        $loading = ($config['fonts_loading'] ?? 'after-paint') === 'async' ? 'async' : 'after-paint';
+        passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(ROOT . '/tools/fonts.php') . ' ' . escapeshellarg($dest) . ' ' . $fonts . ' ' . $loading);
     }
 
     if ($env === 'production' && $base !== '') {

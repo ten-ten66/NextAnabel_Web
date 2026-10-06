@@ -61,12 +61,19 @@ add_action('wp_enqueue_scripts', static function (): void {
     }
 });
 
-// Webフォントの CSS は描画を止めないよう非同期に読み込む（静的サイト版 tools/fonts.php と同じ方式。JavaScript が無効なら noscript で読み込む）
+// Webフォントの CSS は、最初の描画（FCP）が画面に表示されてから読み込む（静的サイト版 tools/fonts.php の after-paint と同じ方式）。
+// 日本語フォントは数百KBになり、先に読むとファーストビューの画像と回線を奪い合うため。
+// 描画の計測に対応しないブラウザでは load 後に、いずれの場合も3秒後には読み込む。JavaScript が無効なら noscript で読み込む
 add_filter('style_loader_tag', static function (string $html, string $handle, string $href): string {
     if ($handle !== 'hakuji-fonts') {
         return $html;
     }
-    return '<link rel="stylesheet" id="hakuji-fonts-css" href="' . esc_url($href) . '" media="print" onload="this.media=\'all\'">' . "\n"
+    $url = html_entity_decode($href, ENT_QUOTES | ENT_HTML5); // WordPress から渡る URL は & が &#038; になっている
+    $loader = "(function(h){var d=0,l=function(){if(d)return;d=1;var k=document.createElement('link');k.rel='stylesheet';k.href=h;document.head.appendChild(k)};"
+        . "try{if(PerformanceObserver.supportedEntryTypes.indexOf('paint')<0)throw 0;"
+        . "new PerformanceObserver(function(s){if(s.getEntriesByName('first-contentful-paint').length)setTimeout(l,0)}).observe({type:'paint',buffered:true})}"
+        . "catch(e){addEventListener('load',l)}setTimeout(l,3000)})(" . wp_json_encode(esc_url_raw($url)) . ')';
+    return '<script>' . $loader . "</script>\n"
         . '<noscript><link rel="stylesheet" href="' . esc_url($href) . '"></noscript>' . "\n";
 }, 10, 3);
 
