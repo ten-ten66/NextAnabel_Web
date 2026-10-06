@@ -27,7 +27,7 @@ $accentFont = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@
 <link rel="icon" href="<?= e(asset('img/favicon.svg')) ?>" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&amp;family=Zen+Kaku+Gothic+Antique:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&amp;family=Zen+Kaku+Gothic+Antique:wght@400;500&amp;display=swap">
 <link rel="stylesheet" href="<?= e($accentFont) ?>">
 <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
 <?php if (in_array('gsap', $vendor, true)): ?>

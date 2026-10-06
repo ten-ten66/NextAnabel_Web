@@ -406,6 +406,7 @@ button {
 .l-footer__catch {
   margin-top: var(--space-4);
   font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
   font-size: 1.25rem;
   color: var(--color-lichen);
   letter-spacing: 0.1em;
@@ -1299,7 +1300,7 @@ html.is-drawer-open {
   justify-self: end;
   writing-mode: vertical-rl;
   font-family: var(--font-display);
-  font-weight: var(--weight-regular);
+  font-weight: var(--weight-semibold);
   font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.625rem);
   line-height: 1.5;
   letter-spacing: 0.3em;
