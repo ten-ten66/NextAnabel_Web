@@ -415,6 +415,8 @@
     }
     gsap.registerPlugin(ScrollTrigger, SplitText);
     ScrollTrigger.config({ ignoreMobileResize: true });
+    // Webフォントは最初の描画のあとに差し替わる。文字の高さが変わるため、届いたら位置を計算し直す
+    document.fonts?.addEventListener?.('loadingdone', () => ScrollTrigger.refresh());
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: reduce)', revealTitles);

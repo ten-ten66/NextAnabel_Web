@@ -228,9 +228,29 @@
     enable();
   };
 
-  // 受付状況と背景の演出は、最初の描画のあとに始める
-  window.requestAnimationFrame(() => window.setTimeout(() => {
-    initReception();
-    initGlaze();
-  }, 0));
+  // 背景の動きは、最初の描画（FCP）が画面に表示されてから始める。
+  // 描画の直後に Canvas のアニメーションを始めると、環境によっては最初の画面の表示が1秒ほど遅れるため
+  const afterFirstContentfulPaint = (callback) => {
+    let done = false;
+    const run = () => {
+      if (done) return;
+      done = true;
+      callback();
+    };
+    if (!('PerformanceObserver' in window) || !(PerformanceObserver.supportedEntryTypes || []).includes('paint')) {
+      window.setTimeout(run, 0);
+      return;
+    }
+    const observer = new PerformanceObserver((list) => {
+      if (!list.getEntriesByName('first-contentful-paint').length) return;
+      observer.disconnect();
+      window.setTimeout(run, 0);
+    });
+    observer.observe({ type: 'paint', buffered: true });
+    window.setTimeout(run, 3000); // 計測できない場合でも3秒後には始める
+  };
+
+  // 受付状況は最初の描画のあとに、背景の演出は最初の描画が表示されてから始める
+  window.requestAnimationFrame(() => window.setTimeout(initReception, 0));
+  afterFirstContentfulPaint(initGlaze);
 })();

@@ -689,7 +689,11 @@
       finishDrawing();
       return;
     }
-    if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
+    if (window.ScrollTrigger) {
+      gsap.registerPlugin(window.ScrollTrigger);
+      // Webフォントは最初の描画のあとに差し替わる。文字の高さが変わるため、届いたら位置を計算し直す
+      document.fonts?.addEventListener?.('loadingdone', () => window.ScrollTrigger.refresh());
+    }
     if (window.DrawSVGPlugin) gsap.registerPlugin(window.DrawSVGPlugin);
     const supportsScrollTimeline = window.CSS?.supports?.('animation-timeline: view()') ?? false;
     let introDone = false;
