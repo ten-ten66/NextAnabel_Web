@@ -853,11 +853,14 @@
   initHeader();
   initDrawer();
   initDialogs();
-  initSeason();
-  initOpenStatus();
-  initAccordion();
-  initPriceNav();
-  initMotion(createVine());
-  initGallery();
-  idle(initMarquee);
+  // 表示に関わらない初期化は最初の描画のあとに回し、読み込み直後のレイアウト計算で表示を遅らせない
+  window.requestAnimationFrame(() => window.setTimeout(() => {
+    initSeason();
+    initOpenStatus();
+    initAccordion();
+    initPriceNav();
+    initMotion(createVine());
+    initGallery();
+    idle(initMarquee);
+  }, 0));
 })();

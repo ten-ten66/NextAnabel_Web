@@ -228,6 +228,9 @@
     enable();
   };
 
-  initReception();
-  initGlaze();
+  // 受付状況と背景の演出は、最初の描画のあとに始める
+  window.requestAnimationFrame(() => window.setTimeout(() => {
+    initReception();
+    initGlaze();
+  }, 0));
 })();

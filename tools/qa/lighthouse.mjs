@@ -40,10 +40,6 @@ for (const [site, info] of Object.entries(manifest.sites)) {
   for (const path of [top, sub]) if (path) targets.push({ site, path });
 }
 
-const chrome = await chromeLauncher.launch({
-  chromePath: process.env.CHROME_PATH ?? '/opt/pw-browsers/chromium',
-  chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu'],
-});
 const runs = Number(args.runs ?? 3);
 const results = [];
 for (const { site, path } of targets) {
@@ -51,12 +47,18 @@ for (const { site, path } of targets) {
   // 計測のばらつきを抑えるため複数回測り、パフォーマンスが中央値の回を採用する
   const samples = [];
   for (let i = 0; i < runs; i++) {
+    // 前のページの状態を持ち越さないよう、1回ごとにブラウザを起動し直す
+    const chrome = await chromeLauncher.launch({
+      chromePath: process.env.CHROME_PATH ?? '/opt/pw-browsers/chromium',
+      chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu'],
+    });
     const runnerResult = await lighthouse(url, {
       port: chrome.port,
       output: 'json',
       logLevel: 'error',
       onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
     });
+    await chrome.kill();
     const { categories, audits } = runnerResult.lhr;
     const score = (key) => Math.round((categories[key]?.score ?? 0) * 100);
     samples.push({
@@ -69,6 +71,8 @@ for (const { site, path } of targets) {
       lcp: audits['largest-contentful-paint']?.displayValue,
       cls: audits['cumulative-layout-shift']?.displayValue,
       tbt: audits['total-blocking-time']?.displayValue,
+      lcpElement: audits['lcp-breakdown-insight']?.details?.items?.[1]?.selector
+        ?? audits['largest-contentful-paint-element']?.details?.items?.[0]?.items?.[0]?.node?.selector,
     });
   }
   samples.sort((a, b) => a.performance - b.performance);
@@ -76,7 +80,6 @@ for (const { site, path } of targets) {
   results.push(row);
   console.log(`${path.padEnd(42)} P${row.performance} A${row.accessibility} BP${row.bestPractices} SEO${row.seo}  LCP ${row.lcp} / CLS ${row.cls} / TBT ${row.tbt}  （各回: ${row.runs.join(', ')}）`);
 }
-await chrome.kill();
 server.close();
 mkdirSync(join(root, 'qa-output'), { recursive: true });
 writeFileSync(join(root, 'qa-output', 'lighthouse.json'), JSON.stringify({ measuredAt: new Date().toISOString(), results }, null, 2));

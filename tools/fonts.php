@@ -10,7 +10,7 @@
  *   2. Google Fonts の text= 指定で、その文字だけを含むフォントを取得する
  *      （text= は長すぎると無視されて通常の分割ファイルが返るため、URL が上限を超えないよう
  *        文字をいくつかの塊に分けて取得し、塊ごとの unicode-range で使い分ける）
- *   3. assets/fonts/ に保存し、同一オリジンから preload して読み込むよう HTML を書き換える
+ *   3. assets/fonts/ に保存し、同一オリジンから表示を止めずに読み込むよう HTML を書き換える
  * 想定外の応答（分割ファイルが返る等）や取得失敗のときは、元の Google Fonts の読み込みを残す。
  *
  * google モードでは保存せず、文字数が1回の要求に収まるときだけ text= を付ける
@@ -71,13 +71,7 @@ remove_dir($tmpDir);
 mkdir($tmpDir, 0775, true);
 
 $faces = [];    // ファイル名 => [family, style, weights[], range, chunk]
-$order = [];    // URL に書かれた書体の順（preload の優先度に使う）
 foreach (array_keys($googleUrls) as $url) {
-    if (preg_match_all('/family=([^:&]+)/', $url, $fm)) {
-        foreach ($fm[1] as $family) {
-            $order[] = str_replace('+', ' ', urldecode($family));
-        }
-    }
     // テンプレート側で text= を指定済みの読み込み（ロゴ用の欧文書体など）は、その文字だけで取得する
     [$baseUrl, $ownText] = split_text_param($url);
     $urlChunks = $ownText === null ? $chunks : chunk_chars(array_values(array_unique(mb_str_split($ownText))));
@@ -111,30 +105,12 @@ foreach ($faces as $name => $face) {
 }
 file_put_contents($fontDir . '/fonts.css', $css);
 
-// 出現回数の多い文字を収めた最初の塊を、書体ごとに1ファイル（URL に先に書かれた順に最大2書体）preload の候補にする
-$preload = [];
-foreach ($order as $family) {
-    foreach ($faces as $name => $face) {
-        if ($face['chunk'] === 0 && $face['family'] === $family && !isset($preload[$family])) {
-            $preload[$family] = $name;
-        }
-    }
-}
-// 先読みが多すぎるとファーストビューの画像と回線を奪い合うため、合計 100KB までにする（最初の1つは必ず含める）
-$selected = [];
-$budget = 100 * 1024;
-foreach (array_slice(array_values($preload), 0, 2) as $name) {
-    $size = (int) filesize($fontDir . '/' . $name . '.woff2');
-    if ($selected && $size > $budget) {
-        break;
-    }
-    $selected[] = $name;
-    $budget -= $size;
-}
-$tags = implode("\n", array_map(
-    static fn ($name) => '<link rel="preload" href="assets/fonts/' . $name . '.woff2" as="font" type="font/woff2" crossorigin>',
-    $selected
-)) . "\n" . '<link rel="stylesheet" href="assets/fonts/fonts.css">' . "\n";
+// フォントの CSS は表示を止めないよう非同期で読み込む（media="print" で取得し、読み込み後に all へ切り替える）。
+// 日本語フォントは1ページで数百KBになり、先に読むと CSS やファーストビューの画像と回線を奪い合うため、
+// 本文はいったん端末のフォントで表示し、Webフォントが届いた時点で差し替える（font-display: swap）。
+// JavaScript が無効な環境では <noscript> で通常どおり読み込む。
+$tags = '<link rel="stylesheet" href="assets/fonts/fonts.css" media="print" onload="this.media=\'all\'">' . "\n"
+    . '<noscript><link rel="stylesheet" href="assets/fonts/fonts.css"></noscript>' . "\n";
 
 foreach ($htmlFiles as $file) {
     $pending = $tags;

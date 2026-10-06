@@ -451,11 +451,14 @@
 
   initHeader();
   initDrawer();
-  initViewTransition();
   initSpBar();
-  initFilters();
-  initTabs();
-  initAccordions();
-  initHoursToday();
-  initToc();
+  initTabs(); // 非表示のパネルを最初の描画より前に畳む（あとで畳むとレイアウトがずれるため）
+  // 表示を変えない初期化は最初の描画のあとに回し、読み込み直後の表示を遅らせない
+  window.requestAnimationFrame(() => window.setTimeout(() => {
+    initViewTransition();
+    initFilters();
+    initAccordions();
+    initHoursToday();
+    initToc();
+  }, 0));
 })();
