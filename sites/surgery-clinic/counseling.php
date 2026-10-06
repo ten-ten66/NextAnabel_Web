@@ -20,9 +20,9 @@ $fields = [
     'email' => ['label' => 'メールアドレス', 'type' => 'email', 'required' => true, 'max' => 254],
     'tel' => ['label' => '電話番号', 'type' => 'tel', 'required' => true, 'max' => 20],
     'menu' => ['label' => 'ご希望の施術', 'type' => 'choices', 'required' => true, 'options' => $menuOptions],
-    'date1' => ['label' => '第1希望日', 'type' => 'date', 'required' => true, 'min_days' => 1, 'max_days' => 60],
+    'date1' => ['label' => '第1希望日', 'type' => 'date', 'required' => true, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_label' => '日曜・祝日'],
     'time' => ['label' => 'ご希望の時間帯', 'type' => 'choice', 'required' => true, 'options' => $timeOptions],
-    'date2' => ['label' => '第2希望日', 'type' => 'date', 'required' => false, 'min_days' => 1, 'max_days' => 60],
+    'date2' => ['label' => '第2希望日', 'type' => 'date', 'required' => false, 'min_days' => 1, 'max_days' => 60, 'closed_weekdays' => [0], 'closed_label' => '日曜・祝日'],
     'message' => ['label' => 'ご相談内容', 'type' => 'textarea', 'required' => false, 'max' => 1000],
     'consent' => ['label' => '個人情報の取り扱い', 'type' => 'consent', 'required' => true, 'message' => 'プライバシーポリシーへの同意が必要です。'],
 ];

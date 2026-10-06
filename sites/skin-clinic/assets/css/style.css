@@ -750,7 +750,7 @@ small {
 .l-footer__list a {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   color: var(--color-ink);
   text-decoration: none;
 }
@@ -1797,7 +1797,7 @@ small {
   gap: var(--space-2);
   margin-top: var(--space-1);
   font-family: var(--font-display);
-  font-size: var(--fs-lg);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
   line-height: 1.5;
 }
 
@@ -3181,7 +3181,7 @@ small {
 .c-breadcrumb__item a {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
+  min-height: 44px;
   color: var(--color-ink-soft);
 }
 
@@ -3874,7 +3874,7 @@ small {
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding-left: var(--space-4);
   color: var(--color-ink);
   font-size: var(--fs-sm);
@@ -4940,7 +4940,7 @@ small {
 .p-policy__toc-list a {
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
+  min-height: 44px;
   color: var(--color-ink);
   text-decoration: none;
 }
@@ -5038,7 +5038,7 @@ small {
 }
 
 .p-404__code {
-  color: var(--color-line);
+  color: color-mix(in srgb, var(--color-ink-soft) 70%, var(--color-line));
   font-family: var(--font-display);
   font-size: clamp(4.5rem, 3rem + 6vw, 8rem);
   line-height: 1;

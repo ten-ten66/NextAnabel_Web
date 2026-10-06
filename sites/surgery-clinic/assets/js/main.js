@@ -263,8 +263,9 @@
         return;
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) add(field, `${label}の形式が正しくありません。`);
-      else if (value < min) add(field, `${label}は1日後以降の日付を選択してください。`);
+      else if (value < min) add(field, `${label}は明日以降の日付を選択してください。`);
       else if (value > max) add(field, `${label}は60日以内の日付を選択してください。`);
+      else if (new Date(`${value}T00:00:00`).getDay() === 0) add(field, `${label}は休診日（日曜・祝日）以外の日付を選択してください。`);
     };
     checkDate('date1', '第1希望日', true);
     if (!data.get('time')) add('time', 'ご希望の時間帯を選択してください。');

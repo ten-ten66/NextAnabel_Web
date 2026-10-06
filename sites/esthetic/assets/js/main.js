@@ -714,7 +714,8 @@
           finishDrawing();
         },
       });
-      tl.fromTo($('.js-hero-far', hero), { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0)
+      // 画像そのものは CSS（scale: -1 1）で左右反転しているため、外側の要素を拡大縮小する
+      tl.fromTo($('.p-hero__layer--far .js-hero-depth', hero), { scale: 1.06 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0)
         .set(targets, { autoAlpha: 1 }, 0)
         .fromTo($('.p-hero__branch--shade', hero), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1, ease: 'sine.out' }, 0.1)
         .fromTo(stems[0], { drawSVG: '0%' }, { drawSVG: '100%', duration: 0.95 }, 0)

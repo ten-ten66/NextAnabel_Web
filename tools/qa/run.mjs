@@ -82,6 +82,15 @@ for (const { site, path } of pages) {
         .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help, target: v.nodes[0]?.target?.join(' ') }));
     }
     if (!args['no-shots']) {
+      await page.evaluate(async () => {
+        const step = Math.max(200, Math.floor(window.innerHeight * 0.8));
+        for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((res) => setTimeout(res, 60));
+        }
+        window.scrollTo(0, 0);
+      });
+      await page.waitForLoadState('networkidle');
       const name = path.replace(/\//g, '__').replace(/\.html$/, '');
       await page.screenshot({ path: join(outDir, 'screens', `${name}-${width}.png`), fullPage: true });
     }

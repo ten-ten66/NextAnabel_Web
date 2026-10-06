@@ -33,8 +33,22 @@ page.on('pageerror', (err) => errors.push(String(err)));
 page.on('requestfailed', (req) => errors.push(`request failed: ${req.url()}`));
 
 await page.goto(url, { waitUntil: 'networkidle' });
+if (opts.full) await scrollThrough(page);
 await page.waitForTimeout(Number(opts.wait ?? 1200));
 const overflowPx = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 await page.screenshot({ path: out, fullPage: Boolean(opts.full) });
 console.log(JSON.stringify({ url, out, width, overflowPx, consoleErrors: errors }));
 await browser.close();
+
+/** 全体を撮る前にページ末尾までスクロールし、loading="lazy" の画像を読み込ませてから先頭に戻る */
+async function scrollThrough(target) {
+  await target.evaluate(async () => {
+    const step = Math.max(200, Math.floor(window.innerHeight * 0.8));
+    for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 60));
+    }
+    window.scrollTo(0, 0);
+  });
+  await target.waitForLoadState('networkidle');
+}

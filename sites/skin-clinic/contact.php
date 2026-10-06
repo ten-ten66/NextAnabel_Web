@@ -192,6 +192,7 @@ $stepIndex = ['input' => 0, 'confirm' => 1, 'complete' => 2][$step] ?? 0;
 $page = [
     'id' => 'contact',
     'title' => 'ご予約・お問い合わせ',
+    'scripts' => ['contact'],
     'description' => '白磁スキンクリニックのご予約・お問い合わせフォームです。カウンセリングや施術のご予約を24時間受け付けています。内容を確認のうえ、2営業日以内に当院からご連絡し、日時を確定いたします。',
     'breadcrumb' => [
         ['label' => 'ホーム', 'href' => url('index')],

@@ -108,7 +108,7 @@ if (document.documentElement.dataset.build === 'demo') {
 - `!important` はユーティリティ以外で使わない。
 - フォーカスは `:focus-visible` で必ず見えるようにする。
 - フォントは Google Fonts から最大2ファミリー・合計4ウェイト以内。`display=swap`。テンプレートには Google Fonts の `<link>` を書くだけでよい。ビルド時に `tools/fonts.php` がサイト内で使う文字だけのサブセットを取得し、同一オリジンから preload して読み込むよう書き換える（日本語フォントの分割ファイルを大量に読み込む遅延を避けるため。Artifact 用のビルドでは Google Fonts の `text=` 指定に切り替える）。
-- サンプルサイトはライトテーマ固定。背景色と文字色を必ず明示する。
+- サンプルサイトはサイトごとに意図したテーマで固定する（美容外科はダーク、その他はライト）。背景色と文字色を必ず明示する。
 
 ## 7. JavaScript
 

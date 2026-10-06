@@ -16,7 +16,8 @@ use DateTimeImmutable;
  *   'tel'     => ['label' => '電話番号', 'type' => 'tel', 'required' => true],
  *   'menu'    => ['label' => 'ご希望の施術', 'type' => 'choice', 'options' => ['ipl' => 'IPL光治療']],
  *   'areas'   => ['label' => '部位', 'type' => 'choices', 'options' => [...]],
- *   'date1'   => ['label' => '第1希望日', 'type' => 'date', 'min_days' => 1, 'max_days' => 60],
+ *   'date1'   => ['label' => '第1希望日', 'type' => 'date', 'min_days' => 1, 'max_days' => 60,
+ *                 'closed_weekdays' => [0], 'closed_label' => '日曜・祝日'],  // 0=日曜 … 6=土曜
  *   'message' => ['label' => 'ご相談内容', 'type' => 'textarea', 'max' => 1000],
  *   'consent' => ['label' => '同意', 'type' => 'consent', 'required' => true, 'message' => '…'],
  *
@@ -151,6 +152,11 @@ final class Validator
         }
         if ($date > $today->modify("+{$maxDays} days")) {
             return "{$label}は{$maxDays}日以内の日付を選択してください。";
+        }
+        $closed = array_map('intval', (array) ($def['closed_weekdays'] ?? []));
+        if ($closed && in_array((int) $date->format('w'), $closed, true)) {
+            $closedLabel = (string) ($def['closed_label'] ?? '休診日');
+            return "{$label}は休診日（{$closedLabel}）以外の日付を選択してください。";
         }
         return null;
     }

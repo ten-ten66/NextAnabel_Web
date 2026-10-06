@@ -10,6 +10,7 @@ $examplePrice = $example['prices'][0];
 $page = [
     'id' => 'index',
     'description' => (string) site('description'),
+    'scripts' => ['home'],
     'jsonld' => [
         business_ld([
             'description' => (string) site('description'),

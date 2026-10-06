@@ -17,6 +17,9 @@
 <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
 <noscript><style>.u-js-only{display:none!important}</style></noscript>
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
+<?php foreach ((array) ($page['scripts'] ?? []) as $script): /* そのページでだけ使うスクリプト（main.js の後に実行される） */ ?>
+<script src="<?= e(asset('js/' . $script . '.js')) ?>" defer></script>
+<?php endforeach; ?>
 </head>
 <body data-page="<?= e($page['id'] ?? '') ?>"<?= !empty($page['bodyClass']) ? ' class="' . e($page['bodyClass']) . '"' : '' ?>>
 <a class="c-skip-link" href="#main">本文へスキップ</a>
